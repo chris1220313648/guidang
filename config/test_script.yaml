@@ -20,6 +20,7 @@ spec:
     #register: http://10.108.251.228:8000
     register: http://127.0.0.1:8080
   executePolicy:
+  #readChange: true 表示如果 readSelector 指定的设备状态发生变化，则执行脚本。
     readChange: true
     webhook: true
     cron: ""
