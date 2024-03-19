@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filter-server
+spec:
+  selector:
+    matchLabels:
+      app: filter-server
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: filter-server
+    spec:
+      containers:
+      - name: filter-server
+        image: reg.tiangong.com:80/admin/filterserver:v0.1-r2
+        ports:
+        - containerPort: 8003

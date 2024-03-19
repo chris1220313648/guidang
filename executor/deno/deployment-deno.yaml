@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruleengine-executor-deno
+spec:
+  selector:
+    matchLabels:
+      app: ruleengine-executor-deno
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ruleengine-executor-deno
+    spec:
+      containers:
+      - name: ruleengine-cloud
+        image: reg.tiangong.com:80/admin/ruleenginedeno:v0.1-r1
+        command: ["deno_executor"]
+        args: ["http://10.109.155.201:8001"]

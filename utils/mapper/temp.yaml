@@ -1,0 +1,22 @@
+apiVersion: devices.kubeedge.io/v1alpha2
+kind: Device
+metadata:
+  name: dht11
+  labels:
+    description: 'virtual_temperature_sensor_at_edge'
+    manufacturer: 'Python.org'
+spec:
+  deviceModelRef:
+    name: sensor-temp
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: ''
+            operator: In
+            values:
+              - lima-default
+status:
+  twins:
+    - propertyName: temperature
+      desired:
+        value: "0"
