@@ -1,21 +1,22 @@
 use std::marker::PhantomData;
-use std::sync::Arc;
+use std::sync::Arc;//Arc 是 Rust 的一个原子引用计数类型，允许多个所有者拥有同一个数据，实现数据的线程安全共享
 
-use crate::api::{
+use crate::api::{//这行代码从当前包的api模块中引入了Device类型以及mqtt子模块中的DEVICE_ETPREFIX和TWIN_ETUPDATE_RESULT_SUFFIX常量。
     mqtt::{DEVICE_ETPREFIX, TWIN_ETUPDATE_RESULT_SUFFIX},
     Device,
 };
 use crate::scheduler::ResourceIndex;
 use color_eyre::{eyre::eyre, Result};
 use flume::Sender;
-use once_cell::sync::Lazy;
-use regex::Regex;
+use once_cell::sync::Lazy;//Lazy用于静态或动态变量的延迟初始化，保证线程安全
+use regex::Regex;//Regex类型用于创建和操作正则表达式。
 use rumqttc::{AsyncClient, Event, MqttOptions, Packet, Publish, QoS};
+//引入了rumqttc库中的AsyncClient（一个异步MQTT客户端）、Event（事件类型）、MqttOptions（MQTT配置选项）、Packet（MQTT数据包）、Publish（发布消息的类型）和QoS（消息服务质量等级）
 use tracing::{error, info, log::trace};
 
-pub type AsyncHook = Sender<Arc<Publish>>;
+pub type AsyncHook = Sender<Arc<Publish>>;//定义了一个类型别名AsyncHook，它是一个发送端，可以发送包裹在Arc（原子引用计数智能指针）中的Publish类型的消息。
 pub type SyncHook = Box<dyn FnMut(&Publish) -> Result<()> + Sync + Send + 'static>;
-
+//定义了一个类型别名SyncHook，它是一个装箱的动态闭包，这个闭包可以修改地接收一个Publish类型的引用，并返回一个Result<()>类型的结果。该闭包可以跨线程安全地发送（Send）、同步访问（Sync），并且具有'static生命周期。
 #[tracing::instrument(skip_all)]
 pub async fn mqtt_client(
     host: String,
