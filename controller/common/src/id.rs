@@ -1,18 +1,18 @@
 use serde::{Deserialize, Serialize};
 use std::sync::atomic::{AtomicU32, Ordering};
-
+//定义了一个ScriptID结构体，并为它实现了From特征，以允许ScriptID和u32之间的相互转换
 #[derive(
     Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize,
 )]
-pub struct ScriptID(ID);
+pub struct ScriptID(ID);//ScriptID是一个包含单一字段的结构体，这个字段是另一个结构体ID的实例
 
-impl From<ScriptID> for u32 {
+impl From<ScriptID> for u32 {//这个impl块为ScriptID类型实现了From特征，允许将ScriptID实例转换成u32类型
     fn from(val: ScriptID) -> u32 {
         val.0.into()
     }
 }
 
-impl From<u32> for ScriptID {
+impl From<u32> for ScriptID {//
     fn from(val: u32) -> Self {
         ScriptID(ID(val))
     }

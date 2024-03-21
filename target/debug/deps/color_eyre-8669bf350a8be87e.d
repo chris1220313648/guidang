@@ -1,0 +1,12 @@
+/home/chenpy/code/guidang/target/debug/deps/libcolor_eyre-8669bf350a8be87e.rmeta: /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/lib.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/config.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/fmt.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/handler.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/private.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/section/mod.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/section/help.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/writers.rs
+
+/home/chenpy/code/guidang/target/debug/deps/color_eyre-8669bf350a8be87e.d: /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/lib.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/config.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/fmt.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/handler.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/private.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/section/mod.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/section/help.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/writers.rs
+
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/lib.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/config.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/fmt.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/handler.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/private.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/section/mod.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/section/help.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/color-eyre-0.6.1/src/writers.rs:

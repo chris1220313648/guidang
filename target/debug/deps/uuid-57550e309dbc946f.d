@@ -1,0 +1,14 @@
+/home/chenpy/code/guidang/target/debug/deps/libuuid-57550e309dbc946f.rmeta: /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/lib.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/builder.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/error.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/parser.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/fmt.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/v4.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/rng.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/external/mod.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/external/serde_support.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/macros.rs
+
+/home/chenpy/code/guidang/target/debug/deps/uuid-57550e309dbc946f.d: /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/lib.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/builder.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/error.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/parser.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/fmt.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/v4.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/rng.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/external/mod.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/external/serde_support.rs /home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/macros.rs
+
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/lib.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/builder.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/error.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/parser.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/fmt.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/v4.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/rng.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/external/mod.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/external/serde_support.rs:
+/home/chenpy/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.1.2/src/macros.rs:
