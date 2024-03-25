@@ -3,11 +3,11 @@ use serde::Deserialize;
 use std::collections::HashMap;
 
 /// the topic prefix for device event
-pub const DEVICE_ETPREFIX: &str = "$hw/events/device/";
+pub const DEVICE_ETPREFIX: &str = "$hw/events/device/";// MQTT 主题的前缀，用于设备事件
 /// the topic suffix for twin update event
-pub const TWIN_ETUPDATE_SUFFIX: &str = "/twin/update";
+pub const TWIN_ETUPDATE_SUFFIX: &str = "/twin/update";//设备双胞胎更新事件的主题后缀
 /// the topic suffix for twin update result event
-pub const TWIN_ETUPDATE_RESULT_SUFFIX: &str = "/twin/update/result";
+pub const TWIN_ETUPDATE_RESULT_SUFFIX: &str = "/twin/update/result";//表示设备双胞胎更新结果事件的主题后缀
 
 /// the struct of device twin update
 /// https://github.com/kubeedge/kubeedge/blob/master/edge/pkg/devicetwin/dttype/types.go#L232
@@ -19,7 +19,7 @@ pub struct DeviceTwinUpdate {
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct MsgTwin {
+pub struct MsgTwin {//包含特定设备双胞胎属性的更新详情
     expected: Option<TwinValue>,
     actual: Option<TwinValue>,
     optional: Option<bool>,
@@ -29,13 +29,13 @@ pub struct MsgTwin {
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct TwinValue {
+pub struct TwinValue {//表示双胞胎属性的值及其元数据
     value: Option<String>,
     metadata: Option<ValueMetadata>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct TypeMetadata {
+pub struct TypeMetadata {//存储关于双胞胎属性类型的信息
     r#type: String,
 }
 

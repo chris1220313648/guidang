@@ -18,7 +18,7 @@ pub fn init() -> Extension {
             prefix "executor/deno:",
             "devices/01_device.js",
         ))
-        .ops(vec![
+        .ops(vec![//列出可读列出可写设备。获取特定设备的状态。更新设备的期望状态。提交设备的操作
             op_list_readable_devices::decl(),
             op_list_writable_devices::decl(),
             op_get_device_status::decl(),
@@ -34,7 +34,7 @@ pub fn op_list_readable_devices(
     _: (),
     _: (),
 ) -> Result<Vec<String>, AnyError> {
-    let readable: &ReadableDevices = state.borrow();
+    let readable: &ReadableDevices = state.borrow();//通过state.borrow()借用ReadableDevices
     let list = readable.devices.keys().map(|v| v.clone()).collect();
     Ok(list)
 }
@@ -60,7 +60,7 @@ pub fn op_get_device_status(
     debug!("{:?}", readable);
     let value = readable
         .devices
-        .get(&name)
+        .get(&name)//尝试从设备映射中找到指定名称的设备，并查询该设备的状态中是否存在指定的属性。如果找到，返回该属性的值；否则，返回None
         .and_then(|d| d.status.get(&property))
         .map(|v| v.to_owned());
     debug!(name = ?name, property = ?property, value = ?value);
@@ -82,7 +82,7 @@ pub fn op_update_device_desired(
 ) -> Result<(), AnyError> {
     let writable: &mut WritableDevices = state.borrow_mut();
     let r = if let Some(d) = writable.devices.get_mut(&arg.name) {
-        debug!(arg =? arg, "update device desired");
+        debug!(arg =? arg, "update device desired");//使用if let结构尝试从writable.devices中找到匹配arg.name的设备。如果找到了设备，就在该设备的commits映射中插入或更新arg.property对应的值为arg.value
         d.commits.insert(arg.property, arg.value);
         Ok(())
     } else {
@@ -93,7 +93,7 @@ pub fn op_update_device_desired(
 }
 
 #[op]
-pub async fn op_commit_device(
+pub async fn op_commit_device(//用于提交对某个设备的所有待定更改
     state: Rc<RefCell<OpState>>,
     name: String,
     qos: Option<i32>,
@@ -102,7 +102,7 @@ pub async fn op_commit_device(
         let mut op_state = state.try_borrow_mut().map_err(|_| resource_unavailable())?;
         let writable: &mut WritableDevices = op_state.borrow_mut();
         if let Some(d) = writable.devices.get_mut(&name) {
-            (std::mem::take(&mut d.commits), d.name.clone())
+            (std::mem::take(&mut d.commits), d.name.clone())//先尝试从Deno的运行时状态中获取指定设备的待提交更改列表
         } else {
             return Err(generic_error("Device not found"));
         }
@@ -117,7 +117,7 @@ pub async fn op_commit_device(
             }
             None => rule.qos as i32,
         };
-        let request = UpdateDevice {
+        let request = UpdateDevice {//，构建一个向设备管理服务发送的请求。如果提供了QoS参数，则使用该参数值；否则，使用默认值。
             script_id: rule.script_id,
             name: resource_name,
             desired: commits,
@@ -128,7 +128,7 @@ pub async fn op_commit_device(
     };
     debug!(request =? request, "commit device requset");
     // FIXME: Qos handle
-    client.update_device_desired(request).await?;
+    client.update_device_desired(request).await?;//通过之前获取的gRPC客户端，异步发送更新设备状态的请求。这一步可能涉及与外部服务的网络通信。
     debug!("requset finished");
     Ok(())
 }
