@@ -21,6 +21,7 @@ pub enum ControllerState {
 }
 
 #[tracing::instrument(skip_all)]
+//定义异步函数 等待控制器状态变为非Init
 pub async fn wait_for_init(rx: &mut watch::Receiver<ControllerState>) {
     loop {
         let state = *rx.borrow_and_update();
@@ -30,7 +31,7 @@ pub async fn wait_for_init(rx: &mut watch::Receiver<ControllerState>) {
         let _ = rx.changed().await;
     }
 }
-
+// 定义一个异步函数wait_for_stop，等待控制器状态变为Stop。
 #[tracing::instrument(skip_all)]
 pub async fn wait_for_stop(rx: &mut watch::Receiver<ControllerState>) {
     loop {
@@ -41,7 +42,7 @@ pub async fn wait_for_stop(rx: &mut watch::Receiver<ControllerState>) {
         let _ = rx.changed().await;
     }
 }
-
+// 定义一个结构体Config，包含Web服务器、gRPC服务器和MQTT服务器的地址。
 #[derive(Debug, Clone, Copy, Deserialize, Serialize)]
 pub struct Config {
     pub webaddr: SocketAddr,
@@ -49,14 +50,16 @@ pub struct Config {
     pub mqttaddr: SocketAddr,
 }
 
+// 定义一个结构体Controller，表示控制器。
 pub struct Controller {
-    pub controller_tasks: Vec<JoinHandle<()>>,
-    state: watch::Sender<ControllerState>,
-    state_rx: watch::Receiver<ControllerState>,
-    config: Config,
+    pub controller_tasks: Vec<JoinHandle<()>>, // 控制器启动的任务列表。
+    state: watch::Sender<ControllerState>, // 用于修改控制器状态的发送端。
+    state_rx: watch::Receiver<ControllerState>, // 用于接收控制器状态的接收端。
+    config: Config, // 控制器配置。
 }
 
 impl Controller {
+    // 定义一个函数new，用于创建一个Controller实例。
     pub fn new(config: Config) -> Result<Controller> {
         let (tx, rx) = tokio::sync::watch::channel(ControllerState::Init);
         Ok(Controller {
@@ -66,7 +69,7 @@ impl Controller {
             config,
         })
     }
-
+// // 定义一个异步函数run，启动控制器的主逻辑。
     #[tracing::instrument(skip_all)]
     pub async fn run(mut self) -> Result<()> {
         self.init();
@@ -81,15 +84,15 @@ impl Controller {
         self.kill_all();
         Ok(())
     }
-
+// 定义一个异步函数setup_term_handler，设置终止信号处理器。
     #[tracing::instrument]
     pub async fn setup_term_handler() -> Result<()> {
         use tokio::signal;
         let mut signal = signal::unix::signal(signal::unix::SignalKind::terminate())?;
-        signal.recv().await;
+        signal.recv().await;// 等待信号。
         Ok(())
     }
-
+ // 定义一个异步函数setup_hup_handler，设置挂起信号处理器。
     #[tracing::instrument]
     pub async fn setup_hup_handler() -> Result<()> {
         use tokio::signal;
@@ -97,7 +100,7 @@ impl Controller {
         signal.recv().await;
         Ok(())
     }
-
+ // 定义一个函数spawn，用于启动一个异步任务。
     pub fn spawn(&mut self, task: impl Future<Output = Result<()>> + Send + 'static) {
         let mut state = self.state_rx.clone();
         let handle = tokio::spawn(async move {
@@ -111,7 +114,7 @@ impl Controller {
         });
         self.controller_tasks.push(handle)
     }
-
+// 定义一个函数spawn_kubeapi，用于启动与Kubernetes API相关的异步任务。
     pub fn spawn_kubeapi(
         &mut self,
         client: Client,
@@ -122,21 +125,24 @@ impl Controller {
         Receiver<ManagerMsg>,
         Arc<Reflector>,
     ) {
-        use crate::trigger::kubeapi::*;
+        use crate::trigger::kubeapi::*;// // 创建一个Reflector实例。
         let reflector_store = Arc::new(Reflector::default());
 
         // Scheduler
+        // 创建一个Scheduler输入的通道。
         let (schin_tx, schin_rx) = flume::bounded(10);
+        // 创建一个Scheduler输出的通道。
         let (schout_tx, schout_rx) = flume::bounded(10);
+         // 克隆Reflector实例。
         let reflector_clone = reflector_store.clone();
-        self.spawn(async move {
-            let mut in_rx = schin_rx.into_stream();
-            let mut scheduler = Scheduler::new(reflector_clone);
-            while let Some(index) = in_rx.next().await {
-                info!("Triger new script to run: {:?}", index);
-                match scheduler.lookup(index) {
-                    Ok(msg) => schout_tx.send(msg)?,
-                    Err(e) => error!(error =? e, "Scheduler throw a error"),
+        self.spawn(async move {// 启动Scheduler相关的异步任务。
+            let mut in_rx = schin_rx.into_stream();// 将接收端转换为Stream。
+            let mut scheduler = Scheduler::new(reflector_clone);// 创建Scheduler实例。
+            while let Some(index) = in_rx.next().await {// 循环处理接收到的消息。
+                info!("Triger new script to run: {:?}", index);// 记录日志。
+                match scheduler.lookup(index) {// 查找并处理消息。
+                    Ok(msg) => schout_tx.send(msg)?,// 发送处理结果。
+                    Err(e) => error!(error =? e, "Scheduler throw a error"),// 记录错误日志。
                 }
             }
             Ok(())
@@ -144,37 +150,47 @@ impl Controller {
 
         // Device to Script map
         let reflector_clone = reflector_store.clone();
+        // 创建一个Device到Script映射的通道。
         let (schdevin_tx, schdevin_rx) = flume::bounded(10);
+        // 克隆Scheduler输入通道的发送端。
         let schin_tx_clone = schin_tx.clone();
+        // 启动设备到脚本映射的异步任务。
         self.spawn(async move { trigger(reflector_clone, schdevin_rx, schin_tx_clone).await });
 
         // script reflector
+        // 创建空的异步钩子列表。
         let mut script_async_hooks = Vec::new();
+        // 创建同步钩子列表。
         let script_sync_hooks = vec![logger_hook()];
+        // 创建Script API实例
         let script_api: Api<Script> = Api::all(client.clone());
 
         // device reflector
+        // 创建空的异步钩子列表。
         let mut device_async_hooks = Vec::new();
+        // 创建同步钩子列表。
         let device_sync_hooks = vec![logger_hook()];
+        // 创建Device API实例。
         let device_api: Api<Device> = Api::all(client);
 
         // device_hook for device reflector
         let (device_tx, device_rx) = flume::bounded(3);
-
+        // 创建设备钩子的通道。
         if is_cloud {
             let device_rx = device_rx.clone();
             let schdevin_tx = schdevin_tx.clone();
             self.spawn(async move { trigger_hook(device_rx, schdevin_tx).await });
         }
 
-        let reflector_clone = reflector_store.clone();
+        let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
         self.spawn(async move { device_hook(device_rx, reflector_clone).await });
-        device_async_hooks.push(device_tx);
+        device_async_hooks.push(device_tx);// 将设备发送端添加到异步钩子列表中。
 
         // script_hook for device reflector
+        // 创建脚本钩子的通道。
         let (script_tx, script_rx) = flume::bounded(3);
-        let reflector_clone = reflector_store.clone();
-        self.spawn(async move { script_hook(script_rx, reflector_clone).await });
+        let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
+        self.spawn(async move { script_hook(script_rx, reflector_clone).await });// 启动脚本钩子的异步任务。
         script_async_hooks.push(script_tx);
 
         // script reflector
