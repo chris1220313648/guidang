@@ -20,5 +20,5 @@ if __name__ == '__main__':
         val = input()
         _int = float(val)
         print("update to " + val + " in " + str(time.time_ns()) + " ns")
-        temp.update_twin(val)
+        temp.update_twin(val)#update_twin方法更新设备的状态（这个方法可能也是基类Mapper提供的）
         temp.status = val
