@@ -22,7 +22,7 @@ const CLIENT_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub struct Client {
     pub client: ControllerServiceClient<Channel>,//tonic gRPC 客户端的一个实例
     pub tasks: Vec<JoinHandle<()>>,//存储的是后台运行的异步任务的句柄
-    pub id: u32,
+    pub id: u32,//客户端id
     pub rx: Receiver<RunScript>,//接受通道
 }
 //尝试连接到 gRPC 服务器，并初始化客户端。
@@ -33,10 +33,10 @@ impl Client {
         let main_client = client.clone();
         let mut tasks = Vec::new();
         let (tx, rx) = flume::bounded(10);
-        let (id, stream) = connect(main_client).await?;//行某种形式的注册或握手操作，返回一个客户端 ID 和一个流（stream）
+        let (id, stream) = connect(main_client).await?;//注册或握手操作，返回一个客户端 ID 和一个流（stream）
         info!("Connected!");
-        let handle = tokio::spawn(async move {
-            if let Err(e) = run(stream, tx).await {//使用 tokio::spawn 在新的异步任务中运行 run 函数
+        let handle = tokio::spawn(async move {//使用 tokio::spawn 启动一个异步任务来运行 run 函数，处理来自服务器的流式消息
+            if let Err(e) = run(stream, tx).await {
                 error!(error =? e, "Connection to controller get a error");
             }
         });
@@ -61,7 +61,7 @@ async fn connect(
             })
         };
         loop {
-            yield ClientMessage {
+            yield ClientMessage {//不断生成 ClientCode::Continue 消息，表示客户端保持连接
                 code: ClientCode::Continue as i32,
                 info: None
             }
@@ -69,7 +69,7 @@ async fn connect(
     };
     let mut request = Request::new(client_stream);
     request//个消息流被包装成 tonic 的 Request 对象，并添加了必要的元数据
-        .metadata_mut()
+        .metadata_mut()//使用 metadata_mut 方法添加元数据，将客户端版本信息添加到请求的元数据中。
         .insert(RE_VERSION, MetadataValue::from_static(CLIENT_VERSION));
 
     let mut stream = client
@@ -78,7 +78,7 @@ async fn connect(
         .wrap_err("Got error from server")?
         .into_inner();
     let msg = stream.next().await;//从 stream 中异步等待并接收第一条消息 msg
-    let executor_id = handle_first_message(msg)?;//处理消息
+    let executor_id = handle_first_message(msg)?;//处理第一条消息
     Ok((executor_id, stream))
 }
 //用于处理从服务器接收到的第一条消息的逻辑
@@ -88,7 +88,7 @@ fn handle_first_message(msg: Option<StdResult<ServerMessage, Status>>) -> Result
         Some(msg) => {//如果 msg 是 Some，函数继续解包并处理内部的 StdResult
             let msg = msg
                 .wrap_err("Got error on first message")?
-                .msg
+                .msg//从 ServerMessage 中提取 msg 字段，如果 msg 字段是 None，则返回带有错误信息的 Result。
                 .ok_or_else(|| eyre!("Got None on ServerMessage"))?;
             match msg {
                 Msg::Connected(c) => Ok(c.executor_id),//成功建立连接，函数提取 executor_id

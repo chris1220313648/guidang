@@ -1,5 +1,5 @@
 //! Publib tasks for rule engine controller
-//这段Rust代码展示了如何使用axum框架和tonic库来构建基于HTTP和gRPC协议的服务器，分别用于处理Web请求和gRPC调用。这种结构是现代微服务架构中常见的，能够同时支持RESTful API和高效的gRPC通信。
+
 use axum::extract::Extension;
 use color_eyre::Result;
 use flume::Sender;
@@ -13,47 +13,47 @@ use crate::{
     trigger,
 };
 
-#[tracing::instrument]//接收一个Extension包装的Arc<Reflector>
+#[tracing::instrument]
 async fn debug(Extension(state): Extension<Arc<Reflector>>) -> String {
     let mut result = String::new();
     result.push_str(&format!("Device: {:?}\n", state.device_store));
     result.push_str(&format!("Script: {:?}\n", state.script_store));
     result.push_str(&format!("Map: {:?}\n", state.selector_map));
     result
-}//这个debug函数可以作为一个HTTP处理函数，通过Web请求调用，
+}
 
 #[tracing::instrument(skip_all)]
 pub async fn web_server(
-    scheduler: Sender<ResourceIndex<Script>>,//用于发送脚本资源索引到调度器。
+    scheduler: Sender<ResourceIndex<Script>>,//用于发送脚本信息
     store: Arc<Reflector>,
-    addr: SocketAddr,//服务器监听的地址和端口
+    addr: SocketAddr,
 ) -> Result<()> {
-    use axum::{routing::get, Router};//引入了axum框架的Router类型和get函数
-//创建了一个Arc（原子引用计数的智能指针）来包裹scheduler
+    use axum::{routing::get, Router};
+
     let endpoint = Arc::new(scheduler);
 
     let app = Router::new()
-        .route("/api/v1alpha/webhook", get(trigger::webhook::webhook))//路由配置为处理webhook请求，具体处理逻辑由trigger::webhook::webhook函数处理。
-        .layer(Extension(endpoint))
+        .route("/api/v1alpha/webhook", get(trigger::webhook::webhook))
+        .layer(Extension(endpoint))//通过 axum::Extension 传递给请求处理器，以便在请求生命周期内共享
         .route("/api/v1alpha/debug", get(debug))
-        .layer(Extension(store));//封装为axum的Extension，从而可以在请求处理函数中通过类型系统自动提取和访问这些共享状态。
+        .layer(Extension(store));
 
     info!("Rule engine webserver listening on {}", addr);
-    axum::Server::bind(&addr)//绑定地址和端口
-        .serve(app.into_make_service())//启动服务
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())//来处理接收的HTTP请求
         .await?;
     Ok(())
 }
 
 #[tracing::instrument(skip_all)]
-pub async fn grpc_server(addr: SocketAddr, mgr: SessionManager) -> Result<()> {//指定gRPC服务应监听的地址和端口
-    use proto::controller_service_server::ControllerServiceServer;//管理会话或业务逻辑的实例
-    use tonic::transport::Server;//tonic的服务器构建器，用于配置和启动gRPC服务器。
+pub async fn grpc_server(addr: SocketAddr, mgr: SessionManager) -> Result<()> {
+    use proto::controller_service_server::ControllerServiceServer;//根据 Protocol Buffers 文件自动生成的 Rust 类型，
+    use tonic::transport::Server;//用于构建grpc服务器
     info!("Rule engine grpc server listening on {}", addr);
 
     Server::builder()
-        // .add_service(ControllerServiceServer::new(mgr))/自动生成的gRPC服务添加到服务器中
-        .serve(addr)//配置服务器监听的地址（addr），并异步等待服务的启动
+        .add_service(ControllerServiceServer::new(mgr))//将一个grpc服务添加到服务器中
+        .serve(addr)//方法启动 gRPC 服务器并使其在指定的地址上监听传入的请求
         .await?;
 
     Ok(())

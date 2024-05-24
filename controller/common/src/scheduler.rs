@@ -82,11 +82,11 @@ pub struct ManagerMsg {
 }
 
 pub struct Scheduler<T: RunScriptLookup + Send> {//Scheduler是一个泛型结构体，它负责调度脚本的执行。
-    lookup_impl: T,
+    lookup_impl: T,//是一个实现了 RunScriptLookup trait 的实例，负责具体的查找脚本和设备的操作。
     script_idgen: ScriptIDGenerator,//用于生成唯一的脚本标识符
 }
 //这个impl块为Scheduler<T>结构体提供了方法的实现，其中T是满足RunScriptLookup + Send + 'static约束的任意类型。这意味着T可以用于查找脚本和设备，可以跨线程发送，且具有'Static'生命周期。
-impl<T: RunScriptLookup + Send + 'static> Scheduler<T> {
+impl<T: RunScriptLookup + Send + 'static> Scheduler<T> {//这个实现块内部，你可以定义 Scheduler<T> 的方法，这些方法将能利用 T 提供的 RunScriptLookup 功能，
     pub fn new(lookup: T) -> Self {//T类型
         Scheduler {
             lookup_impl: lookup,
@@ -194,7 +194,7 @@ impl Reflector {//结构体函数
         if let Some(map) = &script.spec.read_selector.match_names {
             for name in map.values() {
                 idx.name = name.clone();//循环体中，将每个设备名称分别赋值给idx.name，其中idx是ResourceIndex<Device>类型的一个实例。
-                result.push(idx.clone())//通过克隆，确保每个元素都有一个唯一的资源索引副本。
+                result.push(idx.clone())//通过克隆，确保每个元素都有一个唯一的资源索引副本，把相关的设备索引都加入result。
             }
         }
         result
@@ -204,9 +204,9 @@ impl Reflector {//结构体函数
 impl RunScriptLookup for Arc<Reflector> {
     fn lookup_script(&mut self, index: &ResourceIndex<Script>) -> Result<Script> {
         self.script_store
-            .get(index)
+            .get(index)//返回一个 Option 类型，如果找到则是 Some，否则是 None。
             .map(|s| s.to_owned())//.map方法应用于这个Option值，如果值是Some，则执行括号内的闭包函数，这里是克隆脚本|s| s.to_owned()
-            .ok_or_else(|| eyre!("Script: {:?} not found in store", index))//神拷贝
+            .ok_or_else(|| eyre!("Script: {:?} not found in store", index))//深拷贝
     }
 
     fn lookup_device(&mut self, index: &ResourceIndex<Device>) -> Result<Device> {
@@ -232,7 +232,7 @@ impl RunScriptLookup for Arc<Reflector> {
 
     fn lookup_readable(&mut self, script: &Script) -> Result<HashMap<String, ReadDevice>> {
         let mut result = HashMap::new();
-        if let Some(map) = &script.spec.read_selector.match_names {
+        if let Some(map) = &script.spec.read_selector.match_names {//查找到可读设备设备类型和名字
             for (k, v) in map.iter() {
                 let idx = ResourceIndex {//设备索引
                     namespace: script.meta().namespace.to_owned().unwrap(),
@@ -244,12 +244,12 @@ impl RunScriptLookup for Arc<Reflector> {
                 } else {//使用idx在device_store中查询对应的设备。如果设备不存在，则跳过当前迭代。
                     continue;
                 };
-                let mut status = HashMap::new();
+                let mut status = HashMap::new();//建立 设备状态名称和对应的状态值
                 if let Some(s) = &dev.status {
                     trace!(s=?s);
-                    for twin in &s.twins {
+                    for twin in &s.twins {//遍历设备的状态孪生值 比如温度 开关 
                         if let Some(val) = &twin.reported {
-                            status.insert(twin.property_name.to_owned(), val.value.to_owned());
+                            status.insert(twin.property_name.to_owned(), val.value.to_owned());//插入状态名 状态之
                         }
                     }
                 }//遍历设备的状态信息，特别是查找reported状态（这里假设设备状态包含twins，其中每个twin有一个reported字段），并将这些状态信息添加到status映射中。

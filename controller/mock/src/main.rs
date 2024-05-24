@@ -47,7 +47,7 @@ fn main() -> Result<()> {
     drop(resource_file);
     let resource: Script = match opt.resource.extension() {
         Some(e) if e == "json" => {
-            serde_json::from_str(&resource).context("Parse resource file as json")?//用serde_json库解析字符串resource为Script类型的实例。
+            serde_json::from_str(&resource).context("Parse resource file as json")?//。context为上下文添加错误信息
         }
         Some(e) if e == "yaml" || e == "yml" => {
             serde_yaml::from_str(&resource).context("Parse resource file as yaml")?//?操作符用于简化错误处理
@@ -87,7 +87,7 @@ fn main() -> Result<()> {
         };
         config
             .executor
-            .insert("<script type>".into(), "/Path/to/executor".into());
+            .insert("<script type>".into(), "/Path/to/executor".into());//中插入一个键值对，键为 "<script type>"，值为 "/Path/to/executor"。
         println!("{}", toml::to_string_pretty(&config).unwrap());
         panic!("Config file not found!")
     }
@@ -102,7 +102,7 @@ fn main() -> Result<()> {
         .build()?;
     let cmd = Command::new(//使用Command::new()创建一个新的命令，命令的路径是从命令行参数中提供的执行器路径或配置文件中查找到的对应脚本类型的执行器路径
         opt.executor
-            .as_ref()
+            .as_ref()//尝试从命令行参数获取先
             .or(config.executor.get(&resource.spec.script_type.to_string()))//命令的路径是从命令行参数中提供的执行器路径或配置文件中查找到的对应脚本类型的执行器路径。
             .context("Can't find executor")?,
     );
@@ -154,7 +154,7 @@ pub async fn letency_handler(
 
 pub async fn script_status_handler(//主要用于处理脚本状态更新
     mut rx: Receiver<(ExecutorID, ScriptStatus)>,
-    m: HostsMap,
+    m: HostsMap,//用于映射执行器ID到类型和管理执行器通信
     mut state: watch::Receiver<ControllerState>,
 ) -> Result<()> {
     controller::wait_for_init(&mut state).await;
@@ -166,7 +166,7 @@ pub async fn script_status_handler(//主要用于处理脚本状态更新
             msg,
             msg.duration
         );
-        m.send_by_id(id, HostMessage::Disconnect).await.unwrap();//为每个更新请求构造一个 DeviceResponse 消息，并通过 m.send_by_id 方法发送给相应的执行器。这里使用了 DeviceStatus::Mock 状态作为示例
+        m.send_by_id(id, HostMessage::Disconnect).await.unwrap();//为每个更新请求构造一个 DeviceResponse 消息，并通过 m.send_by_id 方法发送给相应的执行器
     }
     Ok(())
 }
@@ -186,7 +186,7 @@ pub async fn update_device_handler(
                     id,
                     msg
                 );
-                let msg = api::protocol::DeviceResponse {
+                let msg = api::protocol::DeviceResponse {//构造一个 api::protocol::DeviceResponse 消息，包含会话ID和设备状态
                     session_id: msg.session_id,
                     status: DeviceStatus::Mock,
                 };
@@ -207,7 +207,7 @@ async fn run(resource: Script, cmd: Command) -> Result<()> {
     let msg = prepare(resource).await?;
     let sess = IOSession::new(cmd, api::manifest::ScriptType::Js.into())?;//使用 prepare 函数准备一个消息，然后创建一个 IOSession 来执行某个命令。
     let (tx, rx) = tokio::sync::oneshot::channel();
-    let (tx2, rx2) = tokio::sync::oneshot::channel();
+    let (tx2, rx2) = tokio::sync::oneshot::channel();//创建两个 oneshot 通道 tx/rx 和 tx2/rx2。这些通道用于在任务之间发送单次消息。
     let mut controller = ControllerBuilder::new()
         .spawn_letency(letency_handler)//构建一个控制器，并配置它以并发运行设备更新处理器、脚本状态处理器等
         .spawn_script_status(|rx, h, state| async move {
@@ -223,7 +223,7 @@ async fn run(resource: Script, cmd: Command) -> Result<()> {
             Ok(())
         })
         .build();
-    let id = controller.spwan_session(Box::new(sess));
+    let id = controller.spwan_session(Box::new(sess));//启动会话 
     tx2.send(id).unwrap();
     controller.run();
     tokio::select! {
@@ -231,7 +231,7 @@ async fn run(resource: Script, cmd: Command) -> Result<()> {
         _ = tokio::signal::ctrl_c() => {}
     }
     controller.stop();
-    for _ in 0..controller.controller_tasks.len() {
+    for _ in 0..controller.controller_tasks.len() {//使用 tokio::task::yield_now().await 暂时让出任务，确保所有控制器任务有机会完成。
         tokio::task::yield_now().await
     }
     controller.kill_all();

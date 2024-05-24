@@ -1,6 +1,6 @@
 use std::{cell::RefCell, rc::Rc};
 //一个模块的一部分，用于处理设备的读取、写入、获取状态、
-//设置状态和提交设备操作。它是为Deno环境编写的，利用Deno的底层API来与设备进行交互。让我们一步步解析这个模块的关键部分和功能：
+//设置状态和提交设备操作。它是为Deno环境编写的，利用Deno的底层API来与设备进行交互
 use deno_core::{//导入Deno的核心库，这包括错误处理、操作注册、扩展创建等功
     error::resource_unavailable, error::AnyError, include_js_files, op, Extension, OpState,
 };
@@ -22,7 +22,7 @@ pub async fn op_http_post(
     url: String,//: 分别表示HTTP请求的URL和正文。
     body: String,
 ) -> Result<String, AnyError> {
-    let op_state = state.try_borrow().map_err(|_| resource_unavailable())?;
+    let op_state = state.try_borrow().map_err(|_| resource_unavailable())?;//借用客户端
     let http: &Client = op_state.borrow();
     let res = http.post(url).body(body).send().await?;// 使用reqwest客户端发起一个POST请求，异步等待结果。
     let res = res.text().await?;//http.get(url).body(body).send().await?: 类似地，发起一个GET请求

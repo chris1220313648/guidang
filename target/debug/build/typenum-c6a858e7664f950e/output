@@ -1,2 +1,0 @@
-cargo:rustc-env=TYPENUM_BUILD_CONSTS=/home/chenpy/Downloads/guidang/target/debug/build/typenum-c6a858e7664f950e/out/consts.rs
-cargo:rustc-env=TYPENUM_BUILD_OP=/home/chenpy/Downloads/guidang/target/debug/build/typenum-c6a858e7664f950e/out/op.rs

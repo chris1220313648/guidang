@@ -14,7 +14,7 @@ use tracing::error;
 
 pub type AsyncHook<K> = Sender<Arc<Event<K>>>;//异步地发送包含某种类型事件的消息。
 pub type SyncHook<K> = Box<dyn FnMut(&Event<K>) -> Result<()> + Sync + Send + 'static>;
-//个类型别名用于同步事件处理，允许你同步地处理某种类型的事件，并且能够在闭包内部进行状态的修改。
+//类型别名用于同步事件处理，允许你同步地处理某种类型的事件，并且能够在闭包内部进行状态的修改。
 #[tracing::instrument(skip_all)]
 pub async fn reflector<K>(
     api: Api<K>,
@@ -79,8 +79,8 @@ where
 
 #[tracing::instrument(skip_all)]
 pub async fn trigger_hook(
-    rx: Receiver<Arc<Event<Device>>>,//接受设备时间
-    scheduler: Sender<ResourceIndex<Device>>,//设备i索引发送到调度器
+    rx: Receiver<Arc<Event<Device>>>,//接受设备事件
+    scheduler: Sender<ResourceIndex<Device>>,//设备索引发送到调度器
 ) -> Result<()> {
     let dev_to_idx = |dev: &Device| ResourceIndex {
         //定义了一个闭包dev_to_idx，它接受一个&Device引用作为参数，并返回一个ResourceIndex<Device>结构

@@ -45,7 +45,7 @@ path = './ops'
 path = '../../proto'
 
 [build-dependencies]
-deno_core = "0.135"
+deno_core = "0.140"
 
 [build-dependencies.executor_ops]
 path = './ops'

@@ -108,7 +108,7 @@ impl ModuleLoader for FsLoader {
                     .await
                     .with_context(|| format!("{:?} Not found", &path))?;
                 let mut code = Vec::new();
-                file.read_to_end(&mut code).await?;//将其内容作为模块代码返回。
+                file.read_to_end(&mut code).await?;// 将文件内容读取到缓冲区
                 let module_url_found = Url::from_file_path(path.canonicalize()?).unwrap();
                 Ok(ModuleSource {//成功读取文件后，构建并返回一个ModuleSource实例，其中包含模块代码、指定的模块URL和实际找到的模块URL（可能因重定向而有所不同）以及模块类
                     code: code.into_boxed_slice(),

@@ -5,7 +5,7 @@ use deno_core::{
     error::{generic_error, range_error, resource_unavailable},
     include_js_files, op, Extension, OpState,
 };
-use proto::{controller_service_client::ControllerServiceClient, QosPolicy, UpdateDevice};
+use proto::{controller_service_client::ControllerServiceClient, QosPolicy, UpdateDevice};//用于与控制器服务进行通信的客户端和相关数据结构。
 use serde::Deserialize;
 use tonic::transport::Channel;
 use tracing::debug;
@@ -35,7 +35,7 @@ pub fn op_list_readable_devices(
     _: (),
 ) -> Result<Vec<String>, AnyError> {
     let readable: &ReadableDevices = state.borrow();//通过state.borrow()借用ReadableDevices
-    let list = readable.devices.keys().map(|v| v.clone()).collect();
+    let list = readable.devices.keys().map(|v| v.clone()).collect();//获取所有可读设备的名称，并收集到一个 Vec<String> 中
     Ok(list)
 }
 
@@ -56,7 +56,7 @@ pub fn op_get_device_status(
     name: String,
     property: String,
 ) -> Result<Option<String>, AnyError> {
-    let readable: &ReadableDevices = state.borrow();
+    let readable: &ReadableDevices = state.borrow();//借用可读设备集合
     debug!("{:?}", readable);
     let value = readable
         .devices
@@ -82,8 +82,8 @@ pub fn op_update_device_desired(
 ) -> Result<(), AnyError> {
     let writable: &mut WritableDevices = state.borrow_mut();
     let r = if let Some(d) = writable.devices.get_mut(&arg.name) {
-        debug!(arg =? arg, "update device desired");//使用if let结构尝试从writable.devices中找到匹配arg.name的设备。如果找到了设备，就在该设备的commits映射中插入或更新arg.property对应的值为arg.value
-        d.commits.insert(arg.property, arg.value);
+        debug!(arg =? arg, "update device desired");//使用if let结构尝试从writable.devices中找到匹配arg.name的设备。
+        d.commits.insert(arg.property, arg.value);//如果找到了设备，就在该设备的commits映射中插入或更新arg.property对应的值为arg.value
         Ok(())
     } else {
         Err(generic_error("Device not found"))
@@ -108,7 +108,7 @@ pub async fn op_commit_device(//用于提交对某个设备的所有待定更改
         }
     };
     debug!(commits =? commits, name =? name, qos =? qos, "commit device");
-    let (mut client, request) = {
+    let (mut client, request) = {//构建请求
         let op_state = state.try_borrow().map_err(|_| resource_unavailable())?;
         let rule: &Rc<Rule> = op_state.borrow();
         let qos = match qos {

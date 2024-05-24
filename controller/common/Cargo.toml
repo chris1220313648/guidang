@@ -38,7 +38,7 @@ version = '*'
 default-features = false
 
 [dependencies.kube]
-version = '0.72.0'
+version = '0.73.1'
 default-features = false
 features = [
     'native-tls',
@@ -47,10 +47,10 @@ features = [
 ]
 
 [dependencies.k8s-openapi]
-version = '0.14'
+version = '0.15'
 default-features = false
 features = [
-    'v1_20',
+    'v1_22',
     'schemars',
 ]
 

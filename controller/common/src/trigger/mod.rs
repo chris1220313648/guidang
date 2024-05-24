@@ -10,9 +10,9 @@ pub(crate) mod test {
     use crate::api::Script;
     use crate::scheduler::ResourceIndex;
     use flume::Sender;
-    use tokio::task::JoinHandle;
+    use tokio::task::JoinHandle;//异步任务
 
-    pub(crate) async fn test_triger(
+    pub(crate) async fn test_triger(//创建一个有界通道，并启动一个异步任务，等待接收 ResourceIndex<Script>，然后验证其名称和命名空间是否与预期匹配。
         name: String,
         namespace: String,
     ) -> (Sender<ResourceIndex<Script>>, JoinHandle<bool>) {
@@ -25,7 +25,7 @@ pub(crate) mod test {
     }
 
     #[tokio::test]
-    async fn test_drop() {
+    async fn test_drop() {//验证在延迟后发送正确的数据能否被正确识别。
         let name = String::from("test_name");
         let namespace = String::from("test_namespace");
         let (tx, handle) = test_triger(name.clone(), namespace.clone()).await;
@@ -58,7 +58,7 @@ pub(crate) mod test {
     }
 
     #[tokio::test]
-    async fn test_ok() {
+    async fn test_ok() {//
         let namespace = String::from("test_namespace");
         let name = String::from("test_name");
         let (tx, handle) = test_triger(name.clone(), namespace.clone()).await;

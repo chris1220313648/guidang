@@ -27,9 +27,9 @@ pub struct DenoWorker {
 pub struct GlobalOption<M: ModuleLoader> {//<M: ModuleLoader>：这部分定义了一个泛型参数M，并约束M必须实现ModuleLoader trait。
     pub default_register: String,
     pub module_loader: M,//ModuleLoader是deno_core中的一个trait，定义了模块加载的接口。这表明GlobalOption可以与任何实现了ModuleLoader接口的模块加载器一起工作
-}
+}//包含全局配置选项
 
-impl DenoWorker {
+impl DenoWorker {//封装和管理运行时环境
     pub fn new<M: ModuleLoader + 'static>(
         run: RunScript,
         global: GlobalOption<M>,
@@ -108,12 +108,12 @@ impl DenoWorker {
         } else {
             (ScriptStatusCode::Ok, String::new())
         };
-        let start = Some(Timestamp {
+        let start = Some(Timestamp {//脚本开始时间
             seconds: state.start_time.unix_timestamp(),
             nanos: state.start_time.nanosecond() as i32,
         });
         let now = OffsetDateTime::now_utc();
-        let duration = now - state.start_time;
+        let duration = now - state.start_time;//持续时间
         let duration = Some(Duration {
             seconds: duration.whole_seconds(),
             nanos: duration.subsec_nanoseconds(),
@@ -133,7 +133,7 @@ impl DenoWorker {
     }
 
     async fn run_inner(&mut self) -> Result<()> {
-        self.bootstrap();
+        self.bootstrap();//初始化
         let res = {
             let op_state = self.rt.op_state();
             let op_state = op_state.borrow_mut();
@@ -142,7 +142,7 @@ impl DenoWorker {
             let url = state.url();
             http.get(url).send().await?//构造请求URL，并异步发送HTTP GET请求以下载脚本。如果响应状态不是成功（200-299），则返回错误。
         };
-        if !res.status().is_success() {
+        if !res.status().is_success() {//检查响应状态
             return Err(anyhow!(
                 "Download script failed with status: {}",
                 res.status()

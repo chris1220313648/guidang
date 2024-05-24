@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
     apiextensions = "v1",
     status = "ScriptStatus"
 )]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase")]//命名风格
 pub struct ScriptSpec {
     /// devices that the rule script can read.
     pub read_selector: DeviceSelectorSet,
@@ -50,7 +50,7 @@ pub struct DeviceSelectorSet {
     /// to a single device resource in kubnernetes.
     /// key: name of device used in rule script
     /// value: name of device resource
-    pub match_names: Option<HashMap<String, String>>,
+    pub match_names: Option<HashMap<String, String>>,//脚本设备名映射k8s设备名
 
     /// This is a map from name of a set of devices used in rule scirpt
     /// to a Ability resource in kubernetes.
@@ -58,7 +58,7 @@ pub struct DeviceSelectorSet {
     pub match_abilities: Option<HashMap<String, String>>,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]//设备集映射
 #[serde(rename_all = "camelCase")]
 pub struct Manifest {
     /// script type

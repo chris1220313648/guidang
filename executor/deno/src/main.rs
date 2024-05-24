@@ -59,7 +59,7 @@ async fn main() -> Result<()> {
         let global = global_option.clone();
         let url = url.clone();
         info!("New script to run: {:?}", run.manifest);
-        thread::spawn(move || {//，使用thread::spawn在新线程中创建并启动一个独立的Tokio运行时环境。
+        thread::spawn(move || {//为新脚本任务创建新线程
             let rt = tokio::runtime::Builder::new_current_thread()
                 .enable_all()
                 .thread_name(format!(

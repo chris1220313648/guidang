@@ -24,7 +24,7 @@ pub enum ControllerState {
 //定义异步函数 等待控制器状态变为非Init
 pub async fn wait_for_init(rx: &mut watch::Receiver<ControllerState>) {
     loop {
-        let state = *rx.borrow_and_update();
+        let state = *rx.borrow_and_update();//获取当前状态并立即更新内部版本，返回当前值的引用
         if state != ControllerState::Init {
             return;
         }
@@ -39,7 +39,7 @@ pub async fn wait_for_stop(rx: &mut watch::Receiver<ControllerState>) {
         if state == ControllerState::Stop {
             return;
         }
-        let _ = rx.changed().await;
+        let _ = rx.changed().await;//等待状态变化
     }
 }
 // 定义一个结构体Config，包含Web服务器、gRPC服务器和MQTT服务器的地址。
@@ -74,7 +74,7 @@ impl Controller {
     pub async fn run(mut self) -> Result<()> {
         self.init();
         use tokio::{signal, time};
-        tokio::select! {
+        tokio::select! {//同时监听多个异步事件
             _ = signal::ctrl_c() => {}
             _ = Self::setup_term_handler() => {}
             _ = Self::setup_hup_handler() => {}
@@ -88,7 +88,7 @@ impl Controller {
     #[tracing::instrument]
     pub async fn setup_term_handler() -> Result<()> {
         use tokio::signal;
-        let mut signal = signal::unix::signal(signal::unix::SignalKind::terminate())?;
+        let mut signal = signal::unix::signal(signal::unix::SignalKind::terminate())?;//创建一个监听 SIGTERM 的信号流
         signal.recv().await;// 等待信号。
         Ok(())
     }
@@ -103,16 +103,16 @@ impl Controller {
  // 定义一个函数spawn，用于启动一个异步任务。
     pub fn spawn(&mut self, task: impl Future<Output = Result<()>> + Send + 'static) {
         let mut state = self.state_rx.clone();
-        let handle = tokio::spawn(async move {
+        let handle = tokio::spawn(async move {//使用 tokio::spawn 函数将一个异步块提交到 Tokio 执行器上执
             wait_for_init(&mut state).await;
-            if let Err(e) = tokio::select! {
+            if let Err(e) = tokio::select! {//用 tokio::select! 宏来同时监听任务执行和停止信号
                 r = task => r,
-                _ = wait_for_stop(&mut state) => Ok(())
+                _ = wait_for_stop(&mut state) => Ok(())//控制器stop状态 
             } {
                 error!(error =? e, "Task throw a error")
             }
         });
-        self.controller_tasks.push(handle)
+        self.controller_tasks.push(handle)//存储人物句柄
     }
 // 定义一个函数spawn_kubeapi，用于启动与Kubernetes API相关的异步任务。
     pub fn spawn_kubeapi(
@@ -129,9 +129,9 @@ impl Controller {
         let reflector_store = Arc::new(Reflector::default());
 
         // Scheduler
-        // 创建一个Scheduler输入的通道。
+        // 创建一个Scheduler输入的通道。 发出和接收脚本信息
         let (schin_tx, schin_rx) = flume::bounded(10);
-        // 创建一个Scheduler输出的通道。
+        // 创建一个Scheduler输出的通道。  发出和接受管理消息
         let (schout_tx, schout_rx) = flume::bounded(10);
          // 克隆Reflector实例。
         let reflector_clone = reflector_store.clone();
@@ -147,14 +147,14 @@ impl Controller {
             }
             Ok(())
         });
-
+      
         // Device to Script map
         let reflector_clone = reflector_store.clone();
-        // 创建一个Device到Script映射的通道。
+        // trigger输入 输出
         let (schdevin_tx, schdevin_rx) = flume::bounded(10);
         // 克隆Scheduler输入通道的发送端。
         let schin_tx_clone = schin_tx.clone();
-        // 启动设备到脚本映射的异步任务。
+        // 启动设备到脚本映射的异步任务。接收设备信息 发出对应脚本信息
         self.spawn(async move { trigger(reflector_clone, schdevin_rx, schin_tx_clone).await });
 
         // script reflector
@@ -179,7 +179,7 @@ impl Controller {
         if is_cloud {
             let device_rx = device_rx.clone();
             let schdevin_tx = schdevin_tx.clone();
-            self.spawn(async move { trigger_hook(device_rx, schdevin_tx).await });
+            self.spawn(async move { trigger_hook(device_rx, schdevin_tx).await });//设备事件-设备索引发到调度期
         }
 
         let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
@@ -191,7 +191,7 @@ impl Controller {
         let (script_tx, script_rx) = flume::bounded(3);
         let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
         self.spawn(async move { script_hook(script_rx, reflector_clone).await });// 启动脚本钩子的异步任务。
-        script_async_hooks.push(script_tx);
+        script_async_hooks.push(script_tx);//将脚本事件发送端添加到异步钩子中
 
         // script reflector
         self.spawn(async move {
@@ -218,16 +218,16 @@ impl Controller {
         (schin_tx, schdevin_tx, schout_rx, reflector_store)
     }
 
-    pub fn spawn_mqtt(&mut self, scheduler: Sender<ResourceIndex<Device>>) {
+    pub fn spawn_mqtt(&mut self, scheduler: Sender<ResourceIndex<Device>>) {//传递schudele 的设备信息发送端
         use crate::trigger::mqtt::*;
         let sync_hooks = vec![trigger_hook(scheduler), logger_hook()];
         let async_hooks = Vec::new();
         let host = self.config.mqttaddr.ip().to_string();
         let port = self.config.mqttaddr.port();
-        self.spawn(async move { mqtt_client(host, port, async_hooks, sync_hooks).await });
+        self.spawn(async move { mqtt_client(host, port, async_hooks, sync_hooks).await });//启动客户端
     }
 
-    pub fn spawn_webserver(
+    pub fn spawn_webserver(//启动http服务器
         &mut self,
         scheduler: Sender<ResourceIndex<Script>>,
         store: Arc<Reflector>,
@@ -242,8 +242,8 @@ impl Controller {
         let mut state = self.state_rx.clone();
         let handle = tokio::spawn(async move {
             wait_for_init(&mut state).await;
-            let mgr = SessionManager::new(client, scheduler, state);
-            if let Err(e) = crate::server::grpc_server(addr, mgr).await {
+            let mgr = SessionManager::new(client, scheduler, state);//启动会话管理器
+            if let Err(e) = crate::server::grpc_server(addr, mgr).await {//在等待初始化完成后，创建一个会话管理器 SessionManager，并尝试启动gRPC服务器。
                 error!(error =? e, "Grpc server is down!");
             }
         });
@@ -254,7 +254,7 @@ impl Controller {
         {
             let state = *self.state_rx.borrow();
             if state != ControllerState::Init {
-                panic!("Can't run twice");
+                panic!("Can't run twice");//获取当前状态，如果状态不是 ControllerState::Init，则触发 panic。
             }
         }
         self.state.send(ControllerState::Running).unwrap();
@@ -270,12 +270,12 @@ impl Controller {
                 _ => {}
             }
         }
-        self.state.send(ControllerState::Stop).unwrap();
+        self.state.send(ControllerState::Stop).unwrap();//设置停止
     }
 
-    pub fn kill_all(&self) {
+    pub fn kill_all(&self) {//如果状态是 ControllerState::Init，表示还未初始化
         for j in &self.controller_tasks {
-            j.abort()
+            j.abort()//停止所有任务
         }
     }
 }
