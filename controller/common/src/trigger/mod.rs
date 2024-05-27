@@ -1,7 +1,7 @@
 pub mod kubeapi;
 pub mod mqtt;
 pub mod webhook;
-
+pub mod sqlite3api;
 #[cfg(test)]
 pub(crate) mod test {
     use std::marker::PhantomData;

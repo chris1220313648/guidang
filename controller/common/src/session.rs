@@ -23,7 +23,8 @@ use proto::{ClientMessage, QosPolicy, ServerMessage};
 use tokio::sync::watch;
 use tonic::{async_trait, metadata::MetadataMap, Request, Response, Status, Streaming};
 use tracing::{error, info, trace};
-
+use rusqlite::{params, Connection};
+use std::sync::{Mutex};
 const RE_VERSION: &str = "re-version";
 const MANAGER: &str = "ruleengine";
 
@@ -35,6 +36,7 @@ pub struct SessionManager {
     pp: PatchParams,//用于配置更新操作的参数
     scheduler: Receiver<ManagerMsg>,
     state: watch::Receiver<ControllerState>,//接受控制器状态变化
+    conn: Arc<Mutex<Connection>>
 }
 
 #[derive(Debug)]
@@ -63,6 +65,13 @@ impl SessionManager {
         scheduler: Receiver<ManagerMsg>,
         state: watch::Receiver<ControllerState>,
     ) -> Self {
+        let conn = match Connection::open("test.db") {
+            Ok(conn) => Arc::new(Mutex::new(conn)),
+            Err(e) => {
+                eprintln!("Failed to open database connection: {}", e);
+                std::process::exit(1); // 如果无法打开数据库连接，则退出程序
+            }
+        };
         Self {
             scripts: Default::default(),
             executors: Default::default(),
@@ -71,6 +80,7 @@ impl SessionManager {
             pp: PatchParams::apply(MANAGER),//用于控制更新操作
             scheduler,
             state,
+            conn,
         }
     }
 
@@ -229,7 +239,7 @@ impl ControllerService for SessionManager {
             Some((_, sess_status)) => {
                 info!(status =? sess_status, "Script exit");//
                 let client = self.client.clone();
-                let api: Api<Script> = Api::namespaced(client, &sess_status.namespace);//创建一个命名空间的Api<Script>视力
+                // let api: Api<Script> = Api::namespaced(client, &sess_status.namespace);//创建一个命名空间的Api<Script>
                 let last_run = status//提取开始时间
                     .get_ref()
                     .start
@@ -242,15 +252,24 @@ impl ControllerService for SessionManager {
                     .as_ref()
                     .map(|d| (d.seconds * 1_000_000 + d.nanos as i64 / 1000) as u32)
                     .unwrap_or_default();
-                let api_status = api::script::ScriptStatus {
+                let new_status = api::script_sqlite3::ScriptStatus {
                     last_run,
                     elapsed_time,
                     status: status.get_ref().code,
                     message: status.into_inner().message,
                 };
-                let patch = serde_json::json!({ "status": api_status });
-                let patch = Patch::Merge(&patch);//转化为json并创建和合并补丁
-                match api.patch_status(&sess_status.name, &self.pp, &patch).await {//更新脚本状态
+                let conn = self.conn.lock().unwrap();
+                match conn.execute(
+                    "UPDATE Script SET LastRun = ?, ElapsedTime = ?, Status = ?, Message = ? WHERE ScriptID = ?",
+                    params![
+                        new_status.last_run,
+                        new_status.elapsed_time,
+                        new_status.status,
+                        new_status.message,
+                        id.to_u32() as i32,
+                        
+                    ],
+                ) {
                     Ok(_) => Ok(Response::new(())),
                     Err(e) => {
                         error!(error =? e, "Failed to update status of Script");
@@ -259,13 +278,24 @@ impl ControllerService for SessionManager {
                 }
             }
             None => {
-                error!(request =? status, "Got message of updating script status， but script isn't running");
+                error!(request =? status, "Got message of updating script status, but script isn't running");
                 Err(Status::invalid_argument(
-                    "Got message of updating script status， but script isn't running",
+                    "Got message of updating script status, but script isn't running",
                 ))
             }
+                // let patch = serde_json::json!({ "status": api_status });
+                // let patch = Patch::Merge(&patch);//转化为json并创建和合并补丁
+                // match api.patch_status(&sess_status.name, &self.pp, &patch).await {//更新脚本状态
+                //     Ok(_) => Ok(Response::new(())),
+                //     Err(e) => {
+                //         error!(error =? e, "Failed to update status of Script");
+                //         Err(Status::internal("Failed to update status of Script"))
+                //     }
+                // }
+            }
+
         }
-    }
+    
 
     #[tracing::instrument(skip(self))]
     async fn update_device_desired(

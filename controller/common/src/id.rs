@@ -6,6 +6,11 @@ use std::sync::atomic::{AtomicU32, Ordering};
 )]
 pub struct ScriptID(ID);//ScriptID是一个包含单一字段的结构体，这个字段是另一个结构体ID的实例
 
+impl ScriptID {
+    pub fn to_u32(&self) -> u32 {
+        self.0 .0
+    }
+}
 impl From<ScriptID> for u32 {//这个impl块为ScriptID类型实现了From特征，允许将ScriptID实例转换成u32类型
     fn from(val: ScriptID) -> u32 {
         val.0.into()

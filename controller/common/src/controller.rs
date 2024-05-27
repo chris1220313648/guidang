@@ -1,6 +1,7 @@
 use crate::api::{Device, Script};
 use crate::scheduler::{trigger, ManagerMsg, Reflector, ResourceIndex, Scheduler};
 use crate::session::SessionManager;
+use crate::trigger::sqlite3api::reflector_sqlite3;
 use color_eyre::Result;
 use flume::{Receiver, Sender};
 use futures::StreamExt;
@@ -12,7 +13,9 @@ use std::sync::Arc;
 use tokio::sync::watch;
 use tokio::task::JoinHandle;
 use tracing::{error, info};
-
+use rusqlite::{params, Connection};
+use std::sync::Mutex;
+use color_eyre::Report;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ControllerState {
     Init,
@@ -161,9 +164,10 @@ impl Controller {
         // 创建空的异步钩子列表。
         let mut script_async_hooks = Vec::new();
         // 创建同步钩子列表。
-        let script_sync_hooks = vec![logger_hook()];
+        // let script_sync_hooks = vec![logger_hook()];
         // 创建Script API实例
-        let script_api: Api<Script> = Api::all(client.clone());
+        // let script_api: Api<Script> = Api::all(client.clone());
+ 
 
         // device reflector
         // 创建空的异步钩子列表。
@@ -194,16 +198,33 @@ impl Controller {
         script_async_hooks.push(script_tx);//将脚本事件发送端添加到异步钩子中
 
         // script reflector
-        self.spawn(async move {
-            reflector(
-                script_api,
-                ListParams::default(),
-                script_async_hooks,
-                script_sync_hooks,
-            )
-            .await
-        });
+        // self.spawn(async move {
+        //     reflector(
+        //         script_api,
+        //         ListParams::default(),
+        //         script_async_hooks,
+        //         script_sync_hooks,
+        //     )
+        //     .await
+        // });
+   // 处理连接的错误，并将打开的连接传递给 reflector_sqlite3
+        let conn = match Connection::open("test.db") {
+            Ok(conn) => {
+                let conn=Arc::new(Mutex::new(conn));
+                self.spawn(async move {
+                    reflector_sqlite3(conn).await 
+                    
+                });
+            
+            }
+            Err(e) => {
+                eprintln!("Failed to open database connection: {}", e);
+                std::process::exit(1); // 如果无法打开数据库连接，则退出程序
+            }
+        };
 
+            
+ 
         // device reflector
         self.spawn(async move {
             reflector(
