@@ -203,12 +203,9 @@ impl Controller {
         //         script_api,
         //         ListParams::default(),
         //         script_async_hooks,
-        //         script_sync_hooks,
-        //     )
-        //     .await
-        // });
-   // 处理连接的错误，并将打开的连接传递给 reflector_sqlite3
-        let conn = match Connection::open("test.db") {
+        //         script_sync_hooks,        let conn = match Connection::open("test.db") {
+
+        let _conn = match Connection::open("test.db") {
             Ok(conn) => {
                 let conn=Arc::new(Mutex::new(conn));
                 self.spawn(async move {

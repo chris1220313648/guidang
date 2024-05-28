@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::error::Error;
 use std::sync::{Arc, Mutex};
 use std::str::FromStr;
-use color_eyre::eyre::{Report, Result};
+use color_eyre::eyre::{Report, Result, WrapErr};
 use crate::api::script_sqlite3::*;
 use tokio::time::{interval, Duration};
 use rusqlite::{params, Connection};
@@ -10,15 +10,16 @@ use chrono::{NaiveDateTime, Utc};
 use serde::{Deserialize, Serialize};
 use schemars::JsonSchema;
 
-pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>) -> Result<()> {
-    poll_event_log_and_process_events(conn).await?;
+
+pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>) -> Result<(), Report> {
+    let e=poll_event_log_and_process_events(conn).await;
     Ok(())
 }
 
-async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>) -> Result<Box<dyn Error>> {
+async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>) -> Result<(), Box<dyn Error>> {
     let mut last_polled = Utc::now() - chrono::Duration::seconds(30); // 记录上次轮询时间，假设10s前开始
     let poll_interval = Duration::from_secs(5); // 轮询间隔
-    let mut interval = interval(poll_interval);//定时器
+    let mut interval = interval(poll_interval); // 定时器
 
     loop {
         interval.tick().await;
@@ -58,7 +59,7 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>) -> Resu
     }
 }
 
-fn fetch_script_details(conn: &Connection, script_id: i32) -> Result<ScriptSqlite3,Box<dyn Error>> {
+fn fetch_script_details(conn: &Connection, script_id: i32) -> Result<ScriptSqlite3, Box<dyn Error>> {
     let mut stmt = conn.prepare("SELECT Name, ScriptType, Version, ElapsedTime, LastRun, Message, Status FROM Script WHERE ScriptID = ?")?;
     let script = stmt.query_row(params![script_id], |row| {
         Ok(ScriptSqlite3 {
@@ -74,7 +75,7 @@ fn fetch_script_details(conn: &Connection, script_id: i32) -> Result<ScriptSqlit
     Ok(script)
 }
 
-fn fetch_environment_variables(conn: &Connection, script_id: i32) -> Result<HashMap<String, String>,Box<dyn Error>> {
+fn fetch_environment_variables(conn: &Connection, script_id: i32) -> Result<HashMap<String, String>, Box<dyn Error>> {
     let mut stmt = conn.prepare("SELECT Key, Value FROM EnvironmentVariables WHERE ScriptID = ?")?;
     let mut rows = stmt.query(params![script_id])?;
     let mut env_vars = HashMap::new();
@@ -86,7 +87,7 @@ fn fetch_environment_variables(conn: &Connection, script_id: i32) -> Result<Hash
     Ok(env_vars)
 }
 
-fn fetch_execute_policy(conn: &Connection, script_id: i32) -> Result<Policy,Box<dyn Error>> {
+fn fetch_execute_policy(conn: &Connection, script_id: i32) -> Result<Policy, Box<dyn Error>> {
     let mut stmt = conn.prepare("SELECT Cron, QoS, ReadChange, Webhook FROM ExecutePolicies WHERE ScriptID = ?")?;
     let policy = stmt.query_row(params![script_id], |row| {
         let qos: String = row.get(1)?;
@@ -101,7 +102,7 @@ fn fetch_execute_policy(conn: &Connection, script_id: i32) -> Result<Policy,Box<
     Ok(policy)
 }
 
-fn fetch_selectors(conn: &Connection, script_id: i32) -> Result<(DeviceSelectorSet, DeviceSelectorSet),Box<dyn Error>> {
+fn fetch_selectors(conn: &Connection, script_id: i32) -> Result<(DeviceSelectorSet, DeviceSelectorSet), Box<dyn Error>> {
     let mut stmt = conn.prepare("SELECT Type, MatchTypes, MatchNames FROM Selector WHERE ScriptID = ?")?;
     let mut rows = stmt.query(params![script_id])?;
     let mut read_selector = DeviceSelectorSet {
@@ -130,7 +131,6 @@ fn fetch_selectors(conn: &Connection, script_id: i32) -> Result<(DeviceSelectorS
     }
     Ok((read_selector, write_selector))
 }
-
 fn parse_match_string(s: &str) -> HashMap<String, String> {
     s.split(',').map(|kv| {
         let mut iter = kv.splitn(2, ':');
@@ -139,18 +139,13 @@ fn parse_match_string(s: &str) -> HashMap<String, String> {
         (key, value)
     }).collect()
 }
-
 fn create_script_struct(
     script: ScriptSqlite3,
     env_vars: HashMap<String, String>,
     execute_policy: Policy,
     selectors: (DeviceSelectorSet, DeviceSelectorSet)
-) -> Result<Script,Box<dyn Error>> {
+) -> Result<Script, Box<dyn Error>> {
     let script_type = ScriptType::from_str(&script.script_type)?;
-    // let script_type = match ScriptType::from_str(&script.script_type) {
-    //     Ok(script_type) => script_type,
-    //     Err(e) => return Err(Box::new(e)),
-    // };
     let manifest = Manifest {
         script_type,
         name: script.name.clone(),
