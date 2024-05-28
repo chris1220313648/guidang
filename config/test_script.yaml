@@ -1,0 +1,27 @@
+apiVersion: hit.edu.cn/v1alpha1
+kind: Script
+metadata:
+  name: test-script
+  namespace: default
+spec:
+  readSelector:
+    matchNames:
+      temp-sensor-name: dht11
+  writeSelector:
+    matchNames:
+      target-device-name: switch
+  env:
+    filter_service_url: "http://127.0.0.1:8003/api/v1alpha1/filter"
+    threshold-value: "40"
+  manifest:
+    scriptType: Js
+    name: test
+    version: 0.1_beta1
+    #register: http://10.108.251.228:8000
+    register: http://127.0.0.1:8080
+  executePolicy:
+  #readChange: true 表示如果 readSelector 指定的设备状态发生变化，则执行脚本。
+    readChange: true
+    webhook: true
+    cron: ""
+    qos: AtMostOnce

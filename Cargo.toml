@@ -1,0 +1,26 @@
+[workspace]
+members = [
+    "controller/cloud",
+    "controller/common",
+    'proto',
+    'utils/script-crd',
+    'utils/filter-server',
+    "executor/common",
+    "executor/deno",
+    "executor/wasm",
+    "executor/wasm-transform",
+    "executor/deno/ops",
+]
+
+[profile.release.package.rand]
+opt-level = 3
+[profile.release.package.deno_core]
+opt-level = 3
+[profile.release.package.v8]
+opt-level = 3
+[profile.release.package.serde_v8]
+opt-level = 3
+[profile.release.package.serde]
+opt-level = 3
+[profile.dev.package.v8]
+opt-level = 3

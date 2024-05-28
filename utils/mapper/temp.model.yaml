@@ -1,0 +1,18 @@
+apiVersion: devices.kubeedge.io/v1alpha2
+kind: DeviceModel
+metadata:
+  labels:
+    description: 'virtual_temperature_sensor_model'
+    manufacturer: 'Python.org'
+    model: ABC
+  name: sensor-temp
+  namespace: default
+spec:
+  properties:
+  - name: temperature
+    description: temperature in degree celsius
+    type:
+      int:
+        accessMode: ReadOnly
+        maximum: 110
+        unit: Degree Celsius
