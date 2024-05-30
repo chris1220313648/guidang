@@ -9,14 +9,16 @@ use rusqlite::{params, Connection};
 use chrono::{NaiveDateTime, Utc};
 use serde::{Deserialize, Serialize};
 use schemars::JsonSchema;
+use crate::scheduler:: Reflector;
 
-
-pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>) -> Result<(), Report> {
-    let e=poll_event_log_and_process_events(conn).await;
+pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Report> {
+    let _=poll_event_log_and_process_events(conn,reflector).await;
     Ok(())
+    
+    
 }
 
-async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>) -> Result<(), Box<dyn Error>> {
+async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Box<dyn Error>> {
     let mut last_polled = Utc::now() - chrono::Duration::seconds(30); // 记录上次轮询时间，假设10s前开始
     let poll_interval = Duration::from_secs(5); // 轮询间隔
     let mut interval = interval(poll_interval); // 定时器
@@ -47,10 +49,35 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>) -> Resu
             let env_vars = fetch_environment_variables(&conn, script_id)?;
             let execute_policy = fetch_execute_policy(&conn, script_id)?;
             let selectors = fetch_selectors(&conn, script_id)?;
-
             let script_struct = create_script_struct(script, env_vars, execute_policy, selectors)?;
             println!("{:?}", script_struct);
+            match event_type.as_str() {
+                "create" => {
+                    // 处理创建事件的逻辑
+                    println!("Handling create event for script_id: {}", script_id);
+                    reflector.add_script(&script_struct)
+                },
+                "update" => {
+                    // 处理更新事件的逻辑
+                    println!("Handling update event for script_id: {}", script_id);
+                    reflector.add_script(&script_struct)
+                },
+                "delete" => {
+                    // 处理删除事件的逻辑
+                    println!("Handling delete event for script_id: {}", script_id);
+                    reflector.remove_script(&script_struct)
+                },
+                "error" => {
+                    // 处理错误事件的逻辑
+                    println!("Handling error event for script_id: {}", script_id);
+                },
+                _ => {
+                    // 处理未知事件类型
+                    println!("Unknown event type: {} for script_id: {}", event_type, script_id);
+                }
+            }      
         }
+        
         if !found {
             println!("No new events found.");
         }

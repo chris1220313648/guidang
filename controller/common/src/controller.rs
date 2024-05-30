@@ -31,7 +31,7 @@ pub async fn wait_for_init(rx: &mut watch::Receiver<ControllerState>) {
         if state != ControllerState::Init {
             return;
         }
-        let _ = rx.changed().await;
+        let _ = rx.changed().await;//等待直到状态发生变化。这个操作会暂停当前任务，直到有新的状态广播,有新的广播就会检测
     }
 }
 // 定义一个异步函数wait_for_stop，等待控制器状态变为Stop。
@@ -115,7 +115,7 @@ impl Controller {
                 error!(error =? e, "Task throw a error")
             }
         });
-        self.controller_tasks.push(handle)//存储人物句柄
+        self.controller_tasks.push(handle)//存储任务句柄
     }
 // 定义一个函数spawn_kubeapi，用于启动与Kubernetes API相关的异步任务。
     pub fn spawn_kubeapi(
@@ -162,7 +162,7 @@ impl Controller {
 
         // script reflector
         // 创建空的异步钩子列表。
-        let mut script_async_hooks = Vec::new();
+        // let mut script_async_hooks = Vec::new();
         // 创建同步钩子列表。
         // let script_sync_hooks = vec![logger_hook()];
         // 创建Script API实例
@@ -192,10 +192,10 @@ impl Controller {
 
         // script_hook for device reflector
         // 创建脚本钩子的通道。
-        let (script_tx, script_rx) = flume::bounded(3);
-        let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
-        self.spawn(async move { script_hook(script_rx, reflector_clone).await });// 启动脚本钩子的异步任务。
-        script_async_hooks.push(script_tx);//将脚本事件发送端添加到异步钩子中
+        // let (script_tx, script_rx) = flume::bounded(3);
+        // let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
+        // self.spawn(async move { script_hook(script_rx, reflector_clone).await });// 启动脚本钩子的异步任务。
+        // script_async_hooks.push(script_tx);//将脚本事件发送端添加到异步钩子中
 
         // script reflector
         // self.spawn(async move {
@@ -203,13 +203,13 @@ impl Controller {
         //         script_api,
         //         ListParams::default(),
         //         script_async_hooks,
-        //         script_sync_hooks,        let conn = match Connection::open("test.db") {
-
+        //         script_sync_hooks,         
+        let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
         let _conn = match Connection::open("test.db") {
             Ok(conn) => {
                 let conn=Arc::new(Mutex::new(conn));
                 self.spawn(async move {
-                    reflector_sqlite3(conn).await 
+                    reflector_sqlite3(conn,reflector_clone).await 
                     
                 });
             
@@ -219,9 +219,6 @@ impl Controller {
                 std::process::exit(1); // 如果无法打开数据库连接，则退出程序
             }
         };
-
-            
- 
         // device reflector
         self.spawn(async move {
             reflector(
