@@ -5,7 +5,11 @@ edition = "2021"
 
 [dependencies]
 futures = '0.3'
+<<<<<<< HEAD
 color-eyre = { version = "0.6", features = ["capture-spantrace"] }
+=======
+color-eyre = '0.6'
+>>>>>>> 6f42697f4d4dd5abea1315b572d74e7b9a187e9d
 serde_json = '1.0'
 async-trait = '0.1'
 bytes = '1'
