@@ -25,38 +25,22 @@ pub async fn mqtt_client(
     mut sync_hooks: Vec<SyncHook>,
 ) -> Result<()> {
     info!("Connect to MQTT broker {}:{}", host, port);
-<<<<<<< HEAD
     let options = MqttOptions::new("ruleengine", host, port);//创建客户端连接选项
     let (client, mut eventloop) = AsyncClient::new(options, 20);//创建客户端和队列容量
     // The only possible first package is
     let connack = eventloop.poll().await?;//获取第一个事件包
     assert!(matches!(connack, Event::Incoming(Packet::ConnAck(_))));//检查连接确认包
-=======
-    let options = MqttOptions::new("ruleengine", host, port);
-    let (client, mut eventloop) = AsyncClient::new(options, 20);
-    // The only possible first package is
-    let connack = eventloop.poll().await?;
-    assert!(matches!(connack, Event::Incoming(Packet::ConnAck(_))));
->>>>>>> 6f42697f4d4dd5abea1315b572d74e7b9a187e9d
     // We should never use Qos 2: ExactlyOnce
     client
         .subscribe(
             format!("{}+{}", DEVICE_ETPREFIX, TWIN_ETUPDATE_RESULT_SUFFIX),
             QoS::AtMostOnce,
         )
-<<<<<<< HEAD
         .await?;//订阅主题
     loop {
         if let Event::Incoming(p) = eventloop.poll().await? {
             let publish = match p {//匹配包类型
                 Packet::Publish(i) => i,//发布类型的包
-=======
-        .await?;
-    loop {
-        if let Event::Incoming(p) = eventloop.poll().await? {
-            let publish = match p {
-                Packet::Publish(i) => i,
->>>>>>> 6f42697f4d4dd5abea1315b572d74e7b9a187e9d
                 Packet::PingResp
                 | Packet::PubAck(_)
                 | Packet::PubRec(_)
@@ -64,30 +48,18 @@ pub async fn mqtt_client(
                 | Packet::PubComp(_)
                 | Packet::SubAck(_) => {
                     trace!("{p:?}");
-<<<<<<< HEAD
                     continue;//记录日志 继续循环
-=======
-                    continue;
->>>>>>> 6f42697f4d4dd5abea1315b572d74e7b9a187e9d
                 }
                 _ => return Err(eyre!("Unexpected MQTT packet {:?}", p)),
             };
             let ae = Arc::new(publish.clone());
             for tx in &mut async_hooks {
-<<<<<<< HEAD
                 if let Err(e) = tx.send(ae.clone()) {//异步钩子发送所以包
-=======
-                if let Err(e) = tx.send(ae.clone()) {
->>>>>>> 6f42697f4d4dd5abea1315b572d74e7b9a187e9d
                     error!(error =? e, "MQTTWatcher async hook throw a error")
                 }
             }
             for hook in &mut sync_hooks {
-<<<<<<< HEAD
                 if let Err(e) = hook(&publish) {//同步钩子处理发布消息
-=======
-                if let Err(e) = hook(&publish) {
->>>>>>> 6f42697f4d4dd5abea1315b572d74e7b9a187e9d
                     error!(error =? e, "MQTTWatcher sync hook throw a error")
                 }
             }
@@ -105,15 +77,9 @@ const DEVICE_UPDATE_RESULT_REGEX: Lazy<Regex> = Lazy::new(|| {
 });
 
 pub fn trigger_hook(scheduler: Sender<ResourceIndex<Device>>) -> SyncHook {
-<<<<<<< HEAD
     let triger = move |msg: &Publish| {//move: 将闭包中的所有权从外部捕获到闭包内。这个闭包需要移动捕获的变量，以便在闭包内使用。
         let name = match DEVICE_UPDATE_RESULT_REGEX.captures(&msg.topic) {
             Some(cap) => cap[1].to_owned(),//匹配成功 提取第一个捕获组中的设备名称
-=======
-    let triger = move |msg: &Publish| {
-        let name = match DEVICE_UPDATE_RESULT_REGEX.captures(&msg.topic) {
-            Some(cap) => cap[1].to_owned(),
->>>>>>> 6f42697f4d4dd5abea1315b572d74e7b9a187e9d
             None => return Ok::<_, color_eyre::Report>(()),
         };
         scheduler

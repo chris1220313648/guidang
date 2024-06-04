@@ -40,11 +40,7 @@ fn main() -> Result<()> {
         .build()//构建运行时
         .unwrap();
     rt.block_on(async move {//启动异步任务
-<<<<<<< HEAD
-        let mut ctl: controller::controller::Controller = controller::controller::Controller::new(config)?;//创建控制器实例并传入解析
-=======
         let mut ctl = controller::controller::Controller::new(config)?;//创建控制器实例并传入解析
->>>>>>> 6f42697f4d4dd5abea1315b572d74e7b9a187e9d
         let client = kube::Client::try_default().await?;//尝试创建一个 Kubernetes 客户端。这个客户端用于与 Kubernetes 集群交互。
         let (schin, _schdevin, schout, store) = ctl.spawn_kubeapi(client.clone(), true);//启动与 Kubernetes API 交互的相关功能
         ctl.spawn_webserver(schin, store);//启动web服务器 接受脚本发送器 reflector结构体
