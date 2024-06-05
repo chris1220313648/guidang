@@ -52,7 +52,7 @@ pub async fn grpc_server(addr: SocketAddr, mgr: SessionManager) -> Result<()> {
     info!("Rule engine grpc server listening on {}", addr);
 
     Server::builder()
-        .add_service(ControllerServiceServer::new(mgr))//将一个grpc服务添加到服务器中
+        .add_service(ControllerServiceServer::new(mgr))//将一个grpc服务（会话管理器）添加到grpc服务器中
         .serve(addr)//方法启动 gRPC 服务器并使其在指定的地址上监听传入的请求
         .await?;
 

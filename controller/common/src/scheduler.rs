@@ -140,7 +140,7 @@ pub type Store<K> = DashMap<ResourceIndex<K>, K>;
 //用于映射从Device到一组Script的关系。这里的DashMap是一个线程安全的高性能哈希表，提供了并发读写访问。
 #[derive(Debug, Clone, Default)]
 pub struct Reflector {
-    pub selector_map: SelectorMap,
+    pub selector_map: SelectorMap,//有时候会存在关系和脚本，但是不存在设备
     pub device_store: Store<Device>,
     pub script_store: Store<Script>,
 }
@@ -161,7 +161,7 @@ impl Reflector {//结构体函数
             self.add_device(d);
         }
     }
-    pub fn add_script(&self, script: &Script) {
+    pub fn add_script(&self, script: &Script) {//添加脚本，添加关系
         let idx: ResourceIndex<Script> = script.into();
         self.script_store.insert(idx.clone(), script.clone());//哈希表插入
         let devices = self.get_selected_by_name(script);
@@ -183,7 +183,7 @@ impl Reflector {//结构体函数
     pub fn remove_script(&self, script: &Script) {
         let idx = script.into();//设备索引
         for set in self.selector_map.iter() {//每个set代表与特定设备关联的脚本集合
-            set.remove(&idx);//移除索引 断开脚本与这些设备的关联。
+            set.value().remove(&idx);//移除索引 断开脚本与这些设备的关联。
         }
         if self.script_store.remove(&idx).is_none() {//脚本存储器中移除脚本
             tracing::warn!(script =? script, "Reflector want to remove nonexsit Script")
@@ -227,7 +227,7 @@ impl RunScriptLookup for Arc<Reflector> {
             .ok_or_else(|| eyre!("Device: {:?} not found in store", index))
     }
 
-    fn map_device_to_script(
+    fn map_device_to_script(//获取和设备关联的脚本
         &mut self,
         device: &ResourceIndex<Device>,
     ) -> Result<Vec<ResourceIndex<Script>>> {
@@ -245,7 +245,7 @@ impl RunScriptLookup for Arc<Reflector> {
         let mut result = HashMap::new();
         if let Some(map) = &script.spec.read_selector.match_names {//查找到可读设备设备类型和名字
             for (k, v) in map.iter() {
-                let idx = ResourceIndex {//设备索引
+                let idx = ResourceIndex {//设备索引  k是脚本里用的名字，v是脚本资源名字
                     namespace: "default".to_string(),
                     name: v.to_string(),
                     api: PhantomData,
@@ -260,7 +260,7 @@ impl RunScriptLookup for Arc<Reflector> {
                     trace!(s=?s);
                     for twin in &s.twins {//遍历设备的状态孪生值 比如温度 开关 
                         if let Some(val) = &twin.reported {
-                            status.insert(twin.property_name.to_owned(), val.value.to_owned());//插入状态名 状态之
+                            status.insert(twin.property_name.to_owned(), val.value.to_owned());//插入状态名 状态值
                         }
                     }
                 }//遍历设备的状态信息，特别是查找reported状态（这里假设设备状态包含twins，其中每个twin有一个reported字段），并将这些状态信息添加到status映射中。

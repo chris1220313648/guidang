@@ -30,7 +30,7 @@ pub struct ScriptIDGenerator {
 
 impl ScriptIDGenerator {
     pub fn gen(&self) -> ScriptID {
-        ScriptID(self.inner.gen())
+        ScriptID(self.inner.gen())//利用IDGenerator生成一个ID
     }
 }
 

@@ -6,7 +6,7 @@ use tracing_subscriber::{filter, prelude::*};
 #[derive(Parser)]//可以直接使用Parser特质
 struct Args {
     //web：定义了一个名为 web 的命令行参数，通过 -w 短标记指定，如果未指定，则默认值为 "0.0.0.0:8000"。
-    #[clap(short, default_value = "127.0.0.1:3000")]
+    #[clap(short, default_value = "127.0.0.1:8000")]
     web: String,
     #[clap(short, default_value = "0.0.0.0:8001")]
     grpc: String,

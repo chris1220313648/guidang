@@ -29,7 +29,7 @@ const RE_VERSION: &str = "re-version";
 const MANAGER: &str = "ruleengine";
 
 pub struct SessionManager {
-    scripts: Arc<DashMap<ScriptID, ScriptStatus>>,
+    scripts: Arc<DashMap<ScriptID, ScriptStatus>>,//记录控制器id和脚本执行状态
     executors: Arc<DashMap<ExecutorID, ExecutorInfo>>,//执行器id和执行器信息
     executor_idgen: Arc<ExecutorIDGenerator>,//执行器id生成
     client: Client,//kube客户端
@@ -40,14 +40,14 @@ pub struct SessionManager {
 }
 
 #[derive(Debug)]
-struct ScriptStatus {
+struct ScriptStatus {//包括执行器id
     name: String,
     namespace: String,
     executor: ExecutorID,
 }
 
 #[derive(Debug)]
-struct ExecutorInfo {
+struct ExecutorInfo {//执行器地址
     addr: SocketAddr,
 }
 
@@ -100,7 +100,7 @@ impl SessionManager {
         Ok(())
     }
 
-    fn handle_first_message(
+    fn handle_first_message(//处理服务器连接上来的第一条消息
         &self,
         msg: Result<Option<ClientMessage>, Status>,
     ) -> Result<(), Status> {
@@ -154,10 +154,10 @@ impl ControllerService for SessionManager {
         info!(addr =? addr, "New executor connection");
         let exeinfo = ExecutorInfo { addr };//创建执行器信息
         let executor_id = self.executor_idgen.gen();//生成新的执行器id
-        let scheduler = self.scheduler.clone();
-        let mut state = self.state.clone();
+        let scheduler = self.scheduler.clone();//克隆mabagermsg接受端
+        let mut state = self.state.clone();//
         self.executors.insert(executor_id, exeinfo);
-        let executors = self.executors.clone();
+        let executors = self.executors.clone();//控制器表克隆
         let scripts = self.scripts.clone();
         let s = stream! {
             // connect message response
@@ -167,15 +167,15 @@ impl ControllerService for SessionManager {
             loop {
                 tokio::select! {//用于同时等待多个异步操作，处理第一个完成的操作。
                     msg = stream.next() => match msg {//从客户端流中读取下一条消息。
-                        Some(Ok(msg)) => match msg.code() {
-                            ClientCode::Continue => match scheduler.recv_async().await {
+                        Some(Ok(msg)) => match msg.code() {//客户端continue
+                            ClientCode::Continue => match scheduler.recv_async().await {//接收控制器传来的消息ManagerMsg
                                 Err(e) => {
                                     error!(error =? e, "Scheduler is down!");
                                     yield Err(Status::internal("Scheduler is down"));
                                     break;
                                 }
                                 Ok(task) => {
-                                    scripts.insert(task.run.script_id.into(), ScriptStatus {
+                                    scripts.insert(task.run.script_id.into(), ScriptStatus {//？？？？？？？
                                         name: task.name,
                                         namespace: task.namespace,
                                         executor: executor_id
@@ -215,7 +215,7 @@ impl ControllerService for SessionManager {
             }
 
             // Disconnect
-            match executors.remove(&executor_id) {//停止后一处执行器并记录日志
+            match executors.remove(&executor_id) {//停止后执行器并记录日志
                 Some((id, info)) => {
                     trace!(id =? id, info =? info, "Executor disconnected")
                 }
@@ -305,14 +305,14 @@ impl ControllerService for SessionManager {
         let id = ScriptID::from(device.get_ref().script_id);
         info!(id =? id, "Script update device");
         match self.scripts.get(&id) {
-            Some(sess_script) => {
+            Some(sess_script) => {//sess_script是脚本执行状态信息
                 let client = self.client.clone();
                 let api: Api<Device> = Api::namespaced(client, &sess_script.namespace);
                 let mut twins = Vec::new();
                 for (k, v) in device.get_ref().desired.iter() {
                     twins.push(Twin {//从请求中提取期望的设备状态，创建 Twin 对象，并添加到 twins 列表中
-                        property_name: k.to_owned(),
-                        desired: TwinProperty::new(v.to_owned()),
+                        property_name: k.to_owned(),//属性名
+                        desired: TwinProperty::new(v.to_owned()),//属性值
                         reported: None,
                     })
                 }
