@@ -148,10 +148,10 @@ fn fetch_selectors(conn: &Connection, script_id: i32) -> Result<(DeviceSelectorS
         let match_types_map = parse_match_string(&match_types);
         let match_names_map = parse_match_string(&match_names);
 
-        if selector_type == "read" {
+        if selector_type == "readSelector" {
             read_selector.match_abilities = Some(match_types_map);
             read_selector.match_names = Some(match_names_map);
-        } else if selector_type == "write" {
+        } else if selector_type == "writeSelector" {
             write_selector.match_abilities = Some(match_types_map);
             write_selector.match_names = Some(match_names_map);
         }
