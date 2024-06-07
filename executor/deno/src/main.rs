@@ -20,7 +20,8 @@ struct Args {
         default_value = "/root/guidang/config/register"
     )]
     register: String,//注册地址
-    server: String,//服务器地址
+    server: String,//服务器地址gprc
+
 }
 
 #[tokio::main]//使用[tokio::main]属性宏将main函数标记为异步入口点 这允许在函数内部使用.await。
@@ -70,7 +71,7 @@ async fn main() -> Result<()> {
                 .unwrap();
             rt.block_on(async move {//首先异步连接到ControllerServiceClient（可能是用于任务管理的服务），然后创建一个DenoWorker实例来处理任务。
                 let client = ControllerServiceClient::connect(url).await.unwrap();
-                let worker = DenoWorker::new(run, global, client);
+                let worker: DenoWorker = DenoWorker::new(run, global, client);
                 worker.run().await;
             });//当调用rt.block_on时，它接收一个Future（通常是一个async块）作为参数，然后当前线程会停在这里等待，直到这个Future被执行完成。完成可以是成功的返回值，也可以是发生的错误
         });

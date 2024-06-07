@@ -179,6 +179,7 @@ impl Reflector {//结构体函数
                 }
             }
         }
+        info!("Reflector add Script Sucesseful!")
     }//
     pub fn remove_script(&self, script: &Script) {
         let idx = script.into();//设备索引
@@ -188,12 +189,15 @@ impl Reflector {//结构体函数
         if self.script_store.remove(&idx).is_none() {//脚本存储器中移除脚本
             tracing::warn!(script =? script, "Reflector want to remove nonexsit Script")
         }
+        info!("Reflector remove Script Sucesseful!")
     }//estart_script方法接收一个脚本数组的引用，并对每个脚本调用add_script方法。这个方法的目的是重新添加（或"重启"）一系列脚本
     pub fn restart_script(&self, scripts: &[Script]) {
         for s in scripts {
             self.add_script(s);
         }
+        info!("Reflector restart Script Sucesseful!")
     }//get_selected_by_name方法基于脚本的选择器逻辑，特别是read_selector.match_names部分，来识别和构建与脚本相关联的设备列表。
+    
     //这个方法返回一个ResourceIndex<Device>类型的向量，其中每个元素代表一个与该脚本相关联的设备。
     fn get_selected_by_name(&self, script: &Script) -> Vec<ResourceIndex<Device>> {
         let mut result = Vec::new();

@@ -78,6 +78,51 @@ fn create_database_tables(conn: &Connection) -> Result<()> {
     conn.execute_batch(sql)?;
     Ok(())
 }
+fn insert_loop(conn: &Connection) -> Result<()> {
+    // 插入Script表的基本信息
+    conn.execute(
+        "INSERT INTO Script (Name, ScriptType, Version, ElapsedTime, LastRun, Message, Status) 
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+        params!["test", "Js", "0.1_beta1", 0, 0, "", 0],
+    )?;
+    let script_id = conn.last_insert_rowid();
+
+    // 插入EnvironmentVariables表
+    let env_vars = [
+        ("filter_service_url", "http://127.0.0.1:8003/api/v1alpha1/filter"),
+        ("threshold-value", "40"),
+    ];
+    for (key, value) in &env_vars {
+        conn.execute(
+            "INSERT INTO EnvironmentVariables (ScriptID, Key, Value) 
+             VALUES (?1, ?2, ?3)",
+            params![script_id, *key, *value],
+        )?;
+    }
+
+    // 插入ExecutePolicies表
+    conn.execute(
+        "INSERT INTO ExecutePolicies (ScriptID, Cron, QoS, ReadChange, Webhook) 
+         VALUES (?1, ?2, ?3, ?4, ?5)",
+        params![script_id, "", "AtMostOnce", true, true],
+    )?;
+
+    // 插入Selector表（ReadSelector）
+    conn.execute(
+        "INSERT INTO Selector (ScriptID, Type, MatchTypes, MatchNames) 
+         VALUES (?1, ?2, ?3, ?4)",
+        params![script_id, "ReadSelector", "matchNames", "temp-sensor-name:dht11"],
+    )?;
+
+    // 插入Selector表（WriteSelector）
+    conn.execute(
+        "INSERT INTO Selector (ScriptID, Type, MatchTypes, MatchNames) 
+         VALUES (?1, ?2, ?3, ?4)",
+        params![script_id, "WriteSelector", "matchNames", "target-device-name:switch"],
+    )?;
+
+    Ok(())
+}
 fn insert_script(conn: &Connection, script: &ScriptSqlite3) -> Result<i64> {
     let sql = "INSERT INTO Script (Name, ScriptType, Version, ElapsedTime, LastRun, Message, Status) VALUES (?, ?, ?, ?, ?, ?, ?)";
     let mut stmt = conn.prepare(sql)?;

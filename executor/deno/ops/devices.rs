@@ -18,7 +18,7 @@ pub fn init() -> Extension {
             prefix "executor/deno:",
             "devices/01_device.js",
         ))
-        .ops(vec![//列出可读列出可写设备。获取特定设备的状态。更新设备的期望状态。提交设备的操作
+        .ops(vec![//注册一系列操作
             op_list_readable_devices::decl(),
             op_list_writable_devices::decl(),
             op_get_device_status::decl(),

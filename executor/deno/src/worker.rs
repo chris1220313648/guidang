@@ -41,7 +41,7 @@ impl DenoWorker {//封装和管理运行时环境
         } = global;//函数内部首先从global中解构出default_register和module_loader。
         let qos = run.default_qos();//默认的服务质量（Quality of Service）设置。
         let manifest = run.manifest.unwrap();// 从manifest获取注册信息。
-        let mut register = manifest.register;//使用Rc::new(ops::Rule { ... })创建一个新的规则状态对象，并存储有关脚本执行的信息（如脚本ID、开始时间、名称、版本和注册信息）
+        let mut register = manifest.register;//
         if register.is_empty() {
             register = default_register.clone()
         }
@@ -139,7 +139,7 @@ impl DenoWorker {//封装和管理运行时环境
             let op_state = op_state.borrow_mut();
             let http: &Client = op_state.borrow();//获取操作状态（OpState）的可变引用，并从中借用HTTP客户端和脚本运行规则的状态。
             let state: &Rc<ops::Rule> = op_state.borrow();
-            let url = state.url();
+            let url = state.url();//文件服务器地址+名字+版本
             http.get(url).send().await?//构造请求URL，并异步发送HTTP GET请求以下载脚本。如果响应状态不是成功（200-299），则返回错误。
         };
         if !res.status().is_success() {//检查响应状态

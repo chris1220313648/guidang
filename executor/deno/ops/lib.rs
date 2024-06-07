@@ -49,7 +49,7 @@ impl Rule {
     }
 }
 
-pub fn extensions() -> Vec<Extension> {
+pub fn extensions() -> Vec<Extension> {//扩展初始化函数
     vec![
         deno_webidl::init(),//提供WebIDL支持
         log::init(),
