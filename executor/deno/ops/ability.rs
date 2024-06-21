@@ -25,7 +25,7 @@ pub async fn op_http_post(
     let op_state = state.try_borrow().map_err(|_| resource_unavailable())?;//借用客户端
     let http: &Client = op_state.borrow();
     let res = http.post(url).body(body).send().await?;// 使用reqwest客户端发起一个POST请求，异步等待结果。
-    let res = res.text().await?;//http.get(url).body(body).send().await?: 类似地，发起一个GET请求
+    let res = res.text().await?;//
     Ok(res)
 }
 

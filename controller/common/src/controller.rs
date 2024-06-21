@@ -205,8 +205,9 @@ impl Controller {
         //         script_async_hooks,
         //         script_sync_hooks,         
         let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
-        let _conn = match Connection::open("test.db") {
+        let _conn = match Connection::open("/root/guidang/controller/common/test.db") {
             Ok(conn) => {
+                info!("open db sucessfully");
                 let conn=Arc::new(Mutex::new(conn));
                 self.spawn(async move {
                     reflector_sqlite3(conn,reflector_clone).await 

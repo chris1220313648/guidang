@@ -3,6 +3,7 @@ use std::error::Error;
 use std::sync::{Arc, Mutex};
 use std::str::FromStr;
 use color_eyre::eyre::{Report, Result, WrapErr};
+use tracing::info;
 use crate::api::script_sqlite3::*;
 use tokio::time::{interval, Duration};
 use rusqlite::{params, Connection};
@@ -12,6 +13,7 @@ use schemars::JsonSchema;
 use crate::scheduler:: Reflector;
 
 pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Report> {
+    info!("start reflector_sqlite3");
     let _=poll_event_log_and_process_events(conn,reflector).await;
     Ok(())
     
@@ -34,7 +36,8 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflecto
 
         // 确保时间格式正确
         let naive_last_polled = last_polled.naive_utc().format("%Y-%m-%d %H:%M:%S").to_string();
-        
+        info!("Using last_polled time:"{},naive_last_polled);
+        info!(last_polled);
         println!("Using last_polled time: {}", naive_last_polled); // 调试信息
         let mut rows = stmt.query(params![naive_last_polled])?;
         let mut found = false;

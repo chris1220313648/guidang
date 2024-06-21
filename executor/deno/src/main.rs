@@ -44,10 +44,10 @@ async fn main() -> Result<()> {
         .init();
 //创建GlobalOption实例，包含默认注册路径和模块加载器
     let global_option = GlobalOption {
-        default_register: args.register,
+        default_register: args.register,//文件服务器
         module_loader: RegisterLoader::new(),
     };
-    //使用自定义的Client类型尝试连接到指定的服务器URL，并解构返回的结构以获取客户端实例和其他相关字段。
+    //使用自定义的Client类型尝试连接到指定的grpc服务器URL，并解构返回的结构以获取客户端实例和其他相关字段。
     let url = args.server;
     let Client {
         client,
