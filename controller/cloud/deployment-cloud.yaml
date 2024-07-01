@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruleengine-cloud-controller
+spec:
+  selector:
+    matchLabels:
+      app: ruleengine-cloud-controller
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ruleengine-cloud-controller
+    spec:
+      containers:
+      - name: ruleengine-cloud
+        image: 192.168.56.154:80/guize/cloud:v1
+        command: ["cloud"]
+        args: ["-m", "127.0.0.1:1883"]
+        ports:
+        - containerPort: 8000
+        - containerPort: 8001
+      serviceAccountName: rule
+      affinity: # 添加亲和性设置
+        nodeAffinity: # 节点亲和性规则
+          requiredDuringSchedulingIgnoredDuringExecution: # 强制在调度时生效
+            nodeSelectorTerms: # 节点选择器项
+            - matchExpressions: # 匹配表达式
+              - key: where # 节点标签的键
+                operator: In # 操作符
+                values: # 指定节点的值
+                - node1 # 节点的名称

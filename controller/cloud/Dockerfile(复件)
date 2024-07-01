@@ -1,0 +1,8 @@
+FROM rust:latest AS builder
+RUN update-ca-certificates && apt update && apt install -y libssl-dev
+WORKDIR /work
+COPY ./ .
+RUN rustup component add rustfmt && cargo build --release --bin cloud
+FROM debian:11-slim
+COPY --from=builder /work/target/release/cloud /usr/local/bin/
+CMD ["/usr/local/bin/cloud"]

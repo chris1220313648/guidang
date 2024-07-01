@@ -1,0 +1,24 @@
+apiVersion: devices.kubeedge.io/v1alpha2
+kind: Device
+metadata:
+  name: switch
+  labels:
+    description: virtual_switch_at_edge
+    manufacturer: "Python.org"
+spec:
+  deviceModelRef:
+    name: wifi-switch
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: "where"
+            operator: In
+            values:
+              - edge
+status:
+  twins:
+    - propertyName: status
+      desired:
+        metadata:
+          type: int
+        value: "0"

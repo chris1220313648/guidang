@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filter-server
+spec:
+  selector:
+    matchLabels:
+      app: filter-server
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: filter-server
+    spec:
+      containers:
+      - name: filter-server
+        image: 192.168.56.154:80/guize/filter:v1
+        ports:
+        - containerPort: 8003
+      affinity: # 添加亲和性设置
+        nodeAffinity: # 节点亲和性规则
+          requiredDuringSchedulingIgnoredDuringExecution: # 强制在调度时生效
+            nodeSelectorTerms: # 节点选择器项
+            - matchExpressions: # 匹配表达式
+              - key: where # 节点标签的键
+                operator: In # 操作符
+                values: # 指定节点的值
+                - node1 # 节点的名称

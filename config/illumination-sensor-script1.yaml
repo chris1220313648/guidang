@@ -1,0 +1,26 @@
+apiVersion: hit.edu.cn/v1alpha1
+kind: Script
+metadata:
+  name: illumination-sensor-script1
+  namespace: default
+spec:
+  readSelector:
+    matchNames:
+      illumination: illumination-sensor-serial1
+  writeSelector:
+    matchNames:
+      motor: motor
+  env:
+    filter_service_url: "http://10.99.22.102:8003/api/v1alpha1/filter"
+    threshold: "400"
+  manifest:
+    scriptType: Js
+    name: test
+    version: 0.1_beta2
+    #register: http://10.108.251.228:8000
+    register: http://10.0.0.87:8004
+  executePolicy:
+    readChange: true
+    webhook: true
+    cron: ""
+    qos: AtMostOnce
