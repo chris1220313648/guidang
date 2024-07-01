@@ -1,0 +1,109 @@
+syntax = "proto3";
+package rule;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+// Controller-Executor connection Executor Side Message
+// Executor first send code = Connect and fill info struct
+// Then send Continue/Disconnect/Pause
+message ClientMessage {
+  enum ClientCode {
+    Continue = 0;
+    Connect = 1;
+    Disconnect = 2;
+  }
+
+  message ClientInfo { uint32 max_job = 1; }
+
+  ClientCode code = 1;
+  optional ClientInfo info = 2;
+}
+
+enum QosPolicy {
+  OnlyOnce = 0;
+  AtMostOnce = 1;
+  AtLeastOnce = 2;
+}
+
+// Controller-Executor connection Executor Side Message
+message ServerMessage {
+  message Connected {
+    uint32 executor_id = 1;
+  }
+
+  message Disconnect {
+    enum DisconnectReason {
+      Unknown = 0;
+      ClientExit = 1;
+      ServerExit = 2;
+      Unneeded = 3;
+    }
+    DisconnectReason reason = 1;
+  }
+
+  message RunScript {
+    message Manifest {
+      enum ScriptType {
+        Wasm = 0;
+        Js = 1;
+        Native = 2;
+        Standalone = 3;
+      }
+      // script type
+      ScriptType script_type = 1;
+      // package name
+      string package_name = 2;
+      // version of package
+      string package_version = 3;
+      // override the default script package register
+      string register = 4;
+    }
+    message ReadDevice {
+      string name = 1;
+      map<string, string> status = 2;
+    }
+    message WriteDevice { string name = 1; }
+
+    uint32 script_id = 1;
+    Manifest manifest = 2;
+    map<string, ReadDevice> readable = 3;
+    map<string, WriteDevice> writable = 4;
+    map<string, string> env = 5;
+    QosPolicy default_qos = 6;
+  }
+
+  oneof msg {
+    Connected connected = 1;
+    Disconnect disconnect = 2;
+    RunScript script = 3;
+  }
+}
+
+service ControllerService {
+  rpc run(stream ClientMessage) returns (stream ServerMessage) {}
+  rpc update_script_status(ScriptStatus) returns (google.protobuf.Empty) {}
+  rpc update_device_desired(UpdateDevice) returns (google.protobuf.Empty) {}
+}
+
+message ScriptStatus {
+  enum ScriptStatusCode {
+    Ok = 0;
+    Crash = 1;
+    Unknown = 3;
+  }
+
+  uint32 script_id = 1;
+  google.protobuf.Timestamp start = 2;
+  google.protobuf.Duration duration = 3;
+  ScriptStatusCode code = 4;
+  string message = 5;
+}
+
+message UpdateDevice {
+  uint32 script_id = 1;
+  string name = 2;
+  map<string, string> desired = 3;
+  QosPolicy qos = 4;
+}

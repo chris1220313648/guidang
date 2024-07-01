@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruleengine-executor-deno
+spec:
+  selector:
+    matchLabels:
+      app: ruleengine-executor-deno
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ruleengine-executor-deno
+    spec:
+      containers:
+      - name: ruleengine-cloud
+        image: 192.168.56.154:80/guize/deno:v1
+        command: ["deno_executor"]
+        args: ["http://10.111.202.42:8001"]
+      affinity: # 添加亲和性设置
+        nodeAffinity: # 节点亲和性规则
+          requiredDuringSchedulingIgnoredDuringExecution: # 强制在调度时生效
+            nodeSelectorTerms: # 节点选择器项
+            - matchExpressions: # 匹配表达式
+              - key: where # 节点标签的键
+                operator: In # 操作符
+                values: # 指定节点的值
+                - node2 # 节点的名称
