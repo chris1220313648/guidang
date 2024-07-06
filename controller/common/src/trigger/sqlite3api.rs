@@ -14,12 +14,32 @@ use crate::scheduler:: Reflector;
 
 pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Report> {
     info!("start reflector_sqlite3");
+    // 导入现有脚本信息
+    import_existing_scripts(conn.clone(), reflector.clone())?;
     let _=poll_event_log_and_process_events(conn,reflector).await;
     Ok(())
     
     
 }
+fn import_existing_scripts(conn: Arc<Mutex<Connection>>, reflector: Arc<Reflector>) -> Result<(), Box<dyn Error>> {
+    let conn = conn.lock().unwrap();
+    let mut stmt = conn.prepare("SELECT id FROM Script")?;
+    
+    let mut rows = stmt.query([])?;
+    while let Some(row) = rows.next()? {
+        let script_id: i32 = row.get(0)?;
+        println!("Importing script: {:?}", script_id);
+        let script = fetch_script_details(&conn, script_id)?;
+        let env_vars = fetch_environment_variables(&conn, script_id)?;
+        let execute_policy = fetch_execute_policy(&conn, script_id)?;
+        let selectors = fetch_selectors(&conn, script_id)?;
+        let script_struct = create_script_struct(script, env_vars, execute_policy, selectors)?;
+        println!("{:?}", script_struct);
+        reflector.add_script(&script_struct);
+    }
 
+    Ok(())
+}
 async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Box<dyn Error>> {
     let mut last_polled = Utc::now() - chrono::Duration::seconds(30); // 记录上次轮询时间，假设10s前开始
     let poll_interval = Duration::from_secs(5); // 轮询间隔
