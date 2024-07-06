@@ -15,15 +15,15 @@ use crate::scheduler:: Reflector;
 pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Report> {
     info!("start reflector_sqlite3");
     // 导入现有脚本信息
-    import_existing_scripts(conn.clone(), reflector.clone())?;
+    let _=import_existing_scripts(conn.clone(), reflector.clone()).await;
     let _=poll_event_log_and_process_events(conn,reflector).await;
     Ok(())
     
     
 }
-fn import_existing_scripts(conn: Arc<Mutex<Connection>>, reflector: Arc<Reflector>) -> Result<(), Box<dyn Error>> {
+async fn import_existing_scripts(conn: Arc<Mutex<Connection>>, reflector: Arc<Reflector>) -> Result<(), Box<dyn Error >> {
     let conn = conn.lock().unwrap();
-    let mut stmt = conn.prepare("SELECT id FROM Script")?;
+    let mut stmt = conn.prepare("SELECT ScriptID From Script;")?;
     
     let mut rows = stmt.query([])?;
     while let Some(row) = rows.next()? {
