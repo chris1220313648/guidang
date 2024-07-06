@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: ruleengine-cloud
-        image: 192.168.56.154:80/guize/deno:v1
+        image: 192.168.56.154:80/guize/deno:sql
         command: ["deno_executor"]
         args: ["http://10.111.202.42:8001"]
       affinity: # 添加亲和性设置

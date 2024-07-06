@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: filter-server
-        image: 192.168.56.154:80/guize/filter:v1
+        image: 192.168.56.154:80/guize/filter:sql
         ports:
         - containerPort: 8003
       affinity: # 添加亲和性设置

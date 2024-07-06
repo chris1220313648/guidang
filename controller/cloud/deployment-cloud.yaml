@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: ruleengine-cloud
-        image: 192.168.56.154:80/guize/cloud:v1
+        image: 192.168.56.154:80/guize/cloud:sql
         command: ["cloud"]
         args: ["-m", "127.0.0.1:1883"]
         ports:

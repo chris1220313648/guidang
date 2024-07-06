@@ -6,7 +6,7 @@ use color_eyre::eyre::{Report, Result, WrapErr};
 use tracing::info;
 use crate::api::script_sqlite3::*;
 use tokio::time::{interval, Duration};
-use rusqlite::{params, Connection};
+use rusqlite::{params, Connection,Result as RusqliteResult};
 use chrono::{NaiveDateTime, Utc};
 use serde::{Deserialize, Serialize};
 use schemars::JsonSchema;
@@ -31,6 +31,15 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflecto
         count=count+1;
         interval.tick().await;
         let conn = conn.lock().unwrap();
+        let mut table_stmt = conn.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='EventLog';")?;
+        let table_exists: RusqliteResult<String> = table_stmt.query_row([], |row| row.get(0));
+        match table_exists {
+            Ok(name) => info!("Table exists: {}", name),
+            Err(err) => {
+                eprintln!("Table 'EventLog' does not exist: {}", err);
+                continue; // 继续循环
+            }
+        }
         let mut stmt = match conn.prepare("
             SELECT script_id, event_type, event_time 
             FROM EventLog 
