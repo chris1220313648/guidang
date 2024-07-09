@@ -17,7 +17,7 @@ struct Args {
     #[clap(//register字段使用了clap的short, long, 和 default_value属性来定义其命令行参数的短格式、长格式和默认值。
         short,
         long,
-        default_value = "/root/guidang/config/register"
+        default_value = "http://192.168.56.150:3000"
     )]
     register: String,//注册地址
     server: String,//服务器地址gprc

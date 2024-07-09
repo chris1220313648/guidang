@@ -77,8 +77,10 @@ async fn connect(
         .await//异步等待
         .wrap_err("Got error from server")?
         .into_inner();
+    info!("wait for receive first msg from controller");
     let msg = stream.next().await;//从 stream 中异步等待并接收第一条消息 msg
     let executor_id = handle_first_message(msg)?;//处理第一条消息
+    info!("Complete process first msg from controller");
     Ok((executor_id, stream))
 }
 //用于处理从服务器接收到的第一条消息的逻辑

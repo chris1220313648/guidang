@@ -43,7 +43,8 @@ impl DenoWorker {//封装和管理运行时环境
         let manifest = run.manifest.unwrap();// 从manifest获取注册信息。
         let mut register = manifest.register;//
         if register.is_empty() {
-            register = default_register.clone()
+            register = default_register.clone();
+            info!("use local default register value:{}",register);
         }
         let state = Rc::new(ops::Rule {//创建一个新的规则状态对象，并存储有关脚本执行的信息
             script_id: run.script_id,

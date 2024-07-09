@@ -16,7 +16,7 @@ def insert_script_data():
     
     # 插入 EnvironmentVariables 表数据
     env_vars = [
-        ('filter_service_url', 'http://127.0.0.1:8003/api/v1alpha1/filter'),
+        ('filter_service_url', 'http://10.100.255.4:8003/api/v1alpha1/filter'),
         ('threshold-value', '40')
     ]
     
