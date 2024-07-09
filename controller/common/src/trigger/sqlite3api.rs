@@ -140,6 +140,7 @@ fn fetch_script_details(conn: &Connection, script_id: i32) -> Result<ScriptSqlit
             last_run: row.get(4)?,
             message: row.get(5)?,
             status: row.get(6)?,
+            register: row.get(7)?,
         })
     })?;
     Ok(script)
@@ -220,7 +221,7 @@ fn create_script_struct(
         script_type,
         name: script.name.clone(),
         version: script.version.clone(),
-        register: None,
+        register: Some(script.register.clone()),
     };
 
     let spec = ScriptSpec {
