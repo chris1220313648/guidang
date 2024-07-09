@@ -124,6 +124,7 @@ pub struct ScriptSqlite3 {
     pub last_run: i32,
     pub message: String,
     pub status: i32,
+    pub register: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

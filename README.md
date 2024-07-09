@@ -236,7 +236,7 @@ SessionManager -> Executor: Disconnect
 
 请在Kubernetes的master节点执行如下操作
 
-* 从GitHub下载最新版的[keadm](https://github.com/kubeedge/kubeedge/releases)
+* 从GitHub下载最新版的[keadm](https://github.com/kubeedge/kubeedge/releases),推荐下载1.12版本
 * 解压keadm并移动到`/usr/local/bin`
 * [安装云端组件cloudcore](https://kubeedge.io/en/docs/setup/keadm/#setup-cloud-side-kubeedge-master-node)
   * 简言之, 执行`sudo keadm init`
@@ -246,7 +246,7 @@ SessionManager -> Executor: Disconnect
 
 请在边缘节点上执行如下操作. 边缘节点必须**没有**加入Kubernetes集群.
 
-* 从GitHub下载最新版的[keadm](https://github.com/kubeedge/kubeedge/releases)
+* 从GitHub下载最新版的[keadm](https://github.com/kubeedge/kubeedge/releases)，推荐下载1.12版本
 * 解压keadm并移动到`/usr/local/bin`
 * [安装边缘节点组件edgecore](https://kubeedge.io/en/docs/setup/keadm/#setup-edge-side-kubeedge-worker-node)
 
