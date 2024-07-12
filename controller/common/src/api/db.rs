@@ -198,6 +198,7 @@ fn import_script_from_yaml(conn: &Connection, yaml_file_path: &str) -> Result<()
         last_run: 0,      // 默认值
         message: "".to_string(), // 默认值
         status: 0,        // 默认值
+        register:config["spec"]["manifest"]["register"].as_str().unwrap_or_default().to_string(),
     };
 
     // 插入Script到数据库

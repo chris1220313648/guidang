@@ -66,7 +66,7 @@ impl SessionManager {
         state: watch::Receiver<ControllerState>,
     ) -> Self {
         let conn = match Connection::open("./test.db") {
-            Ok(conn) => Arc::new(Mutex::new(conn)),
+            Ok(conn) =>Arc::new(Mutex::new(conn)),
             Err(e) => {
                 eprintln!("Failed to open database connection: {}", e);
                 std::process::exit(1); // 如果无法打开数据库连接，则退出程序
