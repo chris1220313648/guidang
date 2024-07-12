@@ -7,16 +7,16 @@ def insert_script_data():
     
     # 插入 Script 表数据
     cursor.execute("""
-        INSERT INTO Script (Name, ScriptType, Version, ElapsedTime, LastRun, Message, Status) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    """, ('test', 'Js', '0.1_beta1', 0, 0, '', 0))
+        INSERT INTO Script (Name, ScriptType, Version, ElapsedTime, LastRun, Message, Status,Register) 
+        VALUES (?, ?, ?, ?, ?, ?, ?,?)
+    """, ('test', 'Js', '0.1_beta1', 0, 0, '', 0,''))
     
     # 获取插入的 ScriptID
     script_id = cursor.lastrowid
     
     # 插入 EnvironmentVariables 表数据
     env_vars = [
-        ('filter_service_url', 'http://10.100.255.4:8003/api/v1alpha1/filter'),
+        ('filter_service_url', 'http://127.0.0.1:8003/api/v1alpha1/filter'),
         ('threshold-value', '40')
     ]
     

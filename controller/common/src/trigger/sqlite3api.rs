@@ -23,17 +23,24 @@ pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Refle
 }
 async fn import_existing_scripts(conn: Arc<Mutex<Connection>>, reflector: Arc<Reflector>) -> Result<(), Box<dyn Error >> {
     let conn = conn.lock().unwrap();
+  
     let mut stmt = conn.prepare("SELECT ScriptID From Script;")?;
-    
+
     let mut rows = stmt.query([])?;
+   
     while let Some(row) = rows.next()? {
         let script_id: i32 = row.get(0)?;
-        println!("Importing script: {:?}", script_id);
+        info!("Importing script: {:?}", script_id);
         let script = fetch_script_details(&conn, script_id)?;
+        // info!("get script: {:?}", script_id);
         let env_vars = fetch_environment_variables(&conn, script_id)?;
+        // info!("get env script: {:?}", script_id);
         let execute_policy = fetch_execute_policy(&conn, script_id)?;
+        // info!("get policy script: {:?}", script_id);
         let selectors = fetch_selectors(&conn, script_id)?;
+        // info!("get selector script: {:?}", script_id);
         let script_struct = create_script_struct(script, env_vars, execute_policy, selectors)?;
+        // info!("create script: {:?}", script_id);
         println!("{:?}", script_struct);
         reflector.add_script(&script_struct);
     }
@@ -76,8 +83,8 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflecto
         // 确保时间格式正确
         let naive_last_polled = last_polled.naive_utc().format("%Y-%m-%d %H:%M:%S").to_string();
         info!("Using last_polled time:{}",naive_last_polled);
-        info!(last_polled = %last_polled);
-        println!("Using last_polled time: {}", naive_last_polled); // 调试信息
+        // info!(last_polled = %last_polled);
+        // println!("Using last_polled time: {}", naive_last_polled); // 调试信息
         let mut rows = stmt.query(params![naive_last_polled])?;
         let mut found = false;
         while let Some(row) = rows.next()? {
@@ -130,7 +137,7 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflecto
 }
 
 fn fetch_script_details(conn: &Connection, script_id: i32) -> Result<ScriptSqlite3, Box<dyn Error>> {
-    let mut stmt = conn.prepare("SELECT Name, ScriptType, Version, ElapsedTime, LastRun, Message, Status FROM Script WHERE ScriptID = ?")?;
+    let mut stmt = conn.prepare("SELECT Name, ScriptType, Version, ElapsedTime, LastRun, Message, Status,Register  FROM Script WHERE ScriptID = ?")?;
     let script = stmt.query_row(params![script_id], |row| {
         Ok(ScriptSqlite3 {
             name: row.get(0)?,
