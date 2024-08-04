@@ -4,7 +4,9 @@ use std::sync::{Arc, Mutex};
 use std::str::FromStr;
 use color_eyre::eyre::{Report, Result, WrapErr};
 use tracing::info;
+use crate::api::device_sqlite3::DeviceStatus;
 use crate::api::script_sqlite3::*;
+use crate::api::script_device::*;
 use tokio::time::{interval, Duration};
 use rusqlite::{params, Connection,Result as RusqliteResult};
 use chrono::{NaiveDateTime, Utc};
@@ -21,6 +23,78 @@ pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Refle
     
     
 }
+async fn import_existing_devices(conn: Arc<Mutex<Connection>>) -> Result<(), Box<dyn Error>> {
+    let conn = conn.lock().unwrap();
+    let mut stmt = conn.prepare("SELECT id, name, labels, device_model_ref, node_selector FROM Device")?;
+    let mut rows = stmt.query([])?;
+    while let Some(row) = rows.next()? {
+        let device_id: i32 = row.get(0)?;
+        info!("Importing device: {:?}", device_id);
+        let name: String = row.get(1)?;
+        let labels: String = row.get(2)?;
+        let device_model_ref: String = row.get(3)?;
+        let node_selector: String = row.get(4)?;
+        let twins = fetch_twins_details(&conn, device_id)?;
+
+        let device_model_ref: LocalObjectReference =LocalObjectReference{device_model_ref} ;
+        
+        let property_visitors: Vec<DevicePropertyVisitor> = serde_json::from_str(&property_visitors)?;
+        let node_selector: NodeSelector = serde_json::from_str(&node_selector)?;
+        
+
+        let spec = DeviceSpec {
+            name:name,
+            device_model_ref:device_model_ref,
+            property_visitors:vec![],
+            node_selector:node_selector,
+        };
+        let status:DeviceStatus=DeviceStatus{
+            twins
+
+        };
+        let device = Device {
+            spec,
+            status: Some(status),
+        };
+
+        println!("{:#?}", device);
+        reflector.add_device(&device);
+        
+
+    }
+    Ok(())
+ 
+}
+async fn fetch_twins_details(conn: &Connection, device_id: i32) -> Result<Vec<Twin>, Box<dyn Error >>{
+    let conn = conn.lock().unwrap();
+    let mut stmt = conn.prepare("SELECT id,device_id ,property_name, desired,reported FROM Twins")?;
+    let twin_iter = stmt.query_map([], |row| {
+        let property_name: String = row.get(2)?;
+        let desired: String = row.get(3)?;
+        let reported: Option<String> = row.get(4)?;
+
+        // 解析 JSON 数据
+        let desired: TwinProperty = serde_json::from_str(&desired)?;
+        let reported: Option<TwinProperty> = reported.map(|rep| serde_json::from_str(&rep)).transpose()?;
+
+        Ok(Twin {
+            property_name,
+            desired,
+            reported,
+        })
+    })?;
+    let mut twins = Vec::new();
+    for twin in twin_iter {
+        twins.push(twin?);
+    }
+
+    Ok(twins)
+    
+
+}
+
+
+
 async fn import_existing_scripts(conn: Arc<Mutex<Connection>>, reflector: Arc<Reflector>) -> Result<(), Box<dyn Error >> {
     let conn = conn.lock().unwrap();
   
@@ -94,11 +168,11 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflecto
             let event_time: NaiveDateTime = row.get(2)?;
             println!("Event: {} for script_id: {} at {}", event_type, script_id, event_time);
 
-            let script = fetch_script_details(&conn, script_id)?;
+            let scriptsqlite3 = fetch_script_details(&conn, script_id)?;
             let env_vars = fetch_environment_variables(&conn, script_id)?;
             let execute_policy = fetch_execute_policy(&conn, script_id)?;
             let selectors = fetch_selectors(&conn, script_id)?;
-            let script_struct = create_script_struct(script, env_vars, execute_policy, selectors)?;
+            let script_struct = create_script_struct(scriptsqlite3, env_vars, execute_policy, selectors)?;
             println!("{:?}", script_struct);
             info!(event_type=%event_type);
             match event_type.as_str() {

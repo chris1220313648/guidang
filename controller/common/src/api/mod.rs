@@ -1,9 +1,9 @@
-pub mod device;
+pub mod device_sqlite3;
 pub mod mqtt;
 pub mod db;
 // pub mod script;
 pub mod script_sqlite3;
-pub use device::Device;
+pub use device_sqlite3::Device;
 pub use script_sqlite3::DeviceSelectorSet;
 pub use script_sqlite3::Manifest;
 pub use script_sqlite3::Script;

@@ -307,7 +307,7 @@ impl ControllerService for SessionManager {
         match self.scripts.get(&id) {
             Some(sess_script) => {//sess_script是脚本执行状态信息
                 let client = self.client.clone();
-                let api: Api<Device> = Api::namespaced(client, &sess_script.namespace);
+                
                 let mut twins = Vec::new();
                 for (k, v) in device.get_ref().desired.iter() {
                     twins.push(Twin {//从请求中提取期望的设备状态，创建 Twin 对象，并添加到 twins 列表中
@@ -316,19 +316,28 @@ impl ControllerService for SessionManager {
                         reported: None,
                     })
                 }
-                let api_status: DeviceStatus = DeviceStatus { twins };
-                let patch = serde_json::json!({ "status": api_status });
-                let patch = Patch::Merge(&patch);
-                if let Err(e) = api.patch(&device.get_ref().name, &self.pp, &patch).await {
-                    error!(error =? e, "Failed to update status of Device");
-                    return Err(Status::internal("Failed to update status of Device"));
+                let status: DeviceStatus = DeviceStatus { twins };
+                let conn = self.conn.lock().unwrap();
+                let device_name = device.get_ref().name.clone();
+
+                // 查询设备 ID
+                let mut stmt = conn.prepare("SELECT id FROM devices WHERE name = ?")?;
+                let device_id: i32 = stmt.query_row(params![device_name], |row| row.get(0))?;
+
+                for twin in twins {
+                    let desired_json = serde_json::to_string(&twin.desired).unwrap();
+                    let reported_json = twin.reported.map(|r| serde_json::to_string(&r).unwrap());
+
+                    conn.execute(
+                        "INSERT INTO twins (device_id, property_name, desired, reported) VALUES (?, ?, ?, ?)
+                         ON CONFLICT(device_id, property_name) DO UPDATE SET desired = excluded.desired, reported = excluded.reported",
+                        params![device_id, twin.property_name, desired_json, reported_json],
+                    )?;
                 }
-                // FIXME: Qos
-                match device.get_ref().qos() {
-                    QosPolicy::AtMostOnce => Ok(Response::new(())),//根据设备的 QoS 策略返回相应的结果
-                    QosPolicy::AtLeastOnce => Err(Status::internal("Not implemented")),
-                    QosPolicy::OnlyOnce => Err(Status::internal("Not implemented")),
-                }
+
+                info!("Device status updated successfully.");
+                Ok(Response::new(()))
+
             }
             None => {
                 error!(request =? device, "Got message of updating device desired, but script isn't running");
