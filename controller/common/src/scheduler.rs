@@ -71,6 +71,15 @@ impl From<&Script> for ResourceIndex<Script> {
         }
     }
 }
+impl From<&Device> for ResourceIndex<Device> {
+    fn from(device: &Device) -> Self {
+        ResourceIndex {
+            namespace: "default".to_string(),
+            name: device.clone(),
+            api: PhantomData,
+        }
+    }
+}
 
 //这个RunScriptLookup特征（trait）定义了一组方法，用于在执行脚本的上下文中查找脚本、设备，以及映射设备到脚本和查询脚本的可读写设备。
 pub trait RunScriptLookup {//这个RunScriptLookup特征（trait）定义了一组方法，用于在执行脚本的上下文中查找脚本、设备，以及映射设备到脚本和查询脚本的可读写设备
