@@ -5,7 +5,7 @@ use crate::trigger::sqlite3api::reflector_sqlite3;
 use color_eyre::Result;
 use flume::{Receiver, Sender};
 use futures::StreamExt;
-use kube::{api::ListParams, Api, Client};
+// use kube::{api::ListParams, Api, Client};
 use serde::{Deserialize, Serialize};
 use std::future::Future;
 use std::net::SocketAddr;
@@ -120,7 +120,7 @@ impl Controller {
 // 定义一个函数spawn_kubeapi，用于启动与Kubernetes API相关的异步任务。
     pub fn spawn_kubeapi(
         &mut self,
-        client: Client,
+        
         is_cloud: bool,
     ) -> (
         Sender<ResourceIndex<Script>>,
@@ -128,7 +128,7 @@ impl Controller {
         Receiver<ManagerMsg>,
         Arc<Reflector>,
     ) {
-        use crate::trigger::kubeapi::*;// // 创建一个Reflector实例。
+        // use crate::trigger::kubeapi::*;// // 创建一个Reflector实例。
         let reflector_store = Arc::new(Reflector::default());
 
         // Scheduler
@@ -175,20 +175,20 @@ impl Controller {
         // 创建同步钩子列表。
         let device_sync_hooks = vec![logger_hook()];
         // 创建Device API实例。
-        let device_api: Api<Device> = Api::all(client);
+  
 
         // device_hook for device reflector
-        let (device_tx, device_rx) = flume::bounded(3);
-        // 创建设备钩子的通道。
-        if is_cloud {
-            let device_rx = device_rx.clone();
-            let schdevin_tx = schdevin_tx.clone();
-            self.spawn(async move { trigger_hook(device_rx, schdevin_tx).await });//设备事件-设备索引发到调度期
-        }
+        // let (device_tx, device_rx) = flume::bounded(3);
+        // // 创建设备钩子的通道。
+        // if is_cloud {
+        //     let device_rx = device_rx.clone();
+        //     let schdevin_tx = schdevin_tx.clone();
+        //     self.spawn(async move { trigger_hook(device_rx, schdevin_tx).await });//设备事件-设备索引发到调度期
+        // }
 
-        let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
-        self.spawn(async move { device_hook(device_rx, reflector_clone).await });
-        device_async_hooks.push(device_tx);// 将设备发送端添加到异步钩子列表中。
+        // let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
+        // self.spawn(async move { device_hook(device_rx, reflector_clone).await });
+        // device_async_hooks.push(device_tx);// 将设备发送端添加到异步钩子列表中。
 
         // script_hook for device reflector
         // 创建脚本钩子的通道。
@@ -204,13 +204,13 @@ impl Controller {
         //         ListParams::default(),
         //         script_async_hooks,
         //         script_sync_hooks,         
-        let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
+        let reflector_script = reflector_store.clone();// 克隆Reflector实例。
         let _conn = match Connection::open("./test.db") {
             Ok(conn) => {
                 info!("open db sucessfully");
                 let conn=Arc::new(Mutex::new(conn));
                 self.spawn(async move {
-                    reflector_sqlite3(conn,reflector_clone).await 
+                    reflector_sqlite3(conn,reflector_script).await 
                     
                 });
             
@@ -220,16 +220,32 @@ impl Controller {
                 std::process::exit(1); // 如果无法打开数据库连接，则退出程序
             }
         };
-        // device reflector
-        self.spawn(async move {
-            reflector(
-                device_api,
-                ListParams::default(),
-                device_async_hooks,
-                device_sync_hooks,
-            )
-            .await
-        });
+        // // device reflector
+        // self.spawn(async move {
+        //     reflector(
+        //         device_api,
+        //         ListParams::default(),
+        //         device_async_hooks,
+        //         device_sync_hooks,
+        //     )
+        //     .await
+        // });
+        let reflector_device = reflector_store.clone();// 克隆Reflector实例。
+        let _conn = match Connection::open("./test.db") {
+            Ok(conn) => {
+                info!("open db sucessfully");
+                let conn=Arc::new(Mutex::new(conn));
+                self.spawn(async move {
+                    reflector_sqlite3_device(conn,reflector_device,schdevin_tx).await 
+                    
+                });
+            
+            }
+            Err(e) => {
+                eprintln!("Failed to open database connection: {}", e);
+                std::process::exit(1); // 如果无法打开数据库连接，则退出程序
+            }
+        };
 
         (schin_tx, schdevin_tx, schout_rx, reflector_store)
     }

@@ -74,6 +74,62 @@ fn create_database_tables(conn: &Connection) -> Result<()> {
             INSERT INTO EventLog (script_id, event_type)
             VALUES (old.ScriptID, 'Deleted');
         END;
+        -- 创建设备事件日志表
+        CREATE TABLE IF NOT EXISTS DeviceLog (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            device_id INTEGER NOT NULL,
+            event_type TEXT NOT NULL,
+            event_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+
+        -- 插入事件触发器
+        CREATE TRIGGER IF NOT EXISTS trg_device_insert
+        AFTER INSERT ON Device
+        BEGIN
+            INSERT INTO DeviceLog (device_id, event_type)
+            VALUES (new.id, 'Inserted');
+        END;
+
+        -- 更新事件触发器
+        CREATE TRIGGER IF NOT EXISTS trg_device_update
+        AFTER UPDATE ON Device
+        BEGIN
+            INSERT INTO DeviceLog (device_id, event_type)
+            VALUES (new.id, 'Updated');
+        END;
+
+        -- 删除事件触发器
+        CREATE TRIGGER IF NOT EXISTS trg_device_delete
+        AFTER DELETE ON Device
+        BEGIN
+            INSERT INTO DeviceLog (device_id, event_type)
+            VALUES (old.id, 'Deleted');
+        END;
+        -- 插入twin事件触发器
+        CREATE TRIGGER IF NOT EXISTS trg_twins_insert
+        AFTER INSERT ON Twins
+        BEGIN
+            INSERT INTO DeviceLog (device_id, event_type)
+            VALUES (new.device_id, 'Inserted');
+        END;
+
+        -- 更新事件触发器
+        CREATE TRIGGER IF NOT EXISTS trg_twins_update
+        AFTER UPDATE ON Twins
+        BEGIN
+            INSERT INTO DeviceLog (device_id,  event_type)
+            VALUES ( new.device_id, 'Updated');
+        END;
+
+        -- 删除事件触发器
+        CREATE TRIGGER IF NOT EXISTS trg_twins_delete
+        AFTER DELETE ON Twins
+        BEGIN
+            INSERT INTO DeviceLog ( device_id,  event_type)
+            VALUES ( old.device_id, 'Deleted');
+        END;
+
+       
     ";
     conn.execute_batch(sql)?;
     Ok(())
