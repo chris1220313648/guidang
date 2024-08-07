@@ -2,6 +2,7 @@ use crate::api::{Device, Script};
 use crate::scheduler::{trigger, ManagerMsg, Reflector, ResourceIndex, Scheduler};
 use crate::session::SessionManager;
 use crate::trigger::sqlite3api::reflector_sqlite3;
+use crate::trigger::sqlite3api::reflector_sqlite3_device;
 use color_eyre::Result;
 use flume::{Receiver, Sender};
 use futures::StreamExt;

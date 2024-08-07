@@ -3,7 +3,7 @@
 
 use std::{net::SocketAddr, sync::Arc};
 
-use crate::api::device::{DeviceStatus, Twin, TwinProperty};
+use crate::api::Device::{DeviceStatus, Twin, TwinProperty};
 use crate::api::{self, Device, Script};
 use crate::controller::{wait_for_stop, ControllerState};
 use crate::id::{ExecutorID, ExecutorIDGenerator, ScriptID};
@@ -283,15 +283,6 @@ impl ControllerService for SessionManager {
                     "Got message of updating script status, but script isn't running",
                 ))
             }
-                // let patch = serde_json::json!({ "status": api_status });
-                // let patch = Patch::Merge(&patch);//转化为json并创建和合并补丁
-                // match api.patch_status(&sess_status.name, &self.pp, &patch).await {//更新脚本状态
-                //     Ok(_) => Ok(Response::new(())),
-                //     Err(e) => {
-                //         error!(error =? e, "Failed to update status of Script");
-                //         Err(Status::internal("Failed to update status of Script"))
-                //     }
-                // }
             }
 
         }
@@ -321,18 +312,37 @@ impl ControllerService for SessionManager {
                 let device_name = device.get_ref().name.clone();
 
                 // 查询设备 ID
-                let mut stmt = conn.prepare("SELECT id FROM devices WHERE name = ?")?;
-                let device_id: i32 = stmt.query_row(params![device_name], |row| row.get(0))?;
-
+                let mut stmt = match conn.prepare("SELECT id FROM devices WHERE name = ?") {
+                    Ok(stmt) => stmt,
+                    Err(e) => return Err(Status::internal("Failed to update status of deviceid")), // 转换错误并返回
+                };
+                
+                let device_id_result = stmt.query_row(params![device_name], |row| row.get(0));
+                let device_id = match device_id_result {
+                    Ok(id) => id,
+                    Err(e) => {
+                        eprintln!("Failed to fetch device id: {}", e);
+                        return Err(Status::internal("Failed to update status of deviceid"));
+                       
+                    }
+                };
+                
                 for twin in twins {
-                    let desired_json = serde_json::to_string(&twin.desired).unwrap();
-                    let reported_json = twin.reported.map(|r| serde_json::to_string(&r).unwrap());
-
-                    conn.execute(
+                    let desired_json = serde_json::to_string(&twin.desired).unwrap(); // 在实际应用中应避免使用 unwrap，而应使用错误处理
+                    let reported_json = twin.reported.map(|r| serde_json::to_string(&r).unwrap()); // 同上，应处理错误
+                
+                    match conn.execute(
                         "INSERT INTO twins (device_id, property_name, desired, reported) VALUES (?, ?, ?, ?)
-                         ON CONFLICT(device_id, property_name) DO UPDATE SET desired = excluded.desired, reported = excluded.reported",
+                        ON CONFLICT(device_id, property_name) DO UPDATE SET desired = excluded.desired, reported = excluded.reported",
                         params![device_id, twin.property_name, desired_json, reported_json],
-                    )?;
+                    ) {
+                        Ok(_) => println!("Twin updated or inserted successfully"),
+                        Err(e) => {
+                            eprintln!("Failed to update or insert twin: {}", e);
+                            return Err(Status::internal("Failed to update status of device"));
+                            
+                        }
+                    }
                 }
 
                 info!("Device status updated successfully.");

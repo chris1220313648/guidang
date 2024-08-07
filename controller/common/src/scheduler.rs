@@ -75,7 +75,7 @@ impl From<&Device> for ResourceIndex<Device> {
     fn from(device: &Device) -> Self {
         ResourceIndex {
             namespace: "default".to_string(),
-            name: device.clone(),
+            name: device.spec.name.clone(),
             api: PhantomData,
         }
     }

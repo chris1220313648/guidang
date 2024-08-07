@@ -277,7 +277,7 @@ async fn import_existing_devices(conn: Arc<Mutex<Connection>>,reflector: Arc<Ref
         let labels: String = row.get(2)?;
         let device_model_ref: String = row.get(3)?;
         let node_selector: String = row.get(4)?;
-        let twins = fetch_twins_details(&conn, device_id)?;
+        let twins = fetch_twins_details(&conn, device_id).await?;
 
         let device_model_ref: LocalObjectReference =LocalObjectReference{device_model_ref} ;
         
@@ -376,12 +376,19 @@ async fn poll_device_event_and_process(conn: Arc<Mutex<Connection>>,reflector: A
             let event_time: NaiveDateTime = row.get(2)?;
             println!("Event: {} for device_id: {} at {}", event_type, script_id, event_time);
             let mut stmt = conn.prepare("SELECT id, name, labels, device_model_ref, node_selector FROM Device Where id=?")?;
-            let mut row = stmt.query([device_id])?;
-            let name: String = row.get(1)?;
-            let labels: String = row.get(2)?;
-            let device_model_ref: String = row.get(3)?;
-            let node_selector: String = row.get(4)?;
-            let twins = fetch_twins_details(&conn, device_id)?;
+            let mut rowdevice = stmt.query([device_id])?;
+            if let Ok(Some(row_result))= rowdevice.next() {
+                let row = row_result?; // Handle the Result, which can be an Err if the row fetch fails
+        
+                // Extract data from the row using correct column indices
+                let name: String = row.get(1)?;
+                let labels: String = row.get(2)?;
+                let device_model_ref: String = row.get(3)?;
+                let node_selector: String = row.get(4)?;
+        
+                // Output or use the data as needed
+                println!("Device Name: {}, Labels: {}, Model Ref: {}, Node Selector: {}", name, labels, device_model_ref, node_selector);
+                let twins = fetch_twins_details(&conn, device_id).await?;
     
             let device_model_ref: LocalObjectReference =LocalObjectReference{device_model_ref} ;
             
@@ -432,6 +439,11 @@ async fn poll_device_event_and_process(conn: Arc<Mutex<Connection>>,reflector: A
                     println!("Unknown event type: {} for device_id: {}", event_type, device_id);
                 }
             }
+            } else {
+                // Handle the case where no rows were returned for the given device ID
+                println!("No device found with ID: {}", device_id);
+            }
+            
 
      
         }
