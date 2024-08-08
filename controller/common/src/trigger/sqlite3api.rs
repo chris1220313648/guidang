@@ -1,18 +1,29 @@
 use std::collections::HashMap;
+use std::vec;
+use rusqlite::Error as RusqliteError;
 use std::error::Error;
-use std::sync::{Arc, Mutex};
+use tokio::sync::Mutex;
+use std::sync::Arc;
 use std::str::FromStr;
 use color_eyre::eyre::{Report, Result, WrapErr};
 use tracing::info;
 use crate::api::device_sqlite3::DeviceStatus;
 use crate::api::script_sqlite3::*;
-use crate::api::script_device::*;
+use crate::api::device_sqlite3::*;
 use tokio::time::{interval, Duration};
 use rusqlite::{params, Connection,Result as RusqliteResult};
 use chrono::{NaiveDateTime, Utc};
 use serde::{Deserialize, Serialize};
 use schemars::JsonSchema;
-use crate::scheduler:: Reflector;
+use std::marker::PhantomData;
+use flume::{Receiver, Sender};
+use crate::scheduler::{Reflector, ResourceIndex};
+use chrono::DateTime;
+struct DeviceEvent {
+    device_id: i32,
+    event_type: String,
+    event_time: DateTime<Utc>,
+}
 
 pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Report> {
     info!("start reflector_sqlite3");
@@ -27,7 +38,7 @@ pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Refle
 
 
 async fn import_existing_scripts(conn: Arc<Mutex<Connection>>, reflector: Arc<Reflector>) -> Result<(), Box<dyn Error >> {
-    let conn = conn.lock().unwrap();
+    let conn = conn.lock().await;
   
     let mut stmt = conn.prepare("SELECT ScriptID From Script;")?;
 
@@ -62,7 +73,7 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflecto
         info!("lunxun:{}",count);
         count=count+1;
         interval.tick().await;
-        let conn = conn.lock().unwrap();
+        let conn = conn.lock().await;
         let mut table_stmt = conn.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='EventLog';")?;
         let table_exists: RusqliteResult<String> = table_stmt.query_row([], |row| row.get(0));
         match table_exists {
@@ -257,6 +268,7 @@ fn create_script_struct(
 
 pub async fn reflector_sqlite3_device(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>,scheduler: Sender<ResourceIndex<Device>>) -> Result<(), Report> {
     info!("start reflector_sqlite3_device");
+    
     // 导入现有脚本信息
     let _=import_existing_devices(conn.clone(), reflector.clone()).await;
     
@@ -267,7 +279,7 @@ pub async fn reflector_sqlite3_device(conn: Arc<Mutex<Connection>>,reflector: Ar
 }
 
 async fn import_existing_devices(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Box<dyn Error>> {
-    let conn = conn.lock().unwrap();
+    let conn = conn.lock().await;
     let mut stmt = conn.prepare("SELECT id, name, labels, device_model_ref, node_selector FROM Device")?;
     let mut rows = stmt.query([])?;
     while let Some(row) = rows.next()? {
@@ -275,13 +287,13 @@ async fn import_existing_devices(conn: Arc<Mutex<Connection>>,reflector: Arc<Ref
         info!("Importing device: {:?}", device_id);
         let name: String = row.get(1)?;
         let labels: String = row.get(2)?;
-        let device_model_ref: String = row.get(3)?;
+        let device_model_name: String = row.get(3)?;
         let node_selector: String = row.get(4)?;
-        let twins = fetch_twins_details(&conn, device_id).await?;
+        let twins = fetch_twins_details(&conn, device_id)?;
 
-        let device_model_ref: LocalObjectReference =LocalObjectReference{device_model_ref} ;
+        let device_model_ref: LocalObjectReference =LocalObjectReference{name:Some(device_model_name)} ;
         
-        let property_visitors: Vec<DevicePropertyVisitor> = serde_json::from_str(&property_visitors)?;
+        
         let node_selector: NodeSelector = serde_json::from_str(&node_selector)?;
         
 
@@ -290,6 +302,8 @@ async fn import_existing_devices(conn: Arc<Mutex<Connection>>,reflector: Arc<Ref
             device_model_ref:device_model_ref,
             property_visitors:vec![],
             node_selector:node_selector,
+            data: None, 
+            protocol: None,
         };
         let status:DeviceStatus=DeviceStatus{
             twins
@@ -308,153 +322,168 @@ async fn import_existing_devices(conn: Arc<Mutex<Connection>>,reflector: Arc<Ref
     Ok(())
  
 }
-async fn fetch_twins_details(conn: &Connection, device_id: i32) -> Result<Vec<Twin>, Box<dyn Error >>{
-    let conn = conn.lock().unwrap();
-    let mut stmt = conn.prepare("SELECT id,device_id ,property_name, desired,reported FROM Twins")?;
-    let twin_iter = stmt.query_map([], |row| {
+async fn poll_device_event_and_process(
+    conn: Arc<Mutex<Connection>>,
+    reflector: Arc<Reflector>,
+    scheduler: Sender<ResourceIndex<Device>>,
+) -> Result<(), Box<dyn Error>> {
+    let poll_interval = Duration::from_secs(8);
+    let mut interval = interval(poll_interval);
+    let mut last_polled = Utc::now() - chrono::Duration::seconds(30);
+
+    loop {
+        interval.tick().await;
+        let events = fetch_device_events(&conn, last_polled).await?;
+
+        for event in events {
+            process_device_event(event, &conn, &reflector, &scheduler).await?;
+        }
+
+        last_polled = Utc::now();
+    }
+}
+
+async fn fetch_device_events(conn: &Arc<Mutex<Connection>>, last_polled: DateTime<Utc>) -> Result<Vec<DeviceEvent>, Box<dyn Error>> {
+    let conn = conn.lock().await;
+    let query = "
+        SELECT device_id, event_type, event_time FROM DeviceLog WHERE event_time > ?";
+    let mut stmt = conn.prepare(query)?;
+    let mut rows = stmt.query(params![last_polled.naive_utc().format("%Y-%m-%d %H:%M:%S").to_string()])?;
+
+    let mut events = Vec::new();
+    while let Some(row) = rows.next()?{
+        let event = DeviceEvent {
+            device_id: row.get(0)?,
+            event_type: row.get(1)?,
+            event_time: row.get(2)?,
+        };
+        events.push(event);
+    }
+
+    Ok(events)
+}
+
+async fn process_device_event(
+    event: DeviceEvent,
+    conn: &Arc<Mutex<Connection>>,
+    reflector: &Arc<Reflector>,
+    scheduler: &Sender<ResourceIndex<Device>>,
+) -> Result<(), Box<dyn Error>> {
+    
+
+    let device = fetch_device_details( conn,event.device_id).await?;
+    let dev_to_idx = |dev: &Device| ResourceIndex {
+        //定义了一个闭包dev_to_idx，它接受一个&Device引用作为参数，并返回一个ResourceIndex<Device>结构
+        name: dev.spec.name.clone(),
+        namespace: "default".to_string(),
+        api: PhantomData,//用于表明这个结构体泛型地依赖于Device类
+    };
+    match event.event_type.as_str() {
+        "Inserted" => {
+            reflector.add_device(&device);
+            let idx = dev_to_idx(&device);
+            scheduler.send_async(idx).await?;
+        },
+        "Updated" => {
+            // 处理更新事件的逻辑
+            println!("Handling update event for device_id: {}",event.device_id);
+            reflector.add_device(&device)
+        },
+        "Deleted" => {
+            // 处理删除事件的逻辑
+            println!("Handling delete event for device_id: {}", event.device_id);
+            reflector.remove_device(&device)
+        },
+        "error" => {
+            // 处理错误事件的逻辑
+            println!("Handling error event for device_id: {}", event.device_id);
+        },
+        _ => {
+            // 处理未知事件类型
+            println!("Unknown event type: {} for device_id: {}", event.event_type, event.device_id);
+        }
+    }
+
+    Ok(())
+}
+async fn fetch_device_details(conn: &Arc<Mutex<Connection>>, device_id: i32) -> Result<Device, Box<dyn Error>> {
+    let conn = conn.lock().await;
+    let mut stmt = conn.prepare("SELECT id, name, labels, device_model_ref, node_selector FROM Device WHERE id=?")?;
+    let mut rows = stmt.query(params![device_id])?;
+    
+    if let Some(row) = rows.next()? {
+        let name: String = row.get(1)?;
+        let labels: String = row.get(2)?; // 假设labels是一个JSON字符串
+        let device_model_name: String = row.get(3)?;
+        let node_selector: String = row.get(4)?;
+        
+        let twins = fetch_twins_details(&conn, device_id)?; // 假设这个函数已经定义好
+
+        let device_model_ref = LocalObjectReference { name: Some(device_model_name) };
+        let node_selector: NodeSelector = serde_json::from_str(&node_selector)?;
+
+        let spec = DeviceSpec {
+            name,
+            device_model_ref,
+            property_visitors: vec![], // 假设这部分数据需要从其他地方获取或者暂时为空
+            node_selector,
+            data: None, // 假设这部分数据暂时为空
+            protocol: None, // 假设这部分数据暂时为空
+        };
+
+        let status = DeviceStatus {
+            twins,
+        };
+
+        Ok(Device {
+            spec,
+            status: Some(status),
+        })
+    } else {
+        Err("No device found with the specified ID".into())
+    }
+}
+
+fn fetch_twins_details(conn: &Connection, device_id: i32) -> Result<Vec<Twin>, Box<dyn Error>> {
+    let mut stmt = conn.prepare("SELECT id, device_id, property_name, desired, reported FROM Twins Where device_id=?")?;
+    let mut rows = stmt.query(params![device_id])?;
+    let mut twins = Vec::new();
+    let mut errors = Vec::new();
+
+    while let Some(row) = rows.next()? {
         let property_name: String = row.get(2)?;
         let desired: String = row.get(3)?;
         let reported: Option<String> = row.get(4)?;
 
-        // 解析 JSON 数据
-        let desired: TwinProperty = serde_json::from_str(&desired)?;
-        let reported: Option<TwinProperty> = reported.map(|rep| serde_json::from_str(&rep)).transpose()?;
-
-        Ok(Twin {
-            property_name,
-            desired,
-            reported,
-        })
-    })?;
-    let mut twins = Vec::new();
-    for twin in twin_iter {
-        twins.push(twin?);
+        twins.push((property_name, desired, reported));
     }
 
-    Ok(twins)
-    
+    let mut result_twins = Vec::new();
 
-}
-async fn poll_device_event_and_process(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>,scheduler: Sender<ResourceIndex<Device>>) -> Result<(), Box<dyn Error>> {
-    let mut last_polled = Utc::now() - chrono::Duration::seconds(30); // 记录上次轮询时间，假设10s前开始
-    let poll_interval = Duration::from_secs(5); // 轮询间隔
-    let mut interval = interval(poll_interval); // 定时器
-    let mut count=0;
-    let dev_to_idx = |dev: &Device| ResourceIndex {
-        //定义了一个闭包dev_to_idx，它接受一个&Device引用作为参数，并返回一个ResourceIndex<Device>结构
-        name: dev.spec.name.clone().unwrap(),
-        namespace: "default".to_string(),
-        api: PhantomData,//用于表明这个结构体泛型地依赖于Device类
-    };
-    loop {
-        info!("lunxun:{}",count);
-        count=count+1;
-        interval.tick().await;
-        let conn = conn.lock().unwrap();
-        let mut stmt = match conn.prepare("
-            SELECT device_id, event_type, event_time 
-            FROM DeviceLog 
-            WHERE event_time > ?
-        ") {
-            Ok(stmt) => stmt,
-            Err(err) => {
-                eprintln!("Failed to prepare statement: {}", err);
-                continue; // 继续循环
-            }
-        };
-
-        info!("presqlite:");
-        // 确保时间格式正确
-        let naive_last_polled = last_polled.naive_utc().format("%Y-%m-%d %H:%M:%S").to_string();
-        
-        let mut rows = stmt.query(params![naive_last_polled])?;
-        let mut found = false;
-        while let Some(row) = rows.next()? {
-            found = true;
-            let device_id: i32 = row.get(0)?;
-            let event_type: String = row.get(1)?;
-            let event_time: NaiveDateTime = row.get(2)?;
-            println!("Event: {} for device_id: {} at {}", event_type, script_id, event_time);
-            let mut stmt = conn.prepare("SELECT id, name, labels, device_model_ref, node_selector FROM Device Where id=?")?;
-            let mut rowdevice = stmt.query([device_id])?;
-            if let Ok(Some(row_result))= rowdevice.next() {
-                let row = row_result?; // Handle the Result, which can be an Err if the row fetch fails
-        
-                // Extract data from the row using correct column indices
-                let name: String = row.get(1)?;
-                let labels: String = row.get(2)?;
-                let device_model_ref: String = row.get(3)?;
-                let node_selector: String = row.get(4)?;
-        
-                // Output or use the data as needed
-                println!("Device Name: {}, Labels: {}, Model Ref: {}, Node Selector: {}", name, labels, device_model_ref, node_selector);
-                let twins = fetch_twins_details(&conn, device_id).await?;
-    
-            let device_model_ref: LocalObjectReference =LocalObjectReference{device_model_ref} ;
-            
-            let property_visitors: Vec<DevicePropertyVisitor> = serde_json::from_str(&property_visitors)?;
-            let node_selector: NodeSelector = serde_json::from_str(&node_selector)?;
-            
-    
-            let spec = DeviceSpec {
-                name:name,
-                device_model_ref:device_model_ref,
-                property_visitors:vec![],
-                node_selector:node_selector,
-            };
-            let status:DeviceStatus=DeviceStatus{
-                twins
-    
-            };
-            let device = Device {
-                spec,
-                status: Some(status),
-            };
-
-            match event_type.as_str() {
-                "Inserted" => {
-                    // 处理创建事件的逻辑
-                    println!("Handling create event for device_id: {}", device_id);
-                    reflector.add_script(&device);
-                    let idx = dev_to_idx(&device);//Device转换为ResourceIndex，并通过scheduler异步发送这个索引。
-                    tracing::trace!(dev = ?dev, "Got new device applied");
-                    scheduler.send_async(idx).await? 
-                },
-                "Updated" => {
-                    // 处理更新事件的逻辑
-                    println!("Handling update event for device_id: {}",device_id);
-                    reflector.add_script(&device)
-                },
-                "Deleted" => {
-                    // 处理删除事件的逻辑
-                    println!("Handling delete event for device_id: {}", device_id);
-                    reflector.remove_script(&device)
-                },
-                "error" => {
-                    // 处理错误事件的逻辑
-                    println!("Handling error event for device_id: {}", device_id);
-                },
-                _ => {
-                    // 处理未知事件类型
-                    println!("Unknown event type: {} for device_id: {}", event_type, device_id);
+    for (property_name, desired, reported) in twins {
+        match serde_json::from_str::<TwinProperty>(&desired) {
+            Ok(desired) => {
+                let reported = reported.map(|r| serde_json::from_str(&r)).transpose();
+                
+                match reported {
+                    Ok(reported) => {
+                        result_twins.push(Twin {
+                            property_name,
+                            desired,
+                            reported,
+                        });
+                    }
+                    Err(e) => errors.push(e),
                 }
             }
-            } else {
-                // Handle the case where no rows were returned for the given device ID
-                println!("No device found with ID: {}", device_id);
-            }
-            
-
-     
+            Err(e) => errors.push(e),
         }
-        
-        if !found {
-            println!("No new events found.");
-        }
-
-        last_polled = Utc::now(); // 更新上次查询时间
     }
 
-
-
+    if !errors.is_empty() {
+        // Handle errors here, such as converting them to a Box<dyn Error>
+        Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, "JSON parsing failed")))
+    } else {
+        Ok(result_twins)
+    }
 }

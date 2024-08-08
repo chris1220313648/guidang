@@ -3,7 +3,7 @@
 
 use std::{net::SocketAddr, sync::Arc};
 
-use crate::api::Device::{DeviceStatus, Twin, TwinProperty};
+use crate::api::device_sqlite3::{DeviceStatus, Twin, TwinProperty};
 use crate::api::{self, Device, Script};
 use crate::controller::{wait_for_stop, ControllerState};
 use crate::id::{ExecutorID, ExecutorIDGenerator, ScriptID};
@@ -32,7 +32,7 @@ pub struct SessionManager {
     scripts: Arc<DashMap<ScriptID, ScriptStatus>>,//记录控制器id和脚本执行状态
     executors: Arc<DashMap<ExecutorID, ExecutorInfo>>,//执行器id和执行器信息
     executor_idgen: Arc<ExecutorIDGenerator>,//执行器id生成
-    client: Client,//kube客户端
+    // client: Client,//kube客户端
     pp: PatchParams,//用于配置更新操作的参数
     scheduler: Receiver<ManagerMsg>,
     state: watch::Receiver<ControllerState>,//接受控制器状态变化
@@ -61,7 +61,7 @@ pub enum ExecutorState {
 
 impl SessionManager {
     pub fn new(
-        client: Client,
+        // client: Client,
         scheduler: Receiver<ManagerMsg>,
         state: watch::Receiver<ControllerState>,
     ) -> Self {
@@ -76,7 +76,7 @@ impl SessionManager {
             scripts: Default::default(),
             executors: Default::default(),
             executor_idgen: Default::default(),
-            client,
+            // client,
             pp: PatchParams::apply(MANAGER),//用于控制更新操作
             scheduler,
             state,
@@ -238,7 +238,7 @@ impl ControllerService for SessionManager {
         match self.scripts.remove(&id) {//移除脚本id的状态
             Some((_, sess_status)) => {
                 info!(status =? sess_status, "Script exit");//
-                let client = self.client.clone();
+                // let client = self.client.clone();
                 // let api: Api<Script> = Api::namespaced(client, &sess_status.namespace);//创建一个命名空间的Api<Script>
                 let last_run = status//提取开始时间
                     .get_ref()
@@ -297,7 +297,7 @@ impl ControllerService for SessionManager {
         info!(id =? id, "Script update device");
         match self.scripts.get(&id) {
             Some(sess_script) => {//sess_script是脚本执行状态信息
-                let client = self.client.clone();
+                // let client = self.client.clone();
                 
                 let mut twins = Vec::new();
                 for (k, v) in device.get_ref().desired.iter() {
@@ -307,7 +307,7 @@ impl ControllerService for SessionManager {
                         reported: None,
                     })
                 }
-                let status: DeviceStatus = DeviceStatus { twins };
+                let status: DeviceStatus = DeviceStatus { twins: twins.clone() };
                 let conn = self.conn.lock().unwrap();
                 let device_name = device.get_ref().name.clone();
 
@@ -317,7 +317,7 @@ impl ControllerService for SessionManager {
                     Err(e) => return Err(Status::internal("Failed to update status of deviceid")), // 转换错误并返回
                 };
                 
-                let device_id_result = stmt.query_row(params![device_name], |row| row.get(0));
+                let device_id_result: rusqlite::Result<i32> = stmt.query_row(params![device_name], |row| row.get(0));
                 let device_id = match device_id_result {
                     Ok(id) => id,
                     Err(e) => {

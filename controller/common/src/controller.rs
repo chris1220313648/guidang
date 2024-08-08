@@ -10,12 +10,13 @@ use futures::StreamExt;
 use serde::{Deserialize, Serialize};
 use std::future::Future;
 use std::net::SocketAddr;
+use tokio::sync::Mutex;
+
 use std::sync::Arc;
 use tokio::sync::watch;
 use tokio::task::JoinHandle;
 use tracing::{error, info};
 use rusqlite::{params, Connection};
-use std::sync::Mutex;
 use color_eyre::Report;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ControllerState {
@@ -160,51 +161,6 @@ impl Controller {
         let schin_tx_clone = schin_tx.clone();
         // 启动设备到脚本映射的异步任务。接收设备信息 发出对应脚本信息
         self.spawn(async move { trigger(reflector_clone, schdevin_rx, schin_tx_clone).await });
-
-        // script reflector
-        // 创建空的异步钩子列表。
-        // let mut script_async_hooks = Vec::new();
-        // 创建同步钩子列表。
-        // let script_sync_hooks = vec![logger_hook()];
-        // 创建Script API实例
-        // let script_api: Api<Script> = Api::all(client.clone());
- 
-
-        // device reflector
-        // 创建空的异步钩子列表。
-        let mut device_async_hooks = Vec::new();
-        // 创建同步钩子列表。
-        let device_sync_hooks = vec![logger_hook()];
-        // 创建Device API实例。
-  
-
-        // device_hook for device reflector
-        // let (device_tx, device_rx) = flume::bounded(3);
-        // // 创建设备钩子的通道。
-        // if is_cloud {
-        //     let device_rx = device_rx.clone();
-        //     let schdevin_tx = schdevin_tx.clone();
-        //     self.spawn(async move { trigger_hook(device_rx, schdevin_tx).await });//设备事件-设备索引发到调度期
-        // }
-
-        // let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
-        // self.spawn(async move { device_hook(device_rx, reflector_clone).await });
-        // device_async_hooks.push(device_tx);// 将设备发送端添加到异步钩子列表中。
-
-        // script_hook for device reflector
-        // 创建脚本钩子的通道。
-        // let (script_tx, script_rx) = flume::bounded(3);
-        // let reflector_clone = reflector_store.clone();// 克隆Reflector实例。
-        // self.spawn(async move { script_hook(script_rx, reflector_clone).await });// 启动脚本钩子的异步任务。
-        // script_async_hooks.push(script_tx);//将脚本事件发送端添加到异步钩子中
-
-        // script reflector
-        // self.spawn(async move {
-        //     reflector(
-        //         script_api,
-        //         ListParams::default(),
-        //         script_async_hooks,
-        //         script_sync_hooks,         
         let reflector_script = reflector_store.clone();// 克隆Reflector实例。
         let _conn = match Connection::open("./test.db") {
             Ok(conn) => {
@@ -221,23 +177,15 @@ impl Controller {
                 std::process::exit(1); // 如果无法打开数据库连接，则退出程序
             }
         };
-        // // device reflector
-        // self.spawn(async move {
-        //     reflector(
-        //         device_api,
-        //         ListParams::default(),
-        //         device_async_hooks,
-        //         device_sync_hooks,
-        //     )
-        //     .await
-        // });
+
         let reflector_device = reflector_store.clone();// 克隆Reflector实例。
+        let schdevin_tx_clone = schdevin_tx.clone();
         let _conn = match Connection::open("./test.db") {
             Ok(conn) => {
                 info!("open db sucessfully");
                 let conn=Arc::new(Mutex::new(conn));
                 self.spawn(async move {
-                    reflector_sqlite3_device(conn,reflector_device,schdevin_tx).await 
+                    reflector_sqlite3_device(conn,reflector_device,schdevin_tx_clone).await 
                     
                 });
             
@@ -270,12 +218,12 @@ impl Controller {
         self.spawn(async move { web_server(scheduler, store, addr).await });
     }
 
-    pub fn spawn_grpc(&mut self, client: Client, scheduler: Receiver<ManagerMsg>) {
+    pub fn spawn_grpc(&mut self,  scheduler: Receiver<ManagerMsg>) {
         let addr = self.config.grpcaddr;
         let mut state = self.state_rx.clone();
         let handle = tokio::spawn(async move {
             wait_for_init(&mut state).await;
-            let mgr = SessionManager::new(client, scheduler, state);//启动会话管理器
+            let mgr = SessionManager::new( scheduler, state);//启动会话管理器
             if let Err(e) = crate::server::grpc_server(addr, mgr).await {//在等待初始化完成后，创建一个会话管理器 SessionManager，并尝试启动gRPC服务器。
                 error!(error =? e, "Grpc server is down!");
             }

@@ -123,7 +123,7 @@ pub struct NodeSelectorTerm {
 }
 
 /// NodeSelectorRequirement represents a node selector requirement.
-#[derive(Clone, Debug, Deserialize, Serialize),JsonSchema]
+#[derive(Clone, Debug, Deserialize, Serialize,JsonSchema)]
 pub struct NodeSelectorRequirement {
     pub key: String,
     pub operator: String,

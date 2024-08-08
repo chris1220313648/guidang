@@ -42,9 +42,9 @@ fn main() -> Result<()> {
     rt.block_on(async move {//启动异步任务
         let mut ctl = controller::controller::Controller::new(config)?;//创建控制器实例并传入解析
         let client = kube::Client::try_default().await?;//尝试创建一个 Kubernetes 客户端。这个客户端用于与 Kubernetes 集群交互。
-        let (schin, _schdevin, schout, store) = ctl.spawn_kubeapi(client.clone(), true);//启动与 Kubernetes API 交互的相关功能
+        let (schin, _schdevin, schout, store) = ctl.spawn_kubeapi( true);//启动与 Kubernetes API 交互的相关功能
         ctl.spawn_webserver(schin, store);//启动web服务器 接受脚本发送器 reflector结构体
-        ctl.spawn_grpc(client, schout);
+        ctl.spawn_grpc( schout);
         ctl.run().await?;//调用 Controller::run 方法来启动控制器的主要运行循环。这个循环可能会处理来自 Kubernetes 的事件、响应 Web 或 gRPC 请求等。
         Ok::<_, Report>(())
     })?;
