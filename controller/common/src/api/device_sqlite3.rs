@@ -106,24 +106,28 @@ impl fmt::Display for TwinProperty {
 
 /// LocalObjectReference represents a reference to another object in the same namespace.
 #[derive(Clone, Debug, Deserialize, Serialize,JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct LocalObjectReference {
     pub name: Option<String>,
 }
 
 /// NodeSelector represents node selector requirements.
 #[derive(Clone, Debug, Deserialize, Serialize,JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct NodeSelector {
     pub node_selector_terms: Vec<NodeSelectorTerm>,
 }
 
 /// NodeSelectorTerm represents a requirement for selecting nodes.
 #[derive(Clone, Debug, Deserialize, Serialize,JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct NodeSelectorTerm {
     pub match_expressions: Vec<NodeSelectorRequirement>,
 }
 
 /// NodeSelectorRequirement represents a node selector requirement.
 #[derive(Clone, Debug, Deserialize, Serialize,JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct NodeSelectorRequirement {
     pub key: String,
     pub operator: String,

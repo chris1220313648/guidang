@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 use std::vec;
-use rusqlite::Error as RusqliteError;
+
 use std::error::Error;
 use tokio::sync::Mutex;
 use std::sync::Arc;
 use std::str::FromStr;
 use color_eyre::eyre::{Report, Result, WrapErr};
-use tracing::info;
+use tracing::{info,error};
 use crate::api::device_sqlite3::DeviceStatus;
 use crate::api::script_sqlite3::*;
 use crate::api::device_sqlite3::*;
@@ -28,7 +28,6 @@ struct DeviceEvent {
 pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Report> {
     info!("start reflector_sqlite3");
     // 导入现有脚本信息
-    
     let _=import_existing_scripts(conn.clone(), reflector.clone()).await;
     let _=poll_event_log_and_process_events(conn,reflector).await;
     Ok(())
@@ -57,7 +56,7 @@ async fn import_existing_scripts(conn: Arc<Mutex<Connection>>, reflector: Arc<Re
         // info!("get selector script: {:?}", script_id);
         let script_struct = create_script_struct(script, env_vars, execute_policy, selectors)?;
         // info!("create script: {:?}", script_id);
-        println!("{:?}", script_struct);
+        info!("{:?}", script_struct);
         reflector.add_script(&script_struct);
     }
 
@@ -70,19 +69,10 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflecto
     let mut count=0;
 
     loop {
-        info!("lunxun:{}",count);
+        info!("Polling script count:{}",count);
         count=count+1;
         interval.tick().await;
         let conn = conn.lock().await;
-        let mut table_stmt = conn.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='EventLog';")?;
-        let table_exists: RusqliteResult<String> = table_stmt.query_row([], |row| row.get(0));
-        match table_exists {
-            Ok(name) => info!("Table exists: {}", name),
-            Err(err) => {
-                eprintln!("Table 'EventLog' does not exist: {}", err);
-                continue; // 继续循环
-            }
-        }
         let mut stmt = match conn.prepare("
             SELECT script_id, event_type, event_time 
             FROM EventLog 
@@ -94,8 +84,6 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflecto
                 continue; // 继续循环
             }
         };
-
-        info!("presqlite:");
         // 确保时间格式正确
         let naive_last_polled = last_polled.naive_utc().format("%Y-%m-%d %H:%M:%S").to_string();
         info!("Using last_polled time:{}",naive_last_polled);
@@ -106,44 +94,44 @@ async fn poll_event_log_and_process_events(conn: Arc<Mutex<Connection>>,reflecto
             let script_id: i32 = row.get(0)?;
             let event_type: String = row.get(1)?;
             let event_time: NaiveDateTime = row.get(2)?;
-            println!("Event: {} for script_id: {} at {}", event_type, script_id, event_time);
+            info!("Script Event: {} for script_id: {} at {}", event_type, script_id, event_time);
 
             let scriptsqlite3 = fetch_script_details(&conn, script_id)?;
             let env_vars = fetch_environment_variables(&conn, script_id)?;
             let execute_policy = fetch_execute_policy(&conn, script_id)?;
             let selectors = fetch_selectors(&conn, script_id)?;
             let script_struct = create_script_struct(scriptsqlite3, env_vars, execute_policy, selectors)?;
-            println!("{:?}", script_struct);
+            info!("{:?}", script_struct);
             info!(event_type=%event_type);
             match event_type.as_str() {
                 "Inserted" => {
                     // 处理创建事件的逻辑
-                    println!("Handling create event for script_id: {}", script_id);
+                    info!("Handling create event for script_id: {}", script_id);
                     reflector.add_script(&script_struct)
                 },
                 "Updated" => {
                     // 处理更新事件的逻辑
-                    println!("Handling update event for script_id: {}", script_id);
+                    info!("Handling update event for script_id: {}", script_id);
                     reflector.add_script(&script_struct)
                 },
                 "Deleted" => {
                     // 处理删除事件的逻辑
-                    println!("Handling delete event for script_id: {}", script_id);
+                    info!("Handling delete event for script_id: {}", script_id);
                     reflector.remove_script(&script_struct)
                 },
                 "error" => {
                     // 处理错误事件的逻辑
-                    println!("Handling error event for script_id: {}", script_id);
+                    info!("Handling error event for script_id: {}", script_id);
                 },
                 _ => {
                     // 处理未知事件类型
-                    println!("Unknown event type: {} for script_id: {}", event_type, script_id);
+                    info!("Unknown event type: {} for script_id: {}", event_type, script_id);
                 }
             }      
         }
         
         if !found {
-            println!("No new events found.");
+            info!("No new events found.");
         }
 
         last_polled = Utc::now(); // 更新上次查询时间
@@ -267,11 +255,10 @@ fn create_script_struct(
 }
 
 pub async fn reflector_sqlite3_device(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>,scheduler: Sender<ResourceIndex<Device>>) -> Result<(), Report> {
-    info!("start reflector_sqlite3_device");
+    info!("start device_reflector");
     
     // 导入现有脚本信息
     let _=import_existing_devices(conn.clone(), reflector.clone()).await;
-    
     let _=poll_device_event_and_process(conn,reflector,scheduler).await;
     Ok(())
     
@@ -279,22 +266,41 @@ pub async fn reflector_sqlite3_device(conn: Arc<Mutex<Connection>>,reflector: Ar
 }
 
 async fn import_existing_devices(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Box<dyn Error>> {
+    info!("import_existing_devices");
     let conn = conn.lock().await;
     let mut stmt = conn.prepare("SELECT id, name, labels, device_model_ref, node_selector FROM Device")?;
+    
     let mut rows = stmt.query([])?;
+    
     while let Some(row) = rows.next()? {
         let device_id: i32 = row.get(0)?;
         info!("Importing device: {:?}", device_id);
         let name: String = row.get(1)?;
+        info!(" device name: {:?}", name);
         let labels: String = row.get(2)?;
+        info!(" device lables: {:?}", labels);
         let device_model_name: String = row.get(3)?;
+        info!(" device model_name: {:?}", device_model_name);
         let node_selector: String = row.get(4)?;
+        info!(" device node_selector: {:?}", node_selector);
+        
         let twins = fetch_twins_details(&conn, device_id)?;
+        info!("twins:{:?}", twins);
 
         let device_model_ref: LocalObjectReference =LocalObjectReference{name:Some(device_model_name)} ;
+        info!(" device model_name: {:?}", device_model_ref);
         
         
-        let node_selector: NodeSelector = serde_json::from_str(&node_selector)?;
+        let node_selector: NodeSelector = match serde_json::from_str(&node_selector) {
+            Ok(ns) => {
+                info!("Node selector parsed successfully: {:?}", ns);
+                ns
+            },
+            Err(e) => {
+                error!("Failed to parse node selector: {}", e);
+                return Err(Box::new(e));
+            }
+        };
         
 
         let spec = DeviceSpec {
@@ -314,7 +320,7 @@ async fn import_existing_devices(conn: Arc<Mutex<Connection>>,reflector: Arc<Ref
             status: Some(status),
         };
 
-        println!("{:#?}", device);
+        info!("add device:{:#?}", &device);
         reflector.add_device(&device);
         
 
@@ -330,14 +336,17 @@ async fn poll_device_event_and_process(
     let poll_interval = Duration::from_secs(8);
     let mut interval = interval(poll_interval);
     let mut last_polled = Utc::now() - chrono::Duration::seconds(30);
+    let mut count=0;
 
     loop {
+        info!("Polling device count:{}",count);
         interval.tick().await;
         let events = fetch_device_events(&conn, last_polled).await?;
 
         for event in events {
             process_device_event(event, &conn, &reflector, &scheduler).await?;
         }
+        count=count+1;
 
         last_polled = Utc::now();
     }
@@ -380,27 +389,28 @@ async fn process_device_event(
     };
     match event.event_type.as_str() {
         "Inserted" => {
+            info!("Handling insert event for device_id: {}",event.device_id);
             reflector.add_device(&device);
             let idx = dev_to_idx(&device);
             scheduler.send_async(idx).await?;
         },
         "Updated" => {
             // 处理更新事件的逻辑
-            println!("Handling update event for device_id: {}",event.device_id);
+            info!("Handling update event for device_id: {}",event.device_id);
             reflector.add_device(&device)
         },
         "Deleted" => {
             // 处理删除事件的逻辑
-            println!("Handling delete event for device_id: {}", event.device_id);
+            info!("Handling delete event for device_id: {}", event.device_id);
             reflector.remove_device(&device)
         },
         "error" => {
             // 处理错误事件的逻辑
-            println!("Handling error event for device_id: {}", event.device_id);
+            info!("Handling error event for device_id: {}", event.device_id);
         },
         _ => {
             // 处理未知事件类型
-            println!("Unknown event type: {} for device_id: {}", event.event_type, event.device_id);
+            info!("Unknown event type: {} for device_id: {}", event.event_type, event.device_id);
         }
     }
 
@@ -420,15 +430,24 @@ async fn fetch_device_details(conn: &Arc<Mutex<Connection>>, device_id: i32) -> 
         let twins = fetch_twins_details(&conn, device_id)?; // 假设这个函数已经定义好
 
         let device_model_ref = LocalObjectReference { name: Some(device_model_name) };
-        let node_selector: NodeSelector = serde_json::from_str(&node_selector)?;
+        let node_selector: NodeSelector = match serde_json::from_str(&node_selector) {
+            Ok(ns) => {
+                info!("Node selector parsed successfully: {:?}", ns);
+                ns
+            },
+            Err(e) => {
+                error!("Failed to parse node selector: {}", e);
+                return Err(Box::new(e));
+            }
+        };
 
         let spec = DeviceSpec {
             name,
             device_model_ref,
-            property_visitors: vec![], // 假设这部分数据需要从其他地方获取或者暂时为空
+            property_visitors: vec![],
             node_selector,
-            data: None, // 假设这部分数据暂时为空
-            protocol: None, // 假设这部分数据暂时为空
+            data: None,
+            protocol: None,
         };
 
         let status = DeviceStatus {
@@ -449,7 +468,7 @@ fn fetch_twins_details(conn: &Connection, device_id: i32) -> Result<Vec<Twin>, B
     let mut rows = stmt.query(params![device_id])?;
     let mut twins = Vec::new();
     let mut errors = Vec::new();
-
+    // info!("get twins");
     while let Some(row) = rows.next()? {
         let property_name: String = row.get(2)?;
         let desired: String = row.get(3)?;
@@ -457,26 +476,44 @@ fn fetch_twins_details(conn: &Connection, device_id: i32) -> Result<Vec<Twin>, B
 
         twins.push((property_name, desired, reported));
     }
+    info!("get twins{:?}",twins);
 
     let mut result_twins = Vec::new();
 
     for (property_name, desired, reported) in twins {
+        info!("twins_for");
         match serde_json::from_str::<TwinProperty>(&desired) {
             Ok(desired) => {
-                let reported = reported.map(|r| serde_json::from_str(&r)).transpose();
-                
-                match reported {
-                    Ok(reported) => {
-                        result_twins.push(Twin {
-                            property_name,
-                            desired,
-                            reported,
-                        });
+            // 判断 reported 字段是否为空，如果不为空则尝试解析
+            let reported = if let Some(r) = reported {
+                if  r.trim() == "{}"  { // 检查是否为空字符串
+                    None
+                } else {
+                    match serde_json::from_str(&r) {
+                        Ok(rep) => Some(rep),
+                        Err(e) => {
+                            info!("reported_parse_error: {:?}", e);
+                            errors.push(e);
+                            continue; // 发生错误时跳过当前循环
+                        }
                     }
-                    Err(e) => errors.push(e),
                 }
+            } else {
+                None
+            };
+            
+            // 没有错误，添加到结果列表
+            info!("repored_ok_twins");
+            result_twins.push(Twin {
+                property_name,
+                desired,
+                reported,
+            });
             }
-            Err(e) => errors.push(e),
+            Err(e) => {
+                info!("desired_error");
+                errors.push(e);
+            }
         }
     }
 
