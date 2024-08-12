@@ -1,4 +1,4 @@
-1.安装k8s1.22版本和kubeedge1.12版本，看原版本的readme
+1。安装文件服务器serve
 
 2.安装sqlite3
 

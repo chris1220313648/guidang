@@ -304,22 +304,26 @@ impl ControllerService for SessionManager {
                     twins.push(Twin {//从请求中提取期望的设备状态，创建 Twin 对象，并添加到 twins 列表中
                         property_name: k.to_owned(),//属性名
                         desired: TwinProperty::new(v.to_owned()),//属性值
-                        reported: None,
+                        reported: Some(TwinProperty::new(v.to_owned())),
                     })
                 }
+                info!{"update twins of device:{:?}",twins};
                 let status: DeviceStatus = DeviceStatus { twins: twins.clone() };
                 let conn = self.conn.lock().unwrap();
                 let device_name = device.get_ref().name.clone();
+                info!("update device name:{}",device_name);
 
                 // 查询设备 ID
-                let mut stmt = match conn.prepare("SELECT id FROM devices WHERE name = ?") {
+                let mut stmt = match conn.prepare("SELECT id FROM Device WHERE name = ?") {
                     Ok(stmt) => stmt,
-                    Err(e) => return Err(Status::internal("Failed to update status of deviceid")), // 转换错误并返回
+                    Err(e) => return Err(Status::internal("Failed to prepare stmt")), // 转换错误并返回
                 };
                 
                 let device_id_result: rusqlite::Result<i32> = stmt.query_row(params![device_name], |row| row.get(0));
                 let device_id = match device_id_result {
-                    Ok(id) => id,
+                    Ok(id) => {
+                        info!{"device_id in sqlite3:{}",id};
+                        id},
                     Err(e) => {
                         eprintln!("Failed to fetch device id: {}", e);
                         return Err(Status::internal("Failed to update status of deviceid"));
@@ -329,12 +333,12 @@ impl ControllerService for SessionManager {
                 
                 for twin in twins {
                     let desired_json = serde_json::to_string(&twin.desired).unwrap(); // 在实际应用中应避免使用 unwrap，而应使用错误处理
+                    info!("desired_json:{}",desired_json);
                     let reported_json = twin.reported.map(|r| serde_json::to_string(&r).unwrap()); // 同上，应处理错误
                 
                     match conn.execute(
-                        "INSERT INTO twins (device_id, property_name, desired, reported) VALUES (?, ?, ?, ?)
-                        ON CONFLICT(device_id, property_name) DO UPDATE SET desired = excluded.desired, reported = excluded.reported",
-                        params![device_id, twin.property_name, desired_json, reported_json],
+                        "Update Twins set desired=?, reported=? where device_id=?;",
+                        params![desired_json, reported_json,device_id],
                     ) {
                         Ok(_) => println!("Twin updated or inserted successfully"),
                         Err(e) => {

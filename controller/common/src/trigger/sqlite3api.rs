@@ -34,6 +34,16 @@ pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Refle
     
     
 }
+pub async fn reflector_sqlite3_device(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>,scheduler: Sender<ResourceIndex<Device>>) -> Result<(), Report> {
+    info!("start device_reflector");
+    
+    // 导入现有脚本信息
+    let _=import_existing_devices(conn.clone(), reflector.clone()).await;
+    let _=poll_device_event_and_process(conn,reflector,scheduler).await;
+    Ok(())
+    
+    
+}
 
 
 async fn import_existing_scripts(conn: Arc<Mutex<Connection>>, reflector: Arc<Reflector>) -> Result<(), Box<dyn Error >> {
@@ -254,16 +264,7 @@ fn create_script_struct(
     })
 }
 
-pub async fn reflector_sqlite3_device(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>,scheduler: Sender<ResourceIndex<Device>>) -> Result<(), Report> {
-    info!("start device_reflector");
-    
-    // 导入现有脚本信息
-    let _=import_existing_devices(conn.clone(), reflector.clone()).await;
-    let _=poll_device_event_and_process(conn,reflector,scheduler).await;
-    Ok(())
-    
-    
-}
+
 
 async fn import_existing_devices(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Box<dyn Error>> {
     info!("import_existing_devices");
@@ -397,7 +398,9 @@ async fn process_device_event(
         "Updated" => {
             // 处理更新事件的逻辑
             info!("Handling update event for device_id: {}",event.device_id);
-            reflector.add_device(&device)
+            reflector.add_device(&device);
+            let idx = dev_to_idx(&device);
+            scheduler.send_async(idx).await?;
         },
         "Deleted" => {
             // 处理删除事件的逻辑
