@@ -1,5 +1,6 @@
 use crate::api::Device;
 use crate::api::Script;
+use crate::api::Ability;
 use crate::id::ScriptIDGenerator;
 use color_eyre::{eyre::eyre, Result};
 use dashmap::{DashMap, DashSet};
@@ -80,6 +81,15 @@ impl From<&Device> for ResourceIndex<Device> {
         }
     }
 }
+impl From<&Ability> for ResourceIndex<Ability> {
+    fn from(ability: &Ability) -> Self {
+        ResourceIndex {
+            namespace: "default".to_string(),
+            name: ability.name.clone(),
+            api: PhantomData,
+        }
+    }
+}
 
 //这个RunScriptLookup特征（trait）定义了一组方法，用于在执行脚本的上下文中查找脚本、设备，以及映射设备到脚本和查询脚本的可读写设备。
 pub trait RunScriptLookup {//这个RunScriptLookup特征（trait）定义了一组方法，用于在执行脚本的上下文中查找脚本、设备，以及映射设备到脚本和查询脚本的可读写设备
@@ -152,9 +162,15 @@ pub struct Reflector {
     pub selector_map: SelectorMap,//有时候会存在关系和脚本，但是不存在设备
     pub device_store: Store<Device>,
     pub script_store: Store<Script>,
+    pub ability_store: Store<Ability>,
 }
 
 impl Reflector {//结构体函数
+    pub fn add_ability(&self, abi: &Ability) {
+        let idx = abi.into();
+        self.ability_store.insert(idx, abi.clone());
+    }//将给定的Device实例添加到device_store中。首先，将Device转换为其资源索引，然后将设备及其索引插入到device_store中
+
     pub fn add_device(&self, dev: &Device) {
         let idx = dev.into();
         self.device_store.insert(idx, dev.clone());

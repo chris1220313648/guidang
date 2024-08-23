@@ -66,3 +66,14 @@ python3 test.py
 python3 temp.py switch.py
 ```
 
+curl -X POST http://localhost:5000/register \
+-H "Content-Type: application/json" \
+-d '{
+  "name": "sensor", 
+  "attributes": {
+      "record video": {
+          "properties": {"status": 0}, 
+          "address": "127.0.0.1:8079"
+      }
+  }
+}'

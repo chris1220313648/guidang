@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::vec;
-
+use serde_json::Value;
 use std::error::Error;
 use tokio::sync::Mutex;
 use std::sync::Arc;
@@ -10,6 +10,7 @@ use tracing::{info,error};
 use crate::api::device_sqlite3::DeviceStatus;
 use crate::api::script_sqlite3::*;
 use crate::api::device_sqlite3::*;
+use crate::api::ability::*;
 use tokio::time::{interval, Duration};
 use rusqlite::{params, Connection,Result as RusqliteResult};
 use chrono::{NaiveDateTime, Utc};
@@ -24,7 +25,75 @@ struct DeviceEvent {
     event_type: String,
     event_time: DateTime<Utc>,
 }
+pub async fn reflector_ability(
+    register_url: &str,
+    reflector: Arc<Reflector>,
+) -> Result<(), Report> {
+    let poll_interval = Duration::from_secs(5); // 轮询间隔
+    let mut interval = interval(poll_interval); // 定时器
+    let event_url = format!("{}/event", register_url); // 查询事件的URL
+    let mut count=0;
 
+    loop {
+        info!("Polling alility count:{}",count);
+        count=count+1;
+        interval.tick().await;
+
+        // 发送 GET 请求到 register 服务器以获取事件列表
+        match reqwest::get(&event_url).await {
+            Ok(response) => {
+                // 如果请求成功，尝试解析 JSON 响应
+                match response.json::<Value>().await {
+                    Ok(events) => {
+                        // 处理事件数据
+                        if let Some(events_map) = events.as_object() {
+                            for (timestamp, event_data) in events_map.iter() {
+                                info!("Received event at {}: {:?}", timestamp, event_data);
+                                // 你可以在这里处理不同类型的事件
+                                let event_type = event_data["event"].as_str().unwrap_or_default();
+                                let event_name = event_data["name"].as_str().unwrap_or_default();
+                                let attributes = event_data["attributes"].clone();
+
+                                // 根据事件类型处理
+                                match event_type {
+                                    "create"  => {
+                                        // 构造 Ability 对象
+                                        let ability = Ability {
+                                            name: event_name.to_string(),
+                                            attributes: serde_json::from_value(attributes)
+                                                .unwrap_or_default(),
+                                        };
+
+                                        // 打印并更新 Reflector 中的能力信息
+                                        info!("create ability: {:?}", ability);
+                                        reflector.add_ability(&ability)
+                                    }
+                                    "delete" => {
+                                        // 从 Reflector 中移除指定的能力
+                                        // reflector.abilities.remove(event_name);
+                                        info!("Deleted ability: {}", event_name);
+                                    }
+                                    _ => {
+                                        eprintln!("Unknown event type: {}", event_type);
+                                    }
+                                }
+                            }
+                        } else {
+                            eprintln!("Invalid event structure received.");
+                        }
+                    }
+                    Err(json_err) => {
+                        eprintln!("Failed to parse JSON response: {}", json_err);
+                    }
+                }
+            }
+            Err(request_err) => {
+                eprintln!("Failed to send request: {}", request_err);
+            }
+        }
+    }
+    Ok(())
+}
 pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Reflector>) -> Result<(), Report> {
     info!("start reflector_sqlite3");
     // 导入现有脚本信息

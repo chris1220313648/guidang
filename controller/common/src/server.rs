@@ -16,9 +16,10 @@ use crate::{
 #[tracing::instrument]
 async fn debug(Extension(state): Extension<Arc<Reflector>>) -> String {
     let mut result = String::new();
-    result.push_str(&format!("Device: {:?}\n", state.device_store));
-    result.push_str(&format!("Script: {:?}\n", state.script_store));
-    result.push_str(&format!("Map: {:?}\n", state.selector_map));
+    result.push_str(&format!("Device: {:?}\n\n", state.device_store));
+    result.push_str(&format!("Script: {:?}\n\n", state.script_store));
+    result.push_str(&format!("Ability: {:?}\n\n", state.ability_store));
+    result.push_str(&format!("Map: {:?}\n\n", state.selector_map));
     result
 }
 

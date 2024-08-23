@@ -2,6 +2,7 @@ use crate::api::{Device, Script};
 use crate::scheduler::{trigger, ManagerMsg, Reflector, ResourceIndex, Scheduler};
 use crate::session::SessionManager;
 use crate::trigger::sqlite3api::reflector_sqlite3;
+use crate::trigger::sqlite3api::reflector_ability;
 use crate::trigger::sqlite3api::reflector_sqlite3_device;
 use color_eyre::Result;
 use flume::{Receiver, Sender};
@@ -161,6 +162,9 @@ impl Controller {
         let schin_tx_clone = schin_tx.clone();
         // 启动设备到脚本映射的异步任务。接收设备信息 发出对应脚本信息
         self.spawn(async move { trigger(reflector_clone, schdevin_rx, schin_tx_clone).await });
+        let reflector_abi = reflector_store.clone();// 克隆Reflector实例。
+        let register_url = "http://localhost:5000";
+        self.spawn(async move { reflector_ability(register_url,reflector_abi).await });
         let reflector_script = reflector_store.clone();// 克隆Reflector实例。
         let _conn = match Connection::open("./test.db") {
             Ok(conn) => {
