@@ -1,0 +1,24 @@
+[package]
+name = "executor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures = '0.3'
+color-eyre = '0.6'
+async-trait = '0.1'
+tracing = '0.1'
+tonic = "0.7"
+flume = "0.10"
+async-stream = "0.3"
+
+[dependencies.tokio]
+version = '1'
+features = ['full']
+
+[dependencies.serde]
+version = '1.0'
+features = ['derive']
+
+[dependencies.proto]
+path = '../../proto'

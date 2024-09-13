@@ -1,0 +1,2930 @@
+<!DOCTYPE html><html><head>
+      <title>README</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <style>
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview  ">
+      <h1 class="mume-header" id="%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E">&#x89C4;&#x5219;&#x5F15;&#x64CE;</h1>
+
+<h2 class="mume-header" id="%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3">&#x7CFB;&#x7EDF;&#x8BBE;&#x8BA1;&#x6587;&#x6863;</h2>
+
+<h3 class="mume-header" id="%E8%83%8C%E6%99%AF">&#x80CC;&#x666F;</h3>
+
+<p>&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x662F;&#x4E00;&#x4E2A;&#x57FA;&#x4E8E;Kubernetes&#x7684;IoT Faas&#x5E73;&#x53F0;.</p>
+<p>&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x662F;&#x4E00;&#x4E2A;&#x5904;&#x7406;&#x8BBE;&#x5907;&#x6570;&#x636E;&#x3001;&#x63A7;&#x5236;&#x8BBE;&#x5907;&#x7684;&#x7F16;&#x7A0B;&#x8FD0;&#x884C;&#x73AF;&#x5883;.</p>
+<p>&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x57FA;&#x4E8E;serverless&#x601D;&#x60F3;, &#x4EE5;<strong>&#x4E8B;&#x4EF6;&#x89E6;&#x53D1;-&gt; &#x89C4;&#x5219;&#x6267;&#x884C;</strong>&#x7684;&#x8303;&#x5F0F;&#x6267;&#x884C;&#x7528;&#x6237;&#x7F16;&#x5199;&#x7684;&#x89C4;&#x5219;&#x811A;&#x672C;.</p>
+<p>&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x76EE;&#x524D;&#x652F;&#x6301;&#x7684;&#x529F;&#x80FD;&#x89C1;&quot;&#x8F6F;&#x4EF6;&#x5B89;&#x88C5;&#x548C;&#x914D;&#x7F6E;&#x6587;&#x6863;&quot;&#x7684;&quot;&#x7F16;&#x5199;&#x65B0;&#x7684;&#x811A;&#x672C;&quot;&#x4E00;&#x8282;.</p>
+<h4 class="mume-header" id="%E7%94%A8%E6%88%B7">&#x7528;&#x6237;</h4>
+
+<p><!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="270.8333px" preserveAspectRatio="none" style="width:448px;height:270px;background:#00000000;" version="1.1" viewBox="0 0 448 270" width="448.9583px" zoomAndPan="magnify"><defs/><g><!--MD5=[fd1fa37104785f1900d71141597d66f8]
+cluster 规则引擎--><rect fill="#444444" height="257.2917" rx="4.1667" ry="4.1667" style="stroke:#55B2DE;stroke-width:2.0833333333333335;" width="435.4167" x="7.2917" y="7.2917"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" font-weight="bold" lengthAdjust="spacing" textLength="50" x="200" y="27.1505">&#x89C4;&#x5219;&#x5F15;&#x64CE;</text><!--MD5=[0155a1a34378bfed880bf90b870134e8]
+entity auther--><ellipse cx="79.1667" cy="61.9792" fill="#2A9FD6" rx="8.3333" ry="8.3333" style="stroke:#55B2DE;stroke-width:1.5625;"/><path d="M79.1667,70.3125 L79.1667,98.4375 M65.625,78.6458 L92.7083,78.6458 M79.1667,98.4375 L65.625,114.0625 M79.1667,98.4375 L92.7083,114.0625 " fill="none" style="stroke:#55B2DE;stroke-width:1.5625;"/><text fill="#ADAFAE" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="50" x="54.1667" y="134.4421">&#x811A;&#x672C;&#x4F5C;&#x8005;</text><!--MD5=[79a439086b036a57b90a01d7b2f8bbd1]
+entity admin--><ellipse cx="225" cy="61.9792" fill="#2A9FD6" rx="8.3333" ry="8.3333" style="stroke:#55B2DE;stroke-width:1.5625;"/><path d="M225,70.3125 L225,98.4375 M211.4583,78.6458 L238.5417,78.6458 M225,98.4375 L211.4583,114.0625 M225,98.4375 L238.5417,114.0625 " fill="none" style="stroke:#55B2DE;stroke-width:1.5625;"/><text fill="#ADAFAE" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="37.5" x="206.25" y="134.4421">&#x7BA1;&#x7406;&#x5458;</text><!--MD5=[8fc3522a43f8c7199df5e09e5bb0188e]
+entity user--><ellipse cx="370.8333" cy="61.9792" fill="#2A9FD6" rx="8.3333" ry="8.3333" style="stroke:#55B2DE;stroke-width:1.5625;"/><path d="M370.8333,70.3125 L370.8333,98.4375 M357.2917,78.6458 L384.375,78.6458 M370.8333,98.4375 L357.2917,114.0625 M370.8333,98.4375 L384.375,114.0625 " fill="none" style="stroke:#55B2DE;stroke-width:1.5625;"/><text fill="#ADAFAE" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="25" x="358.3333" y="134.4421">&#x7528;&#x6237;</text><ellipse cx="79.164" cy="226.4411" fill="#2A9FD6" rx="54.6849" ry="21.2328" style="stroke:#55B2DE;stroke-width:2.0833333333333335;"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="50" x="54.164" y="229.3291">&#x53D1;&#x5E03;&#x811A;&#x672C;</text><ellipse cx="224.9974" cy="226.4411" fill="#2A9FD6" rx="54.6849" ry="21.2328" style="stroke:#55B2DE;stroke-width:2.0833333333333335;"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="50" x="199.9974" y="229.3291">&#x90E8;&#x7F72;&#x811A;&#x672C;</text><ellipse cx="370.8307" cy="226.4411" fill="#2A9FD6" rx="54.6849" ry="21.2328" style="stroke:#55B2DE;stroke-width:2.0833333333333335;"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="50" x="345.8307" y="229.3291">&#x89E6;&#x53D1;&#x811A;&#x672C;</text><!--MD5=[dc9d64ecaf8277ece18005e5febd508e]
+link auther to script register--><path d="M79.1667,142.8854 C79.1667,161.9167 79.1667,183.4792 79.1667,199.8021 " fill="none" id="auther-to-script register" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="79.1667,205.125,83.3333,195.75,79.1667,199.9167,75,195.75,79.1667,205.125" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[23fed5c5c9181088cb1443fd1f7e0450]
+link admin to script deploy--><path d="M225,142.8854 C225,161.9167 225,183.4792 225,199.8021 " fill="none" id="admin-to-script deploy" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="225,205.125,229.1667,195.75,225,199.9167,220.8333,195.75,225,205.125" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[9dda6e86b5c914cd361e9b90c6726c6b]
+link user to script trigger--><path d="M370.8333,142.8854 C370.8333,161.9167 370.8333,183.4792 370.8333,199.8021 " fill="none" id="user-to-script trigger" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="370.8333,205.125,375,195.75,370.8333,199.9167,366.6667,195.75,370.8333,205.125" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[41ddf5cf80747f6c0d1055fdefa6588b]
+link script register to script deploy--><path d="M133.8542,226.5625 C144.1667,226.5625 154.4688,226.5625 164.7813,226.5625 " fill="none" id="script register-to-script deploy" style="stroke:#2A9FD6;stroke-width:3.125;stroke-dasharray:7.0,7.0;"/><polygon fill="#2A9FD6" points="170.1667,226.5625,160.7917,222.3958,164.9583,226.5625,160.7917,230.7292,170.1667,226.5625" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[33b291488e94dcff78ebfcee2c200bfe]
+link script deploy to script trigger--><path d="M279.6875,226.5625 C290,226.5625 300.3021,226.5625 310.6146,226.5625 " fill="none" id="script deploy-to-script trigger" style="stroke:#2A9FD6;stroke-width:3.125;stroke-dasharray:7.0,7.0;"/><polygon fill="#2A9FD6" points="316,226.5625,306.625,222.3958,310.7917,226.5625,306.625,230.7292,316,226.5625" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[d45f022ad398bcfdcaf7cc61a66802ef]
+@startuml
+!theme cyborg
+rectangle 规则引擎 {
+:脚本作者: as auther
+:管理员: as admin
+:用户: as user
+:auther: - -> (script register)
+:admin: - -> (script deploy)
+:user: - -> (script trigger)
+(发布脚本) as (script register)
+(部署脚本) as (script deploy)
+(触发脚本) as (script trigger)
+(script register) .> (script deploy)
+(script deploy) .> (script trigger)
+}
+@enduml
+
+@startuml
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+
+skinparam defaultFontName       "Verdana"
+skinparam defaultFontSize       12
+skinparam dpi                   100
+skinparam shadowing             false
+skinparam roundcorner           8
+skinparam ParticipantPadding    40
+skinparam BoxPadding            40
+skinparam Padding               5
+skinparam ArrowColor            #ADAFAE
+skinparam stereotype {
+    CBackgroundColor #777777
+    CBorderColor #444444
+    ABackgroundColor #5F8F00
+    ABorderColor #92C233
+    IBackgroundColor #A30000
+    IBorderColor #D63333
+    EBackgroundColor #CC6D00
+    EBorderColor #FFA033
+    NBackgroundColor #9F161B
+    NBorderColor #AD5CD6
+}
+skinparam title {
+	FontColor	                 #2A9FD6
+	BorderColor	                 #777777
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #444444-#555
+}
+
+
+skinparam legend {
+	BackgroundColor #555
+	BorderColor #777777
+	FontColor #ADAFAE
+}
+
+skinparam swimlane {
+	BorderColor #9933CC
+	BorderThickness 2
+	TitleBackgroundColor  #444444-#555
+	TitleFontColor #2A9FD6
+}
+
+
+skinparam activity {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	BarColor #77B300
+	StartColor #9933CC
+	EndColor #9933CC
+	DiamondBackgroundColor #444444
+  	DiamondBorderColor #777777
+  	DiamondFontColor #FFF
+}
+
+
+skinparam participant {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	ParticipantBorderThickness 2
+}
+
+
+skinparam actor {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #2A9FD6
+}
+
+
+skinparam arrow {
+	Thickness 3
+	Color #2A9FD6
+	FontColor #FFF
+}
+
+
+skinparam sequence {
+	BorderColor #2A9FD6
+	TitleFontColor #2A9FD6
+	BackgroundColor transparent
+	StartColor #2A9FD6
+	EndColor #2A9FD6
+	BoxBackgroundColor transparent
+	BoxBorderColor #ADAFAE
+	BoxFontColor #ADAFAE
+	DelayFontColor #ADAFAE
+	LifeLineBorderColor #555
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor #777777
+	GroupBorderColor #555
+	GroupFontColor #ADAFAE
+	GroupHeaderFontColor #9933CC
+	GroupBackgroundColor #555
+	GroupHeaderBackgroundColor transparent
+	DividerBackgroundColor #ADAFAE
+    DividerBorderColor #ADAFAE
+    DividerBorderThickness 2
+    DividerFontColor #222
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #555
+	ReferenceFontColor #FFF
+	ReferenceHeaderBackgroundColor #555
+	StereotypeFontColor #FFF
+}
+
+
+skinparam partition {
+	BorderColor #2A9FD6
+	FontColor #2A9FD6
+	BackgroundColor transparent
+}
+
+
+skinparam collections {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+}
+
+
+skinparam control {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #ADAFAE
+}
+
+
+skinparam entity {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #ADAFAE
+}
+
+
+skinparam boundary {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #ADAFAE
+}
+
+
+skinparam agent {
+	BackgroundColor #FF8800
+	BorderColor #CC6D00
+	FontColor #ADAFAE
+}
+
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor #9933CC
+	BorderColor #AD5CD6
+	FontColor #FFF
+}
+
+
+skinparam artifact {
+	BackgroundColor #ADAFAE
+	BorderColor #BDBFBE
+	FontColor #222
+}
+
+
+skinparam component {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+}
+
+
+skinparam interface {
+	BackgroundColor  #D63333
+	BorderColor  #CC0000
+	FontColor #ADAFAE
+}
+
+
+skinparam storage {
+	BackgroundColor #FF8800
+  	BorderColor #FFA033
+	FontColor #FFF
+}
+
+
+skinparam node {
+	BackgroundColor  #555
+	BorderColor #ADAFAE
+	FontColor #ADAFAE
+}
+
+
+skinparam cloud {
+	BackgroundColor #222-black
+	BorderColor #222
+	FontColor #ADAFAE
+}
+
+
+skinparam database {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #ADAFAE
+}
+
+
+skinparam actor {
+	FontColor #ADAFAE
+}
+
+
+skinparam class {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	HeaderBackgroundColor #227FAB
+	StereotypeFontColor #ADAFAE
+	BorderThickness 1
+	AttributeFontColor #222
+	AttributeFontSize 11
+}
+
+
+skinparam object {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	StereotypeFontColor #ADAFAE
+	BorderThickness 1
+	AttributeFontColor #FFF
+	AttributeFontSize 11
+}
+
+
+skinparam usecase {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	BorderThickness 2
+	StereotypeFontColor #2A9FD6
+}
+
+
+skinparam rectangle {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	BackgroundColor #444444
+	BorderThickness 2
+	StereotypeFontColor #2A9FD6
+}
+
+
+skinparam package {
+	BackgroundColor #555
+  	BorderColor #2A9FD6
+	FontColor #2A9FD6
+	BorderThickness 2
+}
+
+
+skinparam folder {
+	BackgroundColor #444444
+  	BorderColor #FF8800
+	FontColor #FF8800
+	BorderThickness 2
+}
+
+
+skinparam frame {
+	BackgroundColor #444444
+  	BorderColor #9933CC
+	FontColor #9933CC
+	BorderThickness 2
+}
+
+
+skinparam state {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	StartColor #9933CC
+	EndColor #9933CC
+	AttributeFontColor #FFF
+	AttributeFontSize 11
+}
+
+
+skinparam queue {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+}
+
+
+skinparam card {
+	BackgroundColor #9933CC
+	BorderColor #AD5CD6
+	FontColor #FFF
+}
+
+
+skinparam file {
+	BackgroundColor #777777
+	BorderColor #ADAFAE
+	FontColor #ADAFAE
+}
+
+
+rectangle 规则引擎 {
+:脚本作者: as auther
+:管理员: as admin
+:用户: as user
+:auther: - -> (script register)
+:admin: - -> (script deploy)
+:user: - -> (script trigger)
+(发布脚本) as (script register)
+(部署脚本) as (script deploy)
+(触发脚本) as (script trigger)
+(script register) .> (script deploy)
+(script deploy) .> (script trigger)
+}
+@enduml
+
+PlantUML version 1.2021.12(Wed Oct 06 00:01:58 CST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: zh
+Country: CN
+--></g></svg></p><p>&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x5177;&#x6709;3&#x7C7B;&#x4E0D;&#x540C;&#x7684;&#x7528;&#x6237;, &#x811A;&#x672C;&#x4F5C;&#x8005;, &#x96C6;&#x7FA4;&#x7BA1;&#x7406;&#x5458;&#x548C;&#x7528;&#x6237;.</p>
+<p>&#x811A;&#x672C;&#x4F5C;&#x8005;&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;&#x811A;&#x672C;registry, &#x5E76;&#x4E0A;&#x4F20;&#x53EF;&#x4F9B;&#x4F7F;&#x7528;&#x7684;&#x811A;&#x672C;. &#x8BE5;&#x7C7B;&#x7528;&#x6237;&#x7684;&#x7BA1;&#x7406;&#x4F9D;&#x9760;registry&#x670D;&#x52A1;&#x5668;&#x7684;&#x5B9E;&#x73B0;.</p>
+<p>&#x96C6;&#x7FA4;&#x7BA1;&#x7406;&#x5458;&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;Kubernetes API Server, &#x5E76;&#x90E8;&#x7F72;&#x65B0;&#x7684;&#x811A;&#x672C;&#x5230;&#x96C6;&#x7FA4;&#x4E2D;. &#x8BE5;&#x7C7B;&#x7528;&#x6237;&#x7684;&#x7BA1;&#x7406;&#x4F9D;&#x9760;Kubernetes&#x7684;&#x7528;&#x6237;&#x3001;&#x7528;&#x6237;&#x89D2;&#x8272;&#x548C;&#x89D2;&#x8272;&#x7ED1;&#x5B9A;&#x673A;&#x5236;.</p>
+<p>&#x7528;&#x6237;&#x53EF;&#x4EE5;&#x624B;&#x52A8;&#x89E6;&#x53D1;&#x811A;&#x672C;&#x7684;&#x8FD0;&#x884C;. &#x8BE5;&#x7C7B;&#x7528;&#x6237;&#x7684;&#x7BA1;&#x7406;&#x4F9D;&#x9760;Kubernetes&#x7684;&#x7528;&#x6237;&#x3001;&#x7528;&#x6237;&#x89D2;&#x8272;&#x548C;&#x89D2;&#x8272;&#x7ED1;&#x5B9A;&#x673A;&#x5236;.</p>
+<h3 class="mume-header" id="%E6%9E%B6%E6%9E%84">&#x67B6;&#x6784;</h3>
+
+<p>&#x6B63;&#x5982;&#x5176;&#x4ED6;&#x57FA;&#x4E8E;Kubernetes&#x5F00;&#x53D1;&#x7684;&#x4E91;&#x539F;&#x751F;&#x5E73;&#x53F0;, &#x89C4;&#x5219;&#x5F15;&#x64CE;&#x5206;&#x4E3A;&#x63A7;&#x5236;&#x5668;&#x548C;&#x6267;&#x884C;&#x5668;&#x4E24;&#x90E8;&#x5206;, &#x5E76;&#x4F7F;&#x7528;Kubernetes&#x7684;&#x81EA;&#x5B9A;&#x4E49;&#x8D44;&#x6E90;&#x5B9A;&#x4E49;(CRD) &#x7BA1;&#x7406;&#x90E8;&#x7F72;&#x5230;Kubernetes&#x96C6;&#x7FA4;&#x7684;&#x89C4;&#x5219;.</p>
+<p>&#x5176;&#x4E2D;&#x63A7;&#x5236;&#x5668;Controller&#x5177;&#x6709;Kubernetes&#x5206;&#x914D;&#x7684;&#x6743;&#x9650;, &#x53EF;&#x4EE5;&#x8BBF;&#x95EE;Kubernetes API Server&#x4E0B;&#x7684;&#x8D44;&#x6E90;(&#x5177;&#x4F53;&#x6765;&#x8BF4;,&#x662F;Script&#x8D44;&#x6E90;&#x548C;Device&#x8D44;&#x6E90;), &#x5E76;&#x63D0;&#x4F9B;gRPC&#x670D;&#x52A1;&#x4F9B;&#x63A7;&#x5236;&#x5668;&#x8BBF;&#x95EE;. &#x5176;&#x4E2D;Script&#x8D44;&#x6E90;&#x4E3A;&#x7528;&#x6237;&#x4F7F;&#x7528;&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x7684;&#x4E3B;&#x8981;&#x63A5;&#x53E3;, &#x5176;&#x5185;&#x5BB9;&#x7531;&#x7BA1;&#x7406;&#x5458;&#x7BA1;&#x7406;, &#x5E76;&#x88AB;&#x63A7;&#x5236;&#x5668;&#x8BFB;&#x53D6;, &#x63A7;&#x5236;&#x5668;&#x4F1A;&#x4FEE;&#x6539;&#x5176;Status&#x53CD;&#x5E94;Script&#x7684;&#x8FD0;&#x884C;&#x72B6;&#x6001;. Device&#x8D44;&#x6E90;&#x7531;KubeEdge&#x7684;&#x8BBE;&#x5907;&#x5B6A;&#x751F;&#x7EC4;&#x4EF6;&#x7BA1;&#x7406;, &#x5176;&#x5185;&#x5BB9;&#x7531;&#x7BA1;&#x7406;&#x5458;&#x7BA1;&#x7406;, &#x5E76;&#x88AB;&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x63A7;&#x5236;&#x5668;, KubeEdge&#x7684;&#x8BBE;&#x5907;&#x5B6A;&#x751F;&#x7EC4;&#x4EF6;&#x8BFB;&#x53D6;, &#x89C4;&#x5219;&#x5F15;&#x64CE;&#x63A7;&#x5236;&#x5668;&#x4F1A;&#x4FEE;&#x6539;Device&#x8D44;&#x6E90;&#x7684;Status&#x4EE5;&#x5B9E;&#x73B0;&#x5BF9;&#x8BBE;&#x5907;&#x7684;&#x63A7;&#x5236;, KubeEdge&#x7684;&#x8BBE;&#x5907;&#x5B6A;&#x751F;&#x7EC4;&#x4EF6;&#x4F1A;&#x5B9E;&#x73B0;&#x7531;Status&#x7684;&#x5185;&#x5BB9;&#x64CD;&#x4F5C;&#x5B9E;&#x9645;&#x786C;&#x4EF6;&#x7684;&#x529F;&#x80FD;.</p>
+<p>&#x6267;&#x884C;&#x5668;&#x6CA1;&#x6709;Kubernetes&#x7684;&#x6743;&#x9650;, &#x9700;&#x8981;&#x8BBF;&#x95EE;&#x63A7;&#x5236;&#x5668;&#x7684;gRPC&#x670D;&#x52A1;, &#x7B49;&#x5F85;&#x63A7;&#x5236;&#x5668;&#x7684;&#x8C03;&#x5EA6;&#x5668;&#x5206;&#x914D;&#x4EFB;&#x52A1;, &#x6267;&#x884C;&#x5668;&#x5728;&#x63A5;&#x6536;&#x5230;&#x4EFB;&#x52A1;&#x540E;&#x4F1A;&#x542F;&#x52A8;&#x8FD0;&#x884C;&#x65F6;&#x6267;&#x884C;&#x4EFB;&#x52A1;, &#x5E76;&#x901A;&#x8FC7;gRPC&#x670D;&#x52A1;&#x5B8C;&#x6210;&#x5404;&#x4E2A;&#x529F;&#x80FD;.</p>
+<p>&#x63A7;&#x5236;&#x5668;&#x548C;&#x6267;&#x884C;&#x5668;&#x4E4B;&#x95F4;&#x7684;&#x534F;&#x8BAE;&#x5B9A;&#x4E49;&#x5728;<code>proto/controller.proto</code>&#x4E2D;</p>
+<h3 class="mume-header" id="%E5%8A%9F%E8%83%BD%E9%80%BB%E8%BE%91%E7%AE%80%E4%BB%8B">&#x529F;&#x80FD;&#x903B;&#x8F91;&#x7B80;&#x4ECB;</h3>
+
+<p>Device&#x8D44;&#x6E90;&#x662F;KubeEdge&#x63D0;&#x4F9B;&#x7684;&#x8D44;&#x6E90;, &#x5305;&#x62EC;&#x4E86;&#x8BBE;&#x5907;&#x7684;&#x4E0D;&#x53EF;&#x53D8;&#x5C5E;&#x6027;(Spec)&#x548C;&#x72B6;&#x6001;&#x4FE1;&#x606F;(Status), &#x5176;&#x4E2D;&#x72B6;&#x6001;&#x4FE1;&#x606F;&#x5305;&#x62EC;&#x4E86;&#x8BBE;&#x5907;&#x7684;&#x53EF;&#x8BFB;/&#x53EF;&#x5199;&#x7684;&#x5C5E;&#x6027;. &#x90E8;&#x5206;&#x8BBE;&#x5907;&#x7684;&#x72B6;&#x6001;&#x4E0D;&#x53EF;&#x5199;, &#x4F8B;&#x5982;&#x4F20;&#x611F;&#x5668;&#x7C7B;&#x8BBE;&#x5907;, &#x90E8;&#x5206;&#x8BBE;&#x5907;&#x7684;&#x72B6;&#x6001;&#x53EF;&#x5199;, &#x4F8B;&#x5982;&#x5F00;&#x5173;, &#x53EF;&#x5199;&#x7684;&#x8BBE;&#x5907;&#x4E00;&#x5B9A;&#x6709;&#x53EF;&#x8BFB;&#x72B6;&#x6001;, &#x53CD;&#x5E94;&#x6700;&#x540E;&#x4E00;&#x6B21;&#x6210;&#x529F;&#x5199;&#x5165;&#x7684;&#x72B6;&#x6001;. KubeEdge&#x4EE5;&#x53CA;&#x5E95;&#x5C42;&#x7684;&#x8BBE;&#x5907;&#x9A71;&#x52A8;&#x4F1A;&#x786E;&#x4FDD;&#x5BF9;&#x72B6;&#x6001;&#x7684;&#x4FEE;&#x6539;&#x4F1A;&#x53CD;&#x6620;&#x5230;&#x7269;&#x7406;&#x4E16;&#x754C;&#x7684;IoT&#x8BBE;&#x5907;&#x4E0A;.</p>
+<p>&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x7684;&#x4E00;&#x4E2A;&quot;&#x89C4;&#x5219;&quot;&#x4F1A;&#x9884;&#x8BBE;&#x4E00;&#x4E2A;&#x53EF;&#x8BFB;&#x7684;&#x8BBE;&#x5907;&#x5217;&#x8868;&#x548C;&#x53EF;&#x5199;&#x7684;&#x8BBE;&#x5907;&#x5217;&#x8868;, &#x5E76;&#x901A;&#x8FC7;&#x4EE3;&#x7801;(&#x5982;JavaScript&#x6216;WebAssembly)&#x8FDB;&#x884C;&#x8FD0;&#x7B97;, &#x6700;&#x7EC8;&#x7684;&#x7ED3;&#x679C;&#x662F;&#x5728;&#x67D0;&#x4E00;&#x6761;&#x4EF6;&#x4E0B;&#x5BF9;&#x53EF;&#x5199;&#x8BBE;&#x5907;&#x7684;&#x72B6;&#x6001;&#x8FDB;&#x884C;&#x4FEE;&#x6539;. &#x7BA1;&#x7406;&#x5458;&#x8981;&#x90E8;&#x7F72;&#x7684;Script&#x8D44;&#x6E90;&#x4F1A;&#x5C06;&#x89C4;&#x5219;&#x9884;&#x8BBE;&#x7684;&#x53EF;&#x8BFB;/&#x53EF;&#x5199;&#x8BBE;&#x5907;&#x7684;&#x540D;&#x79F0;(&#x5B57;&#x7B26;&#x4E32;)&#x6620;&#x5C04;&#x5230;&#x5B9E;&#x9645;Device&#x8D44;&#x6E90;&#x7684;name&#x4E0A;(&#x8981;&#x6C42;Script&#x548C;Device&#x8D44;&#x6E90;&#x5FC5;&#x987B;&#x5728;&#x540C;&#x4E00;&#x4E2A;namespace&#x624D;&#x80FD;&#x76F8;&#x4E92;&#x8BBF;&#x95EE;), &#x5E76;&#x6307;&#x5B9A;&#x89C4;&#x5219;&#x4EE3;&#x7801;&#x7684;&#x540D;&#x79F0;, &#x7248;&#x672C;&#x53F7;&#x7B49;&#x4FE1;&#x606F;&#x4EE5;&#x4F9B;&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x6267;&#x884C;. &#x9664;&#x6B64;&#x4E4B;&#x5916;Script&#x8D44;&#x6E90;&#x8FD8;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x7684;&#x65B9;&#x5F0F;&#x6307;&#x5B9A;&#x53C2;&#x6570;.</p>
+<p>&#x5F53;&#x4E00;&#x4E2A;Script&#x8D44;&#x6E90;&#x6240;&#x7BA1;&#x7406;&#x7684;&#x53EF;&#x8BFB;&#x8BBE;&#x5907;&#x7684;Device&#x8D44;&#x6E90;&#x72B6;&#x6001;&#x53D1;&#x751F;&#x53D8;&#x5316;&#x65F6;, Script&#x4F1A;&#x88AB;&quot;&#x89E6;&#x53D1;&quot;, &#x7531;&#x6267;&#x884C;&#x5668;&#x6267;&#x884C;&#x89C4;&#x5219;&#x4EE3;&#x7801;. &#x4E00;&#x4E2A;&#x826F;&#x597D;&#x7684;&#x89C4;&#x5219;&#x4EE3;&#x7801;&#x5E94;&#x5F53;&#x5728;&#x591A;&#x6B21;&#x8FD0;&#x884C;&#x4E2D;&#x5BF9;&#x540C;&#x6837;&#x7684;&#x8F93;&#x5165;&#x4EA7;&#x751F;&#x540C;&#x6837;&#x7684;&#x8F93;&#x51FA;. &#x4E0D;&#x8FC7;&#x8FD9;&#x5E76;&#x975E;&#x7EDD;&#x5BF9;, &#x56E0;&#x4E3A;&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x4EE3;&#x7801;&#x5141;&#x8BB8;&#x8BBF;&#x95EE;&#x96C6;&#x7FA4;&#x4E0A;&#x90E8;&#x7F72;&#x7684;HTTP&#x670D;&#x52A1;, &#x4F8B;&#x5982;&#x5C06;&#x53EF;&#x8BFB;&#x8BBE;&#x5907;&#x7684;&#x72B6;&#x6001;&#x4EA4;&#x7ED9;&#x6DF1;&#x5EA6;&#x5B66;&#x4E60;&#x670D;&#x52A1;&#x8FDB;&#x884C;&#x63A8;&#x7406;, &#x5E76;&#x83B7;&#x5F97;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;, &#x518D;&#x5BF9;&#x53EF;&#x5199;&#x8BBE;&#x5907;&#x7684;&#x72B6;&#x6001;&#x8FDB;&#x884C;&#x6539;&#x53D8;.</p>
+<p>&#x9664;&#x4E86;&#x56E0;&#x8BBE;&#x5907;&#x72B6;&#x6001;&#x53D8;&#x5316;&#x4EA7;&#x751F;&#x7684;&#x89E6;&#x53D1;&#x4E8B;&#x4EF6;, &#x7528;&#x6237;&#x8FD8;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x5411;Web&#x670D;&#x52A1;&#x5668;&#x53D1;&#x9001;Get&#x8BF7;&#x6C42;&#x7684;&#x65B9;&#x5F0F;&#x76F4;&#x63A5;&#x89E6;&#x53D1;&#x4E00;&#x4E2A;Script&#x8D44;&#x6E90;&#x7684;&#x6267;&#x884C;.</p>
+<h4 class="mume-header" id="%E6%89%A7%E8%A1%8C%E5%99%A8">&#x6267;&#x884C;&#x5668;</h4>
+
+<p>&#x6267;&#x884C;&#x5668;&#x7684;&#x7ED3;&#x6784;&#x5982;&#x4E0B;</p>
+<p><!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="508.3333px" preserveAspectRatio="none" style="width:519px;height:508px;background:#00000000;" version="1.1" viewBox="0 0 519 508" width="519.7917px" zoomAndPan="magnify"><defs/><g><!--MD5=[1ff6996f3977f8c02cf439efac3d4cce]
+entity gRPC--><ellipse cx="283.8542" cy="14.5833" fill="#D63333" rx="8.3333" ry="8.3333" style="stroke:#CC0000;stroke-width:1.5625;"/><text fill="#ADAFAE" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="31.25" x="268.2292" y="50.0671">gRPC</text><!--MD5=[983d0794f401e349a629364dfc448d7d]
+entity run--><ellipse cx="347.3958" cy="14.5833" fill="#D63333" rx="8.3333" ry="8.3333" style="stroke:#CC0000;stroke-width:1.5625;"/><text fill="#ADAFAE" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="21.875" x="336.4583" y="50.0671">run</text><!--MD5=[c9fbf108714351053409b12ce2e7415b]
+entity update--><ellipse cx="268.2292" cy="115.1042" fill="#D63333" rx="8.3333" ry="8.3333" style="stroke:#CC0000;stroke-width:1.5625;"/><text fill="#ADAFAE" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="42.7083" x="246.875" y="150.588">update</text><!--MD5=[53ccf4b3ee6cf4337a0ab93ac09644f3]
+entity main--><rect fill="#2A9FD6" height="56.8583" rx="4.1667" ry="4.1667" style="stroke:#55B2DE;stroke-width:1.5625;" width="83.3333" x="314.0625" y="86.4583"/><rect fill="#2A9FD6" height="10.4167" style="stroke:#55B2DE;stroke-width:1.5625;" width="15.625" x="376.5625" y="91.6667"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="374.4792" y="93.75"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="374.4792" y="97.9167"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="31.25" x="334.8958" y="125.0671">main</text><!--MD5=[5b7355d8979021d688c7f73be5fb5337]
+entity worker 1--><rect fill="#2A9FD6" height="56.8583" rx="4.1667" ry="4.1667" style="stroke:#55B2DE;stroke-width:1.5625;" width="107.2917" x="114.5833" y="206.25"/><rect fill="#2A9FD6" height="10.4167" style="stroke:#55B2DE;stroke-width:1.5625;" width="15.625" x="201.0417" y="211.4583"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="198.9583" y="213.5417"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="198.9583" y="217.7083"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="55.2083" x="135.4167" y="244.8588">worker 1</text><!--MD5=[cf67f0450f82aa62c2ecd4830d20b066]
+entity worker 2--><rect fill="#2A9FD6" height="56.8583" rx="4.1667" ry="4.1667" style="stroke:#55B2DE;stroke-width:1.5625;" width="107.2917" x="258.3333" y="206.25"/><rect fill="#2A9FD6" height="10.4167" style="stroke:#55B2DE;stroke-width:1.5625;" width="15.625" x="344.7917" y="211.4583"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="342.7083" y="213.5417"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="342.7083" y="217.7083"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="55.2083" x="279.1667" y="244.8588">worker 2</text><!--MD5=[a78de94dc95574c6050340147359409b]
+entity worker ...--><rect fill="#2A9FD6" height="56.8583" rx="4.1667" ry="4.1667" style="stroke:#55B2DE;stroke-width:1.5625;" width="111.4583" x="402.0833" y="206.25"/><rect fill="#2A9FD6" height="10.4167" style="stroke:#55B2DE;stroke-width:1.5625;" width="15.625" x="492.7083" y="211.4583"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="490.625" y="213.5417"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="490.625" y="217.7083"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="59.375" x="422.9167" y="244.8588">worker ...</text><!--MD5=[aaf91e38487b3bab6b24838e7fc94e0a]
+entity Deno--><rect fill="#2A9FD6" height="56.8583" rx="4.1667" ry="4.1667" style="stroke:#55B2DE;stroke-width:1.5625;" width="84.375" x="52.0833" y="326.0417"/><rect fill="#2A9FD6" height="10.4167" style="stroke:#55B2DE;stroke-width:1.5625;" width="15.625" x="115.625" y="331.25"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="113.5417" y="333.3333"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="113.5417" y="337.5"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="32.2917" x="72.9167" y="364.6505">Deno</text><!--MD5=[35f3869c3b14f7873fde4297f5759375]
+entity module loader--><rect fill="#2A9FD6" height="56.8583" rx="4.1667" ry="4.1667" style="stroke:#55B2DE;stroke-width:1.5625;" width="139.5833" x="173.4375" y="326.0417"/><rect fill="#2A9FD6" height="10.4167" style="stroke:#55B2DE;stroke-width:1.5625;" width="15.625" x="292.1875" y="331.25"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="290.1042" y="333.3333"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="290.1042" y="337.5"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="87.5" x="194.2708" y="364.6505">module loader</text><!--MD5=[2769dca0263a676a05de1ffa086bacee]
+entity v8--><rect fill="#2A9FD6" height="56.8583" rx="4.1667" ry="4.1667" style="stroke:#55B2DE;stroke-width:1.5625;" width="67.7083" x="7.2917" y="445.8333"/><rect fill="#2A9FD6" height="10.4167" style="stroke:#55B2DE;stroke-width:1.5625;" width="15.625" x="54.1667" y="451.0417"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="52.0833" y="453.125"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="52.0833" y="457.2917"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="15.625" x="28.125" y="484.4421">v8</text><!--MD5=[5a9f12e3433feb7a47fb7cbcc8ee5d5d]
+entity ops--><rect fill="#2A9FD6" height="56.8583" rx="4.1667" ry="4.1667" style="stroke:#55B2DE;stroke-width:1.5625;" width="72.9167" x="111.9792" y="445.8333"/><rect fill="#2A9FD6" height="10.4167" style="stroke:#55B2DE;stroke-width:1.5625;" width="15.625" x="164.0625" y="451.0417"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="161.9792" y="453.125"/><rect fill="#2A9FD6" height="2.0833" style="stroke:#55B2DE;stroke-width:1.5625;" width="4.1667" x="161.9792" y="457.2917"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="20.8333" x="132.8125" y="484.4421">ops</text><!--MD5=[8123e386e2cd4543a332ca35bb0fa074]
+link gRPC to run--><path d="M293.2813,14.5833 C306.2292,14.5833 319.1771,14.5833 332.125,14.5833 " fill="none" id="gRPC-to-run" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="337.6771,14.5833,328.3021,10.4167,332.4688,14.5833,328.3021,18.75,337.6771,14.5833" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[d209434360caef39cea976dcec2bb2bc]
+link gRPC to update--><path d="M282.5208,24.0208 C279.8229,41.0208 273.6875,79.6563 270.4063,100.3646 " fill="none" id="gRPC-to-update" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="269.5625,105.6875,275.1493,97.0829,270.3801,100.5437,266.9193,95.7746,269.5625,105.6875" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[da6c8ffb21e3cff76cd5e0229304ea02]
+link run to main--><path d="M348.1042,24.0208 C349.1667,36.5104 351.2083,60.6979 352.9167,80.8542 " fill="none" id="run-to-main" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="353.3854,86.4271,356.7614,76.7392,352.9541,81.2366,348.4567,77.4293,353.3854,86.4271" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[0ebf1b72a10bf19bdce0c52f0f00818e]
+link main to worker 1--><path d="M313.6458,142.5625 C285.0521,160.5104 247.1354,184.3229 217.1875,203.1146 " fill="none" id="main-to-worker 1" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="212.4479,206.0938,222.6027,204.6337,216.8579,203.3226,218.1689,197.5778,212.4479,206.0938" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[481e0834c17c7892fd3455384b075805]
+link main to worker 2--><path d="M345.3646,144.0417 C338.9896,161.1875 330.7917,183.25 324.1146,201.2083 " fill="none" id="main-to-worker 2" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="322.2708,206.1563,329.4444,198.822,324.0865,201.2747,321.6338,195.9168,322.2708,206.1563" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[205fc1fedb482d5567215fd689328658]
+link main to worker ...--><path d="M379.9167,144.0417 C395.0521,161.4896 414.5833,184 430.2917,202.125 " fill="none" id="main-to-worker ..." style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="433.7917,206.1563,430.8145,196.3385,430.3862,202.2155,424.5093,201.7872,433.7917,206.1563" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[5f50efd44b761a3358916301b6de56c2]
+reverse link update to worker 1--><path d="M257.3854,128.9167 C241.8021,147.25 212.6875,181.5208 191.9688,205.9063 " fill="none" id="update-backto-worker 1" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="261.0417,124.6146,251.7947,129.0582,257.6681,128.5827,258.1436,134.456,261.0417,124.6146" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[c90b4d3bf7d9bbfee9aa48dbf45066d5]
+reverse link update to worker 2--><path d="M273.3229,129.8646 C280.2188,148.4167 292.6771,181.9375 301.5938,205.9063 " fill="none" id="update-backto-worker 2" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="271.375,124.6146,270.738,134.854,273.1907,129.4962,278.5486,131.9489,271.375,124.6146" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[7f017f75d379a85475d48a8d367383be]
+reverse link update to worker ...--><path d="M278.9583,128.5625 C283.6771,133.6146 289.4688,139.3021 295.3125,143.75 C328.4271,168.9583 369.4271,191.6354 401.9583,207.9375 " fill="none" id="update-backto-worker ..." style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="275.2604,124.5104,278.4743,134.2533,278.7602,128.3676,284.6458,128.6536,275.2604,124.5104" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[d6400c801087bcbec440d45d56f68120]
+link worker 1 to Deno--><path d="M150.6979,263.8333 C139.8333,281.1354 125.8333,303.4167 114.4896,321.4583 " fill="none" id="worker 1-to-Deno" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="111.6771,325.9479,120.1844,320.214,114.4415,321.5338,113.1217,315.7909,111.6771,325.9479" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[335a6dca2237cbb324b214027b4f5f77]
+link worker 1 to module loader--><path d="M186,263.8333 C197.0208,281.1354 211.2292,303.4167 222.7188,321.4583 " fill="none" id="worker 1-to-module loader" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="225.5833,325.9479,224.0587,315.8026,222.7842,321.5557,217.0311,320.2812,225.5833,325.9479" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[547d0e3fb7056d9cb5fe2bc81ed3fdda]
+link Deno to v8--><path d="M81.6771,383.625 C73.9375,400.7708 63.9896,422.8333 55.875,440.7917 " fill="none" id="Deno-to-v8" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="53.6458,445.7396,61.3007,438.9091,55.7887,440.9925,53.7054,435.4805,53.6458,445.7396" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[72651a014652dd6a53821783f8254e86]
+link Deno to ops--><path d="M107.1042,383.625 C115,400.7708 125.1458,422.8333 133.4167,440.7917 " fill="none" id="Deno-to-ops" style="stroke:#2A9FD6;stroke-width:3.125;"/><polygon fill="#2A9FD6" points="135.6979,445.7396,135.5606,435.4813,133.5191,441.0089,127.9915,438.9674,135.6979,445.7396" style="stroke:#2A9FD6;stroke-width:3.125;"/><!--MD5=[f4c90ae2523388b05ba759448d936e93]
+@startuml
+!theme cyborg
+() gRPC -> run
+() gRPC -> update
+run - -> [main] 
+[main] - -> [worker 1]
+[main] - -> [worker 2]
+[main] - -> [worker ...]
+update <- - [worker 1]
+update <- - [worker 2]
+update <- - [worker ...]
+[worker 1] - -> [Deno]
+[worker 1] - -> [module loader]
+[Deno] - -> [v8]
+[Deno] - -> [ops]
+@enduml
+
+@startuml
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+
+skinparam defaultFontName       "Verdana"
+skinparam defaultFontSize       12
+skinparam dpi                   100
+skinparam shadowing             false
+skinparam roundcorner           8
+skinparam ParticipantPadding    40
+skinparam BoxPadding            40
+skinparam Padding               5
+skinparam ArrowColor            #ADAFAE
+skinparam stereotype {
+    CBackgroundColor #777777
+    CBorderColor #444444
+    ABackgroundColor #5F8F00
+    ABorderColor #92C233
+    IBackgroundColor #A30000
+    IBorderColor #D63333
+    EBackgroundColor #CC6D00
+    EBorderColor #FFA033
+    NBackgroundColor #9F161B
+    NBorderColor #AD5CD6
+}
+skinparam title {
+	FontColor	                 #2A9FD6
+	BorderColor	                 #777777
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #444444-#555
+}
+
+
+skinparam legend {
+	BackgroundColor #555
+	BorderColor #777777
+	FontColor #ADAFAE
+}
+
+skinparam swimlane {
+	BorderColor #9933CC
+	BorderThickness 2
+	TitleBackgroundColor  #444444-#555
+	TitleFontColor #2A9FD6
+}
+
+
+skinparam activity {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	BarColor #77B300
+	StartColor #9933CC
+	EndColor #9933CC
+	DiamondBackgroundColor #444444
+  	DiamondBorderColor #777777
+  	DiamondFontColor #FFF
+}
+
+
+skinparam participant {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	ParticipantBorderThickness 2
+}
+
+
+skinparam actor {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #2A9FD6
+}
+
+
+skinparam arrow {
+	Thickness 3
+	Color #2A9FD6
+	FontColor #FFF
+}
+
+
+skinparam sequence {
+	BorderColor #2A9FD6
+	TitleFontColor #2A9FD6
+	BackgroundColor transparent
+	StartColor #2A9FD6
+	EndColor #2A9FD6
+	BoxBackgroundColor transparent
+	BoxBorderColor #ADAFAE
+	BoxFontColor #ADAFAE
+	DelayFontColor #ADAFAE
+	LifeLineBorderColor #555
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor #777777
+	GroupBorderColor #555
+	GroupFontColor #ADAFAE
+	GroupHeaderFontColor #9933CC
+	GroupBackgroundColor #555
+	GroupHeaderBackgroundColor transparent
+	DividerBackgroundColor #ADAFAE
+    DividerBorderColor #ADAFAE
+    DividerBorderThickness 2
+    DividerFontColor #222
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #555
+	ReferenceFontColor #FFF
+	ReferenceHeaderBackgroundColor #555
+	StereotypeFontColor #FFF
+}
+
+
+skinparam partition {
+	BorderColor #2A9FD6
+	FontColor #2A9FD6
+	BackgroundColor transparent
+}
+
+
+skinparam collections {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+}
+
+
+skinparam control {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #ADAFAE
+}
+
+
+skinparam entity {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #ADAFAE
+}
+
+
+skinparam boundary {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #ADAFAE
+}
+
+
+skinparam agent {
+	BackgroundColor #FF8800
+	BorderColor #CC6D00
+	FontColor #ADAFAE
+}
+
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor #9933CC
+	BorderColor #AD5CD6
+	FontColor #FFF
+}
+
+
+skinparam artifact {
+	BackgroundColor #ADAFAE
+	BorderColor #BDBFBE
+	FontColor #222
+}
+
+
+skinparam component {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+}
+
+
+skinparam interface {
+	BackgroundColor  #D63333
+	BorderColor  #CC0000
+	FontColor #ADAFAE
+}
+
+
+skinparam storage {
+	BackgroundColor #FF8800
+  	BorderColor #FFA033
+	FontColor #FFF
+}
+
+
+skinparam node {
+	BackgroundColor  #555
+	BorderColor #ADAFAE
+	FontColor #ADAFAE
+}
+
+
+skinparam cloud {
+	BackgroundColor #222-black
+	BorderColor #222
+	FontColor #ADAFAE
+}
+
+
+skinparam database {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	FontColor #ADAFAE
+}
+
+
+skinparam actor {
+	FontColor #ADAFAE
+}
+
+
+skinparam class {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	HeaderBackgroundColor #227FAB
+	StereotypeFontColor #ADAFAE
+	BorderThickness 1
+	AttributeFontColor #222
+	AttributeFontSize 11
+}
+
+
+skinparam object {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	StereotypeFontColor #ADAFAE
+	BorderThickness 1
+	AttributeFontColor #FFF
+	AttributeFontSize 11
+}
+
+
+skinparam usecase {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	BorderThickness 2
+	StereotypeFontColor #2A9FD6
+}
+
+
+skinparam rectangle {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	BackgroundColor #444444
+	BorderThickness 2
+	StereotypeFontColor #2A9FD6
+}
+
+
+skinparam package {
+	BackgroundColor #555
+  	BorderColor #2A9FD6
+	FontColor #2A9FD6
+	BorderThickness 2
+}
+
+
+skinparam folder {
+	BackgroundColor #444444
+  	BorderColor #FF8800
+	FontColor #FF8800
+	BorderThickness 2
+}
+
+
+skinparam frame {
+	BackgroundColor #444444
+  	BorderColor #9933CC
+	FontColor #9933CC
+	BorderThickness 2
+}
+
+
+skinparam state {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+	StartColor #9933CC
+	EndColor #9933CC
+	AttributeFontColor #FFF
+	AttributeFontSize 11
+}
+
+
+skinparam queue {
+		FontColor #FFF
+	BorderColor #55B2DE
+	BackgroundColor #2A9FD6
+}
+
+
+skinparam card {
+	BackgroundColor #9933CC
+	BorderColor #AD5CD6
+	FontColor #FFF
+}
+
+
+skinparam file {
+	BackgroundColor #777777
+	BorderColor #ADAFAE
+	FontColor #ADAFAE
+}
+
+
+() gRPC -> run
+() gRPC -> update
+run - -> [main] 
+[main] - -> [worker 1]
+[main] - -> [worker 2]
+[main] - -> [worker ...]
+update <- - [worker 1]
+update <- - [worker 2]
+update <- - [worker ...]
+[worker 1] - -> [Deno]
+[worker 1] - -> [module loader]
+[Deno] - -> [v8]
+[Deno] - -> [ops]
+@enduml
+
+PlantUML version 1.2021.12(Wed Oct 06 00:01:58 CST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: zh
+Country: CN
+--></g></svg></p><h5 class="mume-header" id="%E4%B8%BB%E7%BA%BF%E7%A8%8B">&#x4E3B;&#x7EBF;&#x7A0B;</h5>
+
+<p>&#x6267;&#x884C;&#x5668;&#x7684;&#x4E3B;&#x7EBF;&#x7A0B;&#x901A;&#x8FC7;gRPC&#x94FE;&#x63A5;&#x8C03;&#x7528;run&#x51FD;&#x6570;. &#x5728;&#x5EFA;&#x7ACB;&#x8FDE;&#x63A5;&#x540E;, &#x4E3B;&#x7EBF;&#x7A0B;&#x4F1A;&#x6536;&#x5230;&#x63A7;&#x5236;&#x5668;&#x53D1;&#x6765;&#x7684;ServerMessage::RunScript&#x6D88;&#x606F;, &#x6267;&#x884C;&#x5668;&#x4F1A;&#x5EFA;&#x7ACB;Worker&#x7EBF;&#x7A0B;&#x5904;&#x7406;&#x8BE5;&#x6D88;&#x606F;.</p>
+<p><!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="664.5833px" preserveAspectRatio="none" style="width:538px;height:664px;background:#00000000;" version="1.1" viewBox="0 0 538 664" width="538.5417px" zoomAndPan="magnify"><defs><linearGradient id="gyvsyjverkrh70" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#33B2E2"/><stop offset="100%" stop-color="#009FDB"/></linearGradient><linearGradient id="gyvsyjverkrh71" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#D2D2D2"/></linearGradient></defs><g><line style="stroke:#C2C2C2;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="79.1667" x2="79.1667" y1="52.6917" y2="613.5498"/><line style="stroke:#C2C2C2;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="449.4792" x2="449.4792" y1="52.6917" y2="613.5498"/><rect fill="url(#gyvsyjverkrh70)" height="46.4417" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="86.4583" x="36.4583" y="5.2083"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="55.2083" x="52.0833" y="33.4005">Executor</text><rect fill="url(#gyvsyjverkrh70)" height="46.4417" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="86.4583" x="36.4583" y="612.5081"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="55.2083" x="52.0833" y="640.7003">Executor</text><rect fill="url(#gyvsyjverkrh70)" height="46.4417" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="91.6667" x="403.6458" y="5.2083"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="60.4167" x="419.2708" y="33.4005">Controller</text><rect fill="url(#gyvsyjverkrh70)" height="46.4417" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="91.6667" x="403.6458" y="612.5081"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="60.4167" x="419.2708" y="640.7003">Controller</text><polygon fill="#009FDB" points="436.9792,97.05,447.3958,101.2166,436.9792,105.3833,441.1458,101.2166" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="79.6875" x2="443.2292" y1="101.2166" y2="101.2166"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="270.8333" x="95.3125" y="88.1755">TCP connect/HTTP Header (validate Header)</text><polygon fill="#009FDB" points="436.9792,143.4916,447.3958,147.6583,436.9792,151.825,441.1458,147.6583" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:3.125;" x1="79.6875" x2="443.2292" y1="147.6583" y2="147.6583"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="325" x="95.3125" y="134.6171">ClientMessage { code = Connect, info = ClientInfo }</text><polygon fill="#009FDB" points="91.1458,189.9333,80.7292,194.0999,91.1458,198.2666,86.9792,194.0999" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:3.125;" x1="84.8958" x2="448.4375" y1="194.0999" y2="194.0999"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="270.8333" x="105.7292" y="181.0588">ServerMessage::Connected { executor_id }</text><polygon fill="#009FDB" points="436.9792,236.3749,447.3958,240.5416,436.9792,244.7083,441.1458,240.5416" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:3.125;" x1="79.6875" x2="443.2292" y1="240.5416" y2="240.5416"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="219.7917" x="95.3125" y="227.5004">ClientMessage { code = Continue }</text><polygon fill="#009FDB" points="91.1458,282.8166,80.7292,286.9832,91.1458,291.1499,86.9792,286.9832" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:3.125;" x1="84.8958" x2="448.4375" y1="286.9832" y2="286.9832"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="328.125" x="105.7292" y="273.9421">ServerMessage::RunScript { script_id, manifest, ... }</text><polygon fill="#009FDB" points="436.9792,329.2582,447.3958,333.4249,436.9792,337.5916,441.1458,333.4249" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:3.125;" x1="79.6875" x2="443.2292" y1="333.4249" y2="333.4249"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="219.7917" x="95.3125" y="320.3837">ClientMessage { code = Continue }</text><rect fill="url(#gyvsyjverkrh71)" height="3.125" style="stroke:url(#gyvsyjverkrh71);stroke-width:1.0416666666666667;" width="531.7708" x="0" y="371.229"/><line style="stroke:#959595;stroke-width:1.0416666666666667;" x1="0" x2="531.7708" y1="371.229" y2="371.229"/><line style="stroke:#959595;stroke-width:1.0416666666666667;" x1="0" x2="531.7708" y1="374.354" y2="374.354"/><rect fill="url(#gyvsyjverkrh71)" height="40.1917" style="stroke:#959595;stroke-width:2.0833333333333335;" width="77.0833" x="227.3438" y="352.1749"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" font-weight="bold" lengthAdjust="spacing" textLength="41.6667" x="241.9271" y="377.242">loop...</text><polygon fill="#009FDB" points="91.1458,436.7249,80.7292,440.8915,91.1458,445.0582,86.9792,440.8915" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:3.125;" x1="84.8958" x2="448.4375" y1="440.8915" y2="440.8915"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="325" x="105.7292" y="427.8503">ServerMessage::Disconnect { reason = ServerExit }</text><rect fill="url(#gyvsyjverkrh71)" height="3.125" style="stroke:url(#gyvsyjverkrh71);stroke-width:1.0416666666666667;" width="531.7708" x="0" y="478.6957"/><line style="stroke:#959595;stroke-width:1.0416666666666667;" x1="0" x2="531.7708" y1="478.6957" y2="478.6957"/><line style="stroke:#959595;stroke-width:1.0416666666666667;" x1="0" x2="531.7708" y1="481.8207" y2="481.8207"/><rect fill="url(#gyvsyjverkrh71)" height="40.1917" style="stroke:#959595;stroke-width:2.0833333333333335;" width="50" x="240.8854" y="459.6415"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" font-weight="bold" lengthAdjust="spacing" textLength="14.5833" x="255.4688" y="484.7087">or</text><polygon fill="#009FDB" points="436.9792,544.1915,447.3958,548.3582,436.9792,552.5248,441.1458,548.3582" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:3.125;" x1="79.6875" x2="443.2292" y1="548.3582" y2="548.3582"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="231.25" x="95.3125" y="535.317">ClientMessage { code = Disconnect }</text><polygon fill="#009FDB" points="91.1458,590.6331,80.7292,594.7998,91.1458,598.9665,86.9792,594.7998" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:3.125;" x1="84.8958" x2="448.4375" y1="594.7998" y2="594.7998"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="319.7917" x="105.7292" y="581.7586">ServerMessage::Disconnect { reason = ClientExit }</text><!--MD5=[2548b670a90318ece9c6e533c4c44d63]
+@startuml
+!theme bluegray
+Executor - -> Controller: TCP connect/HTTP Header (validate Header)
+Executor -> Controller: ClientMessage { code = Connect, info = ClientInfo }
+Controller -> Executor: ServerMessage::Connected { executor_id }
+Executor -> Controller: ClientMessage { code = Continue }
+Controller -> Executor: ServerMessage::RunScript { script_id, manifest, ... }
+Executor -> Controller: ClientMessage { code = Continue }
+== loop... ==
+Controller -> Executor: ServerMessage::Disconnect { reason = ServerExit }
+== or ==
+Executor -> Controller: ClientMessage { code = Disconnect }
+Controller -> Executor: ServerMessage::Disconnect { reason = ClientExit }
+@enduml
+
+@startuml
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+
+
+
+skinparam defaultFontName        "Verdana"
+skinparam defaultFontSize        12
+skinparam dpi                    100
+skinparam shadowing              false
+skinparam roundcorner            20
+skinparam ParticipantPadding     30
+skinparam BoxPadding             40
+skinparam Padding                8
+skinparam ArrowColor             #959595
+skinparam stereotype {
+    CBackgroundColor #f5f5f5
+    CBorderColor #c2c2c2
+    ABackgroundColor #c4ca33
+    ABorderColor #919700
+    IBackgroundColor #d95555
+    IBorderColor #a62222
+    EBackgroundColor #ee9033
+    EBorderColor #bb5d00
+    NBackgroundColor #3786be
+    NBorderColor #04538b
+}
+skinparam title {
+	FontColor	                 #009fdb
+	BorderColor	                 #c2c2c2
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #f5f5f5-#f2f2f2
+}
+
+
+skinparam legend {
+	BackgroundColor #f2f2f2
+	BorderColor #c2c2c2
+	FontColor #5a5a5a
+}
+
+skinparam swimlane {
+	BorderColor #0568ae
+	BorderThickness 2
+	TitleBackgroundColor  #f5f5f5-#f2f2f2
+	TitleFontColor #009fdb
+}
+
+
+skinparam activity {
+	FontColor #fff
+	BorderColor #009fdb
+	BackgroundColor #33b2e2-#009fdb
+	BarColor #b5bd00
+	StartColor #0568ae
+	EndColor #0568ae
+	DiamondBackgroundColor #f5f5f5-#c2c2c2
+  	DiamondBorderColor #c2c2c2
+	DiamondFontColor #5a5a5a
+}
+
+
+skinparam participant {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	ParticipantBorderThickness 2
+}
+
+
+skinparam actor {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam arrow {
+	Thickness 3
+	Color #009fdb
+	FontColor #5a5a5a
+}
+
+
+skinparam sequence {
+	BorderColor #009fdb
+	TitleFontColor #009fdb
+	BackgroundColor transparent
+	StartColor #009fdb
+	EndColor #009fdb
+	BoxBackgroundColor #d2d2d2
+	BoxBorderColor #959595
+	BoxFontColor #5a5a5a
+	DelayFontColor #5a5a5a
+	LifeLineBorderColor #c2c2c2
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor #f5f5f5
+	GroupBorderColor #959595
+	GroupFontColor #5a5a5a
+	GroupHeaderFontColor #0568ae
+	DividerBackgroundColor #fff-#d2d2d2
+    DividerBorderColor #959595
+    DividerBorderThickness 2
+    DividerFontColor #5a5a5a
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #959595
+	ReferenceFontColor #5a5a5a
+	ReferenceHeaderFontColor #0568ae
+	StereotypeFontColor #fff
+}
+
+
+skinparam partition {
+	BorderColor #009fdb
+	FontColor #009fdb
+	BackgroundColor transparent
+}
+
+
+skinparam collections {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+}
+
+
+skinparam control {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam entity {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam boundary {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam agent {
+	BackgroundColor #orange
+	BorderColor #999999
+	FontColor #333333
+}
+
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor #3786be-#0568ae
+	BorderColor #0568ae
+	FontColor #fff
+}
+
+
+skinparam artifact {
+	BackgroundColor #fff-#d2d2d2
+	BorderColor #c2c2c2
+	FontColor #5a5a5a
+}
+
+
+skinparam component {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+}
+
+
+skinparam interface {
+	BackgroundColor  #d95555
+	BorderColor  #cf2a2a
+	FontColor #5a5a5a
+}
+
+
+skinparam storage {
+	BackgroundColor #ee9033-#ea7400
+  	BorderColor #ea7400
+	FontColor #fff
+}
+
+
+skinparam node {
+	BackgroundColor #f5f5f5-#f2f2f2
+	BorderColor #c2c2c2
+	FontColor #009fdb
+}
+
+
+skinparam cloud {
+	BackgroundColor #F2FCFE-#eeeeee
+	BorderColor #F2FCFE
+	FontColor #009fdb
+}
+
+
+skinparam database {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	BorderColor #007faf
+}
+
+
+skinparam class {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	HeaderBackgroundColor #33b2e2-#009fdb
+	StereotypeFontColor #5a5a5a
+	BorderThickness 1
+	AttributeFontColor #d2d2d2
+	AttributeFontSize 11
+}
+
+
+skinparam object {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	StereotypeFontColor #5a5a5a
+	BorderThickness 1
+	AttributeFontColor #d2d2d2
+	AttributeFontSize 11
+}
+
+
+skinparam usecase {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	BorderThickness 2
+	StereotypeFontColor #009fdb
+}
+
+
+skinparam rectangle {
+		FontColor #5a5a5a
+	BorderColor #c2c2c2
+	BackgroundColor #fff-#fefefe
+	BorderThickness 2
+	StereotypeFontColor #009fdb
+}
+
+
+skinparam package {
+	FontColor #009fdb
+	BorderColor #33b2e2
+	BackgroundColor transparent
+	BorderThickness 2
+}
+
+
+skinparam folder {
+	BackgroundColor #fff-#f5f5f5
+  	BorderColor #ea7400
+	FontColor #ea7400
+	BorderThickness 2
+}
+
+
+skinparam frame {
+	BackgroundColor #fff-#f5f5f5
+  	BorderColor #0568ae
+	FontColor #0568ae
+	BorderThickness 2
+}
+
+
+skinparam state {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	BorderColor #007faf
+	StartColor #0568ae
+	EndColor #0568ae
+	AttributeFontColor #d2d2d2
+	AttributeFontSize 11
+}
+
+
+skinparam queue {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+}
+
+
+skinparam card {
+	BackgroundColor #3786be-#0568ae
+	BorderColor #0568ae
+	FontColor #fff
+}
+
+
+skinparam file {
+	BackgroundColor #f5f5f5-#f2f2f2
+	BorderColor #0568ae
+	FontColor #5a5a5a
+
+}
+
+
+Executor - -> Controller: TCP connect/HTTP Header (validate Header)
+Executor -> Controller: ClientMessage { code = Connect, info = ClientInfo }
+Controller -> Executor: ServerMessage::Connected { executor_id }
+Executor -> Controller: ClientMessage { code = Continue }
+Controller -> Executor: ServerMessage::RunScript { script_id, manifest, ... }
+Executor -> Controller: ClientMessage { code = Continue }
+== loop... ==
+Controller -> Executor: ServerMessage::Disconnect { reason = ServerExit }
+== or ==
+Executor -> Controller: ClientMessage { code = Disconnect }
+Controller -> Executor: ServerMessage::Disconnect { reason = ClientExit }
+@enduml
+
+PlantUML version 1.2021.12(Wed Oct 06 00:01:58 CST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: zh
+Country: CN
+--></g></svg></p><p>&#x8FDE;&#x63A5;&#x7684;&#x72B6;&#x6001;&#x53D8;&#x5316;:</p>
+<p><!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="405.2083px" preserveAspectRatio="none" style="width:150px;height:405px;background:#00000000;" version="1.1" viewBox="0 0 150 405" width="150px" zoomAndPan="magnify"><defs><linearGradient id="ga5vith0br5h0" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#33B2E2"/><stop offset="100%" stop-color="#009FDB"/></linearGradient><linearGradient id="ga5vith0br5h1" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#F5F5F5"/><stop offset="100%" stop-color="#C2C2C2"/></linearGradient></defs><g><ellipse cx="64.0625" cy="20.8333" fill="#0568AE" rx="10.4167" ry="10.4167" style="stroke:none;stroke-width:1.0416666666666667;"/><rect fill="url(#ga5vith0br5h0)" height="52.6917" rx="13.0208" ry="13.0208" style="stroke:#009FDB;stroke-width:1.5625;" width="88.5417" x="19.7917" y="52.0833"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="51.0417" x="38.5417" y="83.4005">Connect</text><rect fill="url(#ga5vith0br5h0)" height="52.6917" rx="13.0208" ry="13.0208" style="stroke:#009FDB;stroke-width:1.5625;" width="93.75" x="17.1875" y="171.4417"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="56.25" x="35.9375" y="202.7588">Continue</text><polygon fill="url(#ga5vith0br5h1)" points="64.0625,125.6083,76.5625,138.1083,64.0625,150.6083,51.5625,138.1083,64.0625,125.6083" style="stroke:#C2C2C2;stroke-width:1.5625;"/><polygon fill="url(#ga5vith0br5h1)" points="39.0625,244.9666,89.0625,244.9666,101.5625,260.8958,89.0625,276.825,39.0625,276.825,26.5625,260.8958,39.0625,244.9666" style="stroke:#C2C2C2;stroke-width:1.5625;"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="33.3333" x="47.3958" y="265.8671">stop?</text><rect fill="url(#ga5vith0br5h0)" height="52.6917" rx="13.0208" ry="13.0208" style="stroke:#009FDB;stroke-width:1.5625;" width="105.2083" x="11.4583" y="297.6583"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="67.7083" x="30.2083" y="328.9754">Disconnect</text><ellipse cx="64.0625" cy="382.6416" rx="11.4583" ry="11.4583" style="stroke:#0568AE;stroke-width:1.0416666666666667;fill:none;"/><ellipse cx="64.0625" cy="382.6416" fill="#0568AE" rx="6.25" ry="6.25" style="stroke:#023457;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:1.5625;" x1="64.0625" x2="64.0625" y1="31.25" y2="52.0833"/><polygon fill="#009FDB" points="59.8958,41.6667,64.0625,52.0833,68.2292,41.6667,64.0625,45.8333" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:1.5625;" x1="64.0625" x2="64.0625" y1="150.6083" y2="171.4417"/><polygon fill="#009FDB" points="59.8958,161.025,64.0625,171.4417,68.2292,161.025,64.0625,165.1917" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:1.5625;" x1="101.5625" x2="123.4375" y1="260.8958" y2="260.8958"/><polygon fill="#009FDB" points="119.2708,209.9187,123.4375,199.5021,127.6042,209.9187,123.4375,205.7521" style="stroke:#009FDB;stroke-width:1.5625;"/><line style="stroke:#009FDB;stroke-width:1.5625;" x1="123.4375" x2="123.4375" y1="138.1083" y2="260.8958"/><line style="stroke:#009FDB;stroke-width:1.5625;" x1="123.4375" x2="76.5625" y1="138.1083" y2="138.1083"/><polygon fill="#009FDB" points="86.9792,133.9417,76.5625,138.1083,86.9792,142.275,82.8125,138.1083" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:1.5625;" x1="64.0625" x2="64.0625" y1="224.1333" y2="244.9666"/><polygon fill="#009FDB" points="59.8958,234.55,64.0625,244.9666,68.2292,234.55,64.0625,238.7166" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:1.5625;" x1="64.0625" x2="64.0625" y1="104.775" y2="125.6083"/><polygon fill="#009FDB" points="59.8958,115.1917,64.0625,125.6083,68.2292,115.1917,64.0625,119.3583" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:1.5625;" x1="64.0625" x2="64.0625" y1="276.825" y2="297.6583"/><polygon fill="#009FDB" points="59.8958,287.2416,64.0625,297.6583,68.2292,287.2416,64.0625,291.4083" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><line style="stroke:#009FDB;stroke-width:1.5625;" x1="64.0625" x2="64.0625" y1="350.3499" y2="371.1833"/><polygon fill="#009FDB" points="59.8958,360.7666,64.0625,371.1833,68.2292,360.7666,64.0625,364.9333" style="stroke:#009FDB;stroke-width:1.0416666666666667;"/><!--MD5=[dcb9af6e338c9d4c463fcf4b542303a9]
+@startuml
+!theme bluegray
+start
+:Connect;
+repeat
+:Continue;
+repeat while(stop?)
+:Disconnect;
+stop
+@enduml
+
+@startuml
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+
+
+
+skinparam defaultFontName        "Verdana"
+skinparam defaultFontSize        12
+skinparam dpi                    100
+skinparam shadowing              false
+skinparam roundcorner            20
+skinparam ParticipantPadding     30
+skinparam BoxPadding             40
+skinparam Padding                8
+skinparam ArrowColor             #959595
+skinparam stereotype {
+    CBackgroundColor #f5f5f5
+    CBorderColor #c2c2c2
+    ABackgroundColor #c4ca33
+    ABorderColor #919700
+    IBackgroundColor #d95555
+    IBorderColor #a62222
+    EBackgroundColor #ee9033
+    EBorderColor #bb5d00
+    NBackgroundColor #3786be
+    NBorderColor #04538b
+}
+skinparam title {
+	FontColor	                 #009fdb
+	BorderColor	                 #c2c2c2
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #f5f5f5-#f2f2f2
+}
+
+
+skinparam legend {
+	BackgroundColor #f2f2f2
+	BorderColor #c2c2c2
+	FontColor #5a5a5a
+}
+
+skinparam swimlane {
+	BorderColor #0568ae
+	BorderThickness 2
+	TitleBackgroundColor  #f5f5f5-#f2f2f2
+	TitleFontColor #009fdb
+}
+
+
+skinparam activity {
+	FontColor #fff
+	BorderColor #009fdb
+	BackgroundColor #33b2e2-#009fdb
+	BarColor #b5bd00
+	StartColor #0568ae
+	EndColor #0568ae
+	DiamondBackgroundColor #f5f5f5-#c2c2c2
+  	DiamondBorderColor #c2c2c2
+	DiamondFontColor #5a5a5a
+}
+
+
+skinparam participant {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	ParticipantBorderThickness 2
+}
+
+
+skinparam actor {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam arrow {
+	Thickness 3
+	Color #009fdb
+	FontColor #5a5a5a
+}
+
+
+skinparam sequence {
+	BorderColor #009fdb
+	TitleFontColor #009fdb
+	BackgroundColor transparent
+	StartColor #009fdb
+	EndColor #009fdb
+	BoxBackgroundColor #d2d2d2
+	BoxBorderColor #959595
+	BoxFontColor #5a5a5a
+	DelayFontColor #5a5a5a
+	LifeLineBorderColor #c2c2c2
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor #f5f5f5
+	GroupBorderColor #959595
+	GroupFontColor #5a5a5a
+	GroupHeaderFontColor #0568ae
+	DividerBackgroundColor #fff-#d2d2d2
+    DividerBorderColor #959595
+    DividerBorderThickness 2
+    DividerFontColor #5a5a5a
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #959595
+	ReferenceFontColor #5a5a5a
+	ReferenceHeaderFontColor #0568ae
+	StereotypeFontColor #fff
+}
+
+
+skinparam partition {
+	BorderColor #009fdb
+	FontColor #009fdb
+	BackgroundColor transparent
+}
+
+
+skinparam collections {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+}
+
+
+skinparam control {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam entity {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam boundary {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam agent {
+	BackgroundColor #orange
+	BorderColor #999999
+	FontColor #333333
+}
+
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor #3786be-#0568ae
+	BorderColor #0568ae
+	FontColor #fff
+}
+
+
+skinparam artifact {
+	BackgroundColor #fff-#d2d2d2
+	BorderColor #c2c2c2
+	FontColor #5a5a5a
+}
+
+
+skinparam component {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+}
+
+
+skinparam interface {
+	BackgroundColor  #d95555
+	BorderColor  #cf2a2a
+	FontColor #5a5a5a
+}
+
+
+skinparam storage {
+	BackgroundColor #ee9033-#ea7400
+  	BorderColor #ea7400
+	FontColor #fff
+}
+
+
+skinparam node {
+	BackgroundColor #f5f5f5-#f2f2f2
+	BorderColor #c2c2c2
+	FontColor #009fdb
+}
+
+
+skinparam cloud {
+	BackgroundColor #F2FCFE-#eeeeee
+	BorderColor #F2FCFE
+	FontColor #009fdb
+}
+
+
+skinparam database {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	BorderColor #007faf
+}
+
+
+skinparam class {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	HeaderBackgroundColor #33b2e2-#009fdb
+	StereotypeFontColor #5a5a5a
+	BorderThickness 1
+	AttributeFontColor #d2d2d2
+	AttributeFontSize 11
+}
+
+
+skinparam object {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	StereotypeFontColor #5a5a5a
+	BorderThickness 1
+	AttributeFontColor #d2d2d2
+	AttributeFontSize 11
+}
+
+
+skinparam usecase {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	BorderThickness 2
+	StereotypeFontColor #009fdb
+}
+
+
+skinparam rectangle {
+		FontColor #5a5a5a
+	BorderColor #c2c2c2
+	BackgroundColor #fff-#fefefe
+	BorderThickness 2
+	StereotypeFontColor #009fdb
+}
+
+
+skinparam package {
+	FontColor #009fdb
+	BorderColor #33b2e2
+	BackgroundColor transparent
+	BorderThickness 2
+}
+
+
+skinparam folder {
+	BackgroundColor #fff-#f5f5f5
+  	BorderColor #ea7400
+	FontColor #ea7400
+	BorderThickness 2
+}
+
+
+skinparam frame {
+	BackgroundColor #fff-#f5f5f5
+  	BorderColor #0568ae
+	FontColor #0568ae
+	BorderThickness 2
+}
+
+
+skinparam state {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	BorderColor #007faf
+	StartColor #0568ae
+	EndColor #0568ae
+	AttributeFontColor #d2d2d2
+	AttributeFontSize 11
+}
+
+
+skinparam queue {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+}
+
+
+skinparam card {
+	BackgroundColor #3786be-#0568ae
+	BorderColor #0568ae
+	FontColor #fff
+}
+
+
+skinparam file {
+	BackgroundColor #f5f5f5-#f2f2f2
+	BorderColor #0568ae
+	FontColor #5a5a5a
+
+}
+
+
+start
+:Connect;
+repeat
+:Continue;
+repeat while(stop?)
+:Disconnect;
+stop
+@enduml
+
+PlantUML version 1.2021.12(Wed Oct 06 00:01:58 CST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: zh
+Country: CN
+--></g></svg></p><h5 class="mume-header" id="worker%E7%BA%BF%E7%A8%8B">Worker&#x7EBF;&#x7A0B;</h5>
+
+<p>Worker&#x7EBF;&#x7A0B;&#x8FDB;&#x884C;&#x5982;&#x4E0B;&#x5DE5;&#x4F5C;:</p>
+<ol>
+<li>&#x521B;&#x5EFA;v8&#x8FD0;&#x884C;&#x65F6;</li>
+<li>&#x521D;&#x59CB;&#x5316;(bootstrap)&#x4E0A;&#x4E0B;&#x6587;</li>
+<li>&#x52A0;&#x8F7D;&#x8981;&#x8FD0;&#x884C;&#x7684;&#x89C4;&#x5219;&#x4F5C;&#x4E3A;&#x4E3B;&#x6A21;&#x5757;</li>
+<li>&#x8FD0;&#x884C;&#x5176;&#x4E2D;&#x7684;main&#x51FD;&#x6570;, &#x76F4;&#x5230;&#x6240;&#x6709;Promise&#x90FD;resolve.</li>
+<li>&#x8BB0;&#x5F55;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7B49;&#x72B6;&#x6001;&#x4FE1;&#x606F;, &#x5E76;&#x901A;&#x8FC7;gRPC&#x7684;update_script_status&#x8C03;&#x7528;&#x66F4;&#x65B0;Script&#x8D44;&#x6E90;&#x7684;Status</li>
+</ol>
+<h5 class="mume-header" id="ops">ops</h5>
+
+<p>ops&#x662F;Deno&#x5E95;&#x5C42;&#x63D0;&#x4F9B;&#x7684;&#x5411;v8&#x6DFB;&#x52A0;native&#x51FD;&#x6570;&#x7684;&#x65B9;&#x6CD5;, &#x8BE5;&#x6A21;&#x5757;&#x5B9E;&#x73B0;&#x4E86;ECMAScript&#x4E4B;&#x5916;&#x7684;&#x8BF8;&#x591A;&#x6269;&#x5C55;, &#x4F8B;&#x5982;&#x65E5;&#x5FD7;&#x529F;&#x80FD;(console.log)&#x6216;&#x8BBF;&#x95EE;&#x8BBE;&#x5907;&#x7684;Device API&#x529F;&#x80FD;.</p>
+<h4 class="mume-header" id="%E6%8E%A7%E5%88%B6%E5%99%A8">&#x63A7;&#x5236;&#x5668;</h4>
+
+<p>&#x6267;&#x884C;&#x5668;&#x7ED3;&#x6784;&#x5982;&#x4E0B;</p>
+<p><!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="1205.2083px" preserveAspectRatio="none" style="width:808px;height:1205px;background:#00000000;" version="1.1" viewBox="0 0 808 1205" width="808.3333px" zoomAndPan="magnify"><defs><linearGradient id="g127h5j2nglxfk0" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#33B2E2"/><stop offset="100%" stop-color="#009FDB"/></linearGradient></defs><g><!--MD5=[9363c7a74747497655051e4c11f55a5f]
+cluster Reflector--><path d="M378.125,108.3333 L442.7083,108.3333 A15.625,15.625 0 0 1 453.125,118.75 L460.4167,146.4417 L764.5833,146.4417 A10.4167,10.4167 0 0 1 775,156.8583 L775,851.5625 A10.4167,10.4167 0 0 1 764.5833,861.9792 L378.125,861.9792 A10.4167,10.4167 0 0 1 367.7083,851.5625 L367.7083,118.75 A10.4167,10.4167 0 0 1 378.125,108.3333 " style="stroke:#33B2E2;stroke-width:2.0833333333333335;fill:none;"/><line style="stroke:#33B2E2;stroke-width:2.0833333333333335;fill:none;" x1="367.7083" x2="460.4167" y1="146.4417" y2="146.4417"/><text fill="#009FDB" font-family="Verdana" font-size="12.5" font-weight="bold" lengthAdjust="spacing" textLength="62.5" x="380.2083" y="131.3171">Reflector</text><!--MD5=[3f0cd6d8531412bdb4ea35cf9a189c2b]
+cluster WebServer--><path d="M16.6667,588.5417 L96.875,588.5417 A15.625,15.625 0 0 1 107.2917,598.9583 L114.5833,626.65 L332.2917,626.65 A10.4167,10.4167 0 0 1 342.7083,637.0667 L342.7083,709.375 A10.4167,10.4167 0 0 1 332.2917,719.7917 L16.6667,719.7917 A10.4167,10.4167 0 0 1 6.25,709.375 L6.25,598.9583 A10.4167,10.4167 0 0 1 16.6667,588.5417 " style="stroke:#33B2E2;stroke-width:2.0833333333333335;fill:none;"/><line style="stroke:#33B2E2;stroke-width:2.0833333333333335;fill:none;" x1="6.25" x2="114.5833" y1="626.65" y2="626.65"/><text fill="#009FDB" font-family="Verdana" font-size="12.5" font-weight="bold" lengthAdjust="spacing" textLength="78.125" x="18.75" y="611.5255">WebServer</text><!--MD5=[fa6e9bd286d8949374a0688a8525a3df]
+entity DeviceReflector--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="170.8333" x="384.375" y="159.375"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="534.375" y="164.5833"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="532.2917" y="166.6667"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="532.2917" y="170.8333"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="112.5" x="408.3333" y="201.1088">reflector&lt;Device&gt;</text><!--MD5=[4a51e71dabeec4a5f306de3f1d8d9f68]
+entity ScriptReflector--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="165.625" x="592.1875" y="159.375"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="736.9792" y="164.5833"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="734.8958" y="166.6667"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="734.8958" y="170.8333"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="107.2917" x="616.1458" y="201.1088">reflector&lt;Script&gt;</text><!--MD5=[3d7f7ddd1481e4eda9568fa156b615a7]
+entity trigger_hook--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="137.5" x="384.375" y="381.25"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="501.0417" y="386.4583"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="498.9583" y="388.5417"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="498.9583" y="392.7083"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="79.1667" x="408.3333" y="422.9838">trigger_hook</text><!--MD5=[d6856b040a1663a798ad7a4fdedcc4e9]
+entity trigger--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="98.9583" x="402.6042" y="639.5833"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="480.7292" y="644.7917"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="478.6458" y="646.875"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="478.6458" y="651.0417"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="40.625" x="426.5625" y="681.3171">trigger</text><!--MD5=[e3152162072024c50465e7b26cb20ed6]
+entity Scheduler--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="119.7917" x="423.4375" y="781.7708"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="522.3958" y="786.9792"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="520.3125" y="789.0625"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="520.3125" y="793.2292"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="61.4583" x="447.3958" y="823.5046">Scheduler</text><!--MD5=[f2232bf02efdb37a7c0434c228c2f278]
+entity Reflector--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="112.5" x="489.5833" y="476.0417"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="581.25" y="481.25"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="579.1667" y="483.3333"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="579.1667" y="487.5"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="54.1667" x="513.5417" y="517.7755">Reflector</text><!--MD5=[0d8422cecbbd90343f851d6ed1de4994]
+entity device_hook--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="135.4167" x="425" y="286.4583"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="539.5833" y="291.6667"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="537.5" y="293.75"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="537.5" y="297.9167"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="77.0833" x="448.9583" y="328.1921">device_hook</text><!--MD5=[c572adf774c3f87fc3fbb442be1e2a7c]
+entity script_hook--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="130.2083" x="597.3958" y="286.4583"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="706.7708" y="291.6667"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="704.6875" y="293.75"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="704.6875" y="297.9167"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="71.875" x="621.3542" y="328.1921">script_hook</text><!--MD5=[d4fea359461332fcbf244ebc8f043990]
+entity /api/debug--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="123.9583" x="23.4375" y="639.5833"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="126.5625" y="644.7917"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="124.4792" y="646.875"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="124.4792" y="651.0417"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="65.625" x="47.3958" y="681.3171">/api/debug</text><!--MD5=[eda7c1acaf39a37b4d9105138c6d1c4e]
+entity /api/webhook--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="141.6667" x="184.375" y="639.5833"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="305.2083" y="644.7917"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="303.125" y="646.875"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="303.125" y="651.0417"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="83.3333" x="208.3333" y="681.3171">/api/webhook</text><!--MD5=[4b119b6f80322a633ea7e3fbae709e96]
+entity KubeAPI_Script--><ellipse cx="755.2083" cy="1158.3333" fill="#D95555" rx="8.3333" ry="8.3333" style="stroke:#CF2A2A;stroke-width:1.5625;"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="92.7083" x="708.8542" y="1196.9421">KubeAPI/Script</text><!--MD5=[9613459f691d2e974be088b7b0d6b3b6]
+entity KubeAPI_Device--><ellipse cx="469.7917" cy="14.5833" fill="#D95555" rx="8.3333" ry="8.3333" style="stroke:#CF2A2A;stroke-width:1.5625;"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="97.9167" x="420.8333" y="53.1921">KubeAPI/Device</text><!--MD5=[1ff6996f3977f8c02cf439efac3d4cce]
+entity gRPC--><ellipse cx="556.25" cy="1158.3333" fill="#D95555" rx="8.3333" ry="8.3333" style="stroke:#CF2A2A;stroke-width:1.5625;"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="31.25" x="540.625" y="1196.9421">gRPC</text><!--MD5=[96f7e1299d4a43069e6ed32352fcac20]
+entity HTTP--><ellipse cx="159.375" cy="813.5417" fill="#D95555" rx="8.3333" ry="8.3333" style="stroke:#CF2A2A;stroke-width:1.5625;"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="31.25" x="143.75" y="852.1505">HTTP</text><!--MD5=[9f979410722f6435e20fc2db26b7bd8f]
+entity SessionManager--><rect fill="url(#g127h5j2nglxfk0)" height="63.1083" rx="10.4167" ry="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="158.3333" x="477.0833" y="954.1667"/><rect fill="url(#g127h5j2nglxfk0)" height="10.4167" style="stroke:#33B2E2;stroke-width:1.5625;" width="15.625" x="614.5833" y="959.375"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="612.5" y="961.4583"/><rect fill="url(#g127h5j2nglxfk0)" height="2.0833" style="stroke:#33B2E2;stroke-width:1.5625;" width="4.1667" x="612.5" y="965.625"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="100" x="501.0417" y="995.9005">SessionManager</text><!--MD5=[5686199f0d948f42de9db5a0a8fbda4d]
+link KubeAPI_Device to DeviceReflector--><path d="M469.7917,24.0417 C469.7917,47.1042 469.7917,112.3542 469.7917,153.8646 " fill="none" id="KubeAPI_Device-to-DeviceReflector" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="469.7917,159.3021,473.9583,149.9271,469.7917,154.0937,465.625,149.9271,469.7917,159.3021" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[9eb9b90f3be16c7754f4d6f9aab852a4]
+link KubeAPI_Script to ScriptReflector--><path d="M757.6042,1148.8646 C764.4063,1124.1979 783.3333,1049.9167 783.3333,986.9792 C783.3333,317.1875 783.3333,317.1875 783.3333,317.1875 C783.3333,280.1146 755.7813,248.6458 728.4688,226.5521 " fill="none" id="KubeAPI_Script-to-ScriptReflector" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="724.0938,223.0937,728.8562,232.1806,728.1767,226.3273,734.03,225.6478,724.0938,223.0937" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[b33bb8a0399ac2825e500ccc23a4a778]
+link DeviceReflector to trigger_hook--><path d="M442.6771,222.9375 C429.1979,240.3021 414.3229,263.1458 407.2917,286.4583 C399.1458,313.5 398.4479,323.1771 407.2917,350 C410.3646,359.3333 415.4479,368.4063 421.125,376.6042 " fill="none" id="DeviceReflector-to-trigger_hook" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="424.3438,381.0625,422.2519,371.0188,421.3025,376.8344,415.4869,375.8849,424.3438,381.0625" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[acf7ea3c66b6ccf25868f8ae89041491]
+link trigger_hook to trigger--><path d="M453,444.9688 C452.8021,492.4896 452.4375,583.3021 452.2292,633.9271 " fill="none" id="trigger_hook-to-trigger" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="452.2083,639.2917,456.4285,629.9406,452.2381,634.0834,448.0953,629.893,452.2083,639.2917" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[0898510d0972f03bd09dc4b73bd0c368]
+link trigger to Scheduler--><path d="M458.9375,703.1458 C463.7292,724.6146 470.1458,753.3854 475.1979,776.0208 " fill="none" id="trigger-to-Scheduler" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="476.3854,781.3438,478.4191,771.2881,475.2556,776.2594,470.2842,773.0959,476.3854,781.3438" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[243f55114f74139d383fe6ade8353e35]
+link Reflector to trigger--><path d="M527.9792,539.6042 C512.2604,566.6771 489.3646,606.1146 472.8333,634.5729 " fill="none" id="Reflector-to-trigger" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="470.0313,639.4063,478.3516,633.4044,472.6537,634.9063,471.1518,629.2084,470.0313,639.4063" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[5dbd5343bbcf3af4f63f402d1612086f]
+link DeviceReflector to device_hook--><path d="M475.4583,223.0833 C478.6563,240.5104 482.6667,262.3958 486.0104,280.6667 " fill="none" id="DeviceReflector-to-device_hook" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="487.0313,286.2083,489.4409,276.2361,486.093,281.0852,481.2439,277.7373,487.0313,286.2083" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[a526e1d7cead5a7f32aba682f9bc3bbf]
+link ScriptReflector to script_hook--><path d="M671.9063,223.0833 C670.1667,240.5104 667.9792,262.3958 666.1563,280.6667 " fill="none" id="ScriptReflector-to-script_hook" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="665.5938,286.2083,670.6777,277.2973,666.1149,281.0261,662.3862,276.4634,665.5938,286.2083" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[f809743877e5687721962317fd796df6]
+link device_hook to Reflector--><path d="M516.4583,350.3021 C522.5938,359.7708 528.5208,370.5313 532.2917,381.25 C542.4688,410.2083 545.5625,445.0417 546.2813,470.6667 " fill="none" id="device_hook-to-Reflector" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="546.3958,475.9896,550.3472,466.5218,546.2768,470.7826,542.016,466.7122,546.3958,475.9896" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[09f7da3f42a15dc345eabafc735b0e41]
+link script_hook to Reflector--><path d="M643.2396,350.2292 C622.5521,383.4792 589.7292,436.2292 567.9896,471.1667 " fill="none" id="script_hook-to-Reflector" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="565.125,475.7604,573.6184,470.0059,567.8787,471.3396,566.545,465.5999,565.125,475.7604" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[d05ada42147f83a5e04e949fa81284d3]
+link Reflector to Scheduler--><path d="M544.9688,539.8958 C543.125,582.8646 537.4375,662.6042 519.7917,728.125 C515.3542,744.5938 508.2708,762.0313 501.5104,776.7396 " fill="none" id="Reflector-to-Scheduler" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="499.2396,781.625,506.9729,774.8836,501.4372,776.903,499.4178,771.3673,499.2396,781.625" style="stroke:#009FDB;stroke-width:3.125;"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="105.2083" x="551.0417" y="676.6296">RunScriptLookup</text><!--MD5=[3b63bbdd92462537fbb209f716e71da7]
+link Scheduler to SessionManager--><path d="M496.5417,845.4271 C509.0417,874.6354 527.8125,918.4688 540.9583,949.1875 " fill="none" id="Scheduler-to-SessionManager" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="543.0208,954,543.1576,943.7417,540.9692,949.2128,535.4981,947.0243,543.0208,954" style="stroke:#009FDB;stroke-width:3.125;"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="166.6667" x="537.5" y="911.5255">ManagerMsg { RunScript }</text><!--MD5=[c94bd5335ee8ba4212215a7c53893264]
+link Reflector to /api/debug--><path d="M489.4479,508.3229 C411.6563,509.9583 269.2604,521.625 165.625,580.2083 C142.4063,593.3333 122.4375,615.6979 108.2292,634.8646 " fill="none" id="Reflector-to-/api/debug" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="105.1042,639.1563,113.9902,634.0288,108.1693,634.9454,107.2528,629.1245,105.1042,639.1563" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[032bf555914ff8a3b5c37fc163a462c2]
+link /api/webhook to Scheduler--><path d="M305.2708,703.1458 C341.6979,725.5104 390.9896,755.7917 428.4792,778.8125 " fill="none" id="/api/webhook-to-Scheduler" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="432.9896,781.5833,427.1811,773.1268,428.5513,778.8578,422.8203,780.228,432.9896,781.5833" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[75a607815c345b4bb66841c5d9aa5ba4]
+link /api/debug to HTTP--><path d="M101.6458,703.1458 C117.4688,733.125 140.7917,777.3021 152.3542,799.1875 " fill="none" id="/api/debug-to-HTTP" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="154.8958,804.0104,154.2071,793.7743,152.4658,799.4037,146.8364,797.6624,154.8958,804.0104" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[0231a49ba91cd32cdb1fc37f2b6beb07]
+reverse link /api/webhook to HTTP--><path d="M230.9896,707.8021 C208.9375,740.0521 177.9167,785.3854 165.1875,804.0104 " fill="none" id="/api/webhook-backto-HTTP" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="234.1771,703.1458,225.4538,708.5454,231.2435,707.4494,232.3395,713.2391,234.1771,703.1458" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[a927607822fb12810fe4761f1d0dfdac]
+link SessionManager to gRPC--><path d="M556.25,1023.1042 C556.25,1060.5521 556.25,1117.1875 556.25,1143.2604 " fill="none" id="SessionManager-gRPC" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="556.25,1148.625,560.4167,1139.25,556.25,1143.4167,552.0833,1139.25,556.25,1148.625" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="556.25,1017.8229,552.0833,1027.1979,556.25,1023.0313,560.4167,1027.1979,556.25,1017.8229" style="stroke:#009FDB;stroke-width:3.125;"/><text fill="#5A5A5A" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="105.2083" x="565.625" y="1070.9005">ControllerService</text><!--MD5=[9ae40422d5aea7f15d979e1b59fd59ad]
+link SessionManager to KubeAPI_Script--><path d="M635.6979,1015.0938 C654.3438,1024.0521 673.2188,1035.2813 688.5417,1048.9583 C719.3542,1076.4583 740.7292,1121.5938 750.0104,1143.9167 " fill="none" id="SessionManager-to-KubeAPI_Script" style="stroke:#009FDB;stroke-width:3.125;"/><polygon fill="#009FDB" points="752,1148.8333,752.3487,1138.58,750.0477,1144.0047,744.623,1141.7037,752,1148.8333" style="stroke:#009FDB;stroke-width:3.125;"/><!--MD5=[50f0a33b09905617438ff228e6fcdd00]
+@startuml
+!theme bluegray
+() "KubeAPI/Script" as KubeAPI_Script
+() "KubeAPI/Device" as KubeAPI_Device
+() gRPC
+() HTTP
+package "Reflector" {
+[reflector<Device>] as DeviceReflector
+[reflector<Script>] as ScriptReflector
+KubeAPI_Device - -> [DeviceReflector]
+KubeAPI_Script - -> [ScriptReflector]
+[DeviceReflector] - -> [trigger_hook]
+[trigger_hook] - -> [trigger]
+[trigger] - -> [Scheduler]
+[Reflector] - -> [trigger]
+[DeviceReflector] - -> [device_hook]
+[ScriptReflector] - -> [script_hook]
+[device_hook] - -> [Reflector]
+[script_hook] - -> [Reflector]
+}
+[Reflector] - -> [Scheduler]: RunScriptLookup
+[Scheduler] - -> [SessionManager]: ManagerMsg { RunScript }
+package "WebServer" {
+[Reflector] - -> [/api/debug]
+[/api/webhook] - -> [Scheduler]
+[/api/debug] - -> HTTP
+[/api/webhook] <- - HTTP
+}
+[SessionManager] <- -> gRPC: ControllerService
+[SessionManager] - -> KubeAPI_Script
+@enduml
+
+@startuml
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+
+
+
+skinparam defaultFontName        "Verdana"
+skinparam defaultFontSize        12
+skinparam dpi                    100
+skinparam shadowing              false
+skinparam roundcorner            20
+skinparam ParticipantPadding     30
+skinparam BoxPadding             40
+skinparam Padding                8
+skinparam ArrowColor             #959595
+skinparam stereotype {
+    CBackgroundColor #f5f5f5
+    CBorderColor #c2c2c2
+    ABackgroundColor #c4ca33
+    ABorderColor #919700
+    IBackgroundColor #d95555
+    IBorderColor #a62222
+    EBackgroundColor #ee9033
+    EBorderColor #bb5d00
+    NBackgroundColor #3786be
+    NBorderColor #04538b
+}
+skinparam title {
+	FontColor	                 #009fdb
+	BorderColor	                 #c2c2c2
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #f5f5f5-#f2f2f2
+}
+
+
+skinparam legend {
+	BackgroundColor #f2f2f2
+	BorderColor #c2c2c2
+	FontColor #5a5a5a
+}
+
+skinparam swimlane {
+	BorderColor #0568ae
+	BorderThickness 2
+	TitleBackgroundColor  #f5f5f5-#f2f2f2
+	TitleFontColor #009fdb
+}
+
+
+skinparam activity {
+	FontColor #fff
+	BorderColor #009fdb
+	BackgroundColor #33b2e2-#009fdb
+	BarColor #b5bd00
+	StartColor #0568ae
+	EndColor #0568ae
+	DiamondBackgroundColor #f5f5f5-#c2c2c2
+  	DiamondBorderColor #c2c2c2
+	DiamondFontColor #5a5a5a
+}
+
+
+skinparam participant {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	ParticipantBorderThickness 2
+}
+
+
+skinparam actor {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam arrow {
+	Thickness 3
+	Color #009fdb
+	FontColor #5a5a5a
+}
+
+
+skinparam sequence {
+	BorderColor #009fdb
+	TitleFontColor #009fdb
+	BackgroundColor transparent
+	StartColor #009fdb
+	EndColor #009fdb
+	BoxBackgroundColor #d2d2d2
+	BoxBorderColor #959595
+	BoxFontColor #5a5a5a
+	DelayFontColor #5a5a5a
+	LifeLineBorderColor #c2c2c2
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor #f5f5f5
+	GroupBorderColor #959595
+	GroupFontColor #5a5a5a
+	GroupHeaderFontColor #0568ae
+	DividerBackgroundColor #fff-#d2d2d2
+    DividerBorderColor #959595
+    DividerBorderThickness 2
+    DividerFontColor #5a5a5a
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #959595
+	ReferenceFontColor #5a5a5a
+	ReferenceHeaderFontColor #0568ae
+	StereotypeFontColor #fff
+}
+
+
+skinparam partition {
+	BorderColor #009fdb
+	FontColor #009fdb
+	BackgroundColor transparent
+}
+
+
+skinparam collections {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+}
+
+
+skinparam control {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam entity {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam boundary {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	FontColor #009fdb
+}
+
+
+skinparam agent {
+	BackgroundColor #orange
+	BorderColor #999999
+	FontColor #333333
+}
+
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor #3786be-#0568ae
+	BorderColor #0568ae
+	FontColor #fff
+}
+
+
+skinparam artifact {
+	BackgroundColor #fff-#d2d2d2
+	BorderColor #c2c2c2
+	FontColor #5a5a5a
+}
+
+
+skinparam component {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+}
+
+
+skinparam interface {
+	BackgroundColor  #d95555
+	BorderColor  #cf2a2a
+	FontColor #5a5a5a
+}
+
+
+skinparam storage {
+	BackgroundColor #ee9033-#ea7400
+  	BorderColor #ea7400
+	FontColor #fff
+}
+
+
+skinparam node {
+	BackgroundColor #f5f5f5-#f2f2f2
+	BorderColor #c2c2c2
+	FontColor #009fdb
+}
+
+
+skinparam cloud {
+	BackgroundColor #F2FCFE-#eeeeee
+	BorderColor #F2FCFE
+	FontColor #009fdb
+}
+
+
+skinparam database {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	BorderColor #007faf
+}
+
+
+skinparam class {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	HeaderBackgroundColor #33b2e2-#009fdb
+	StereotypeFontColor #5a5a5a
+	BorderThickness 1
+	AttributeFontColor #d2d2d2
+	AttributeFontSize 11
+}
+
+
+skinparam object {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	StereotypeFontColor #5a5a5a
+	BorderThickness 1
+	AttributeFontColor #d2d2d2
+	AttributeFontSize 11
+}
+
+
+skinparam usecase {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	BorderThickness 2
+	StereotypeFontColor #009fdb
+}
+
+
+skinparam rectangle {
+		FontColor #5a5a5a
+	BorderColor #c2c2c2
+	BackgroundColor #fff-#fefefe
+	BorderThickness 2
+	StereotypeFontColor #009fdb
+}
+
+
+skinparam package {
+	FontColor #009fdb
+	BorderColor #33b2e2
+	BackgroundColor transparent
+	BorderThickness 2
+}
+
+
+skinparam folder {
+	BackgroundColor #fff-#f5f5f5
+  	BorderColor #ea7400
+	FontColor #ea7400
+	BorderThickness 2
+}
+
+
+skinparam frame {
+	BackgroundColor #fff-#f5f5f5
+  	BorderColor #0568ae
+	FontColor #0568ae
+	BorderThickness 2
+}
+
+
+skinparam state {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+	BorderColor #007faf
+	StartColor #0568ae
+	EndColor #0568ae
+	AttributeFontColor #d2d2d2
+	AttributeFontSize 11
+}
+
+
+skinparam queue {
+	
+	FontColor #fff
+	BorderColor #33b2e2
+	BackgroundColor #33b2e2-#009fdb
+
+}
+
+
+skinparam card {
+	BackgroundColor #3786be-#0568ae
+	BorderColor #0568ae
+	FontColor #fff
+}
+
+
+skinparam file {
+	BackgroundColor #f5f5f5-#f2f2f2
+	BorderColor #0568ae
+	FontColor #5a5a5a
+
+}
+
+
+() "KubeAPI/Script" as KubeAPI_Script
+() "KubeAPI/Device" as KubeAPI_Device
+() gRPC
+() HTTP
+package "Reflector" {
+[reflector<Device>] as DeviceReflector
+[reflector<Script>] as ScriptReflector
+KubeAPI_Device - -> [DeviceReflector]
+KubeAPI_Script - -> [ScriptReflector]
+[DeviceReflector] - -> [trigger_hook]
+[trigger_hook] - -> [trigger]
+[trigger] - -> [Scheduler]
+[Reflector] - -> [trigger]
+[DeviceReflector] - -> [device_hook]
+[ScriptReflector] - -> [script_hook]
+[device_hook] - -> [Reflector]
+[script_hook] - -> [Reflector]
+}
+[Reflector] - -> [Scheduler]: RunScriptLookup
+[Scheduler] - -> [SessionManager]: ManagerMsg { RunScript }
+package "WebServer" {
+[Reflector] - -> [/api/debug]
+[/api/webhook] - -> [Scheduler]
+[/api/debug] - -> HTTP
+[/api/webhook] <- - HTTP
+}
+[SessionManager] <- -> gRPC: ControllerService
+[SessionManager] - -> KubeAPI_Script
+@enduml
+
+PlantUML version 1.2021.12(Wed Oct 06 00:01:58 CST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: zh
+Country: CN
+--></g></svg></p><h4 class="mume-header" id="reflector">Reflector</h4>
+
+<p>Reflector&#x662F;&#x4E00;&#x4E2A;&#x4F7F;&#x7528;List&amp;Watch&#x76D1;&#x89C6;Kubernetes API &#x8D44;&#x6E90;&#x53D8;&#x52A8;&#x7684;&#x6A21;&#x5757;, &#x540C;&#x65F6;&#x4F1A;&#x5728;&#x5185;&#x5B58;&#x4E2D;&#x7EF4;&#x62A4;&#x4E00;&#x4EFD;&#x8D44;&#x6E90;&#x7684;&#x72B6;&#x6001;, &#x5373;Reflector&#x7ED3;&#x6784;&#x4F53;.Reflector&#x7ED3;&#x6784;&#x4F53;&#x8FD8;&#x5305;&#x62EC;&#x4E86;&#x4ECE;Device&#x5230;Script&#x7684;&#x6620;&#x5C04;, &#x4EE5;&#x65B9;&#x4FBF;&#x7684;&#x67E5;&#x627E;&#x89E6;&#x53D1;&#x5173;&#x7CFB;.<br>
+&#x76EE;&#x524D;&#x63A7;&#x5236;&#x5668;&#x4F1A;List&amp;Watch&#x4E24;&#x4E2A;Kubernetes API &#x8D44;&#x6E90;, &#x8868;&#x793A;&#x90E8;&#x7F72;&#x89C4;&#x5219;&#x7684;Script&#x8D44;&#x6E90;&#x548C;&#x8868;&#x793A;&#x90E8;&#x7F72;&#x8BBE;&#x5907;&#x7684;Device&#x8D44;&#x6E90;.</p>
+<p>reflector&#x51FD;&#x6570;&#x8D1F;&#x8F7D;&#x6267;&#x884C;List&amp;Watch, &#x5E76;&#x5C06;&#x8D44;&#x6E90;&#x7684;&#x53D8;&#x52A8;&#x4F5C;&#x4E3A;&#x4E8B;&#x4EF6;&#x6D41;&#x8F93;&#x51FA;. &#x901A;&#x8FC7;&#x5411;reflector&#x6DFB;&#x52A0;&#x540C;&#x6B65;&#x6216;&#x5F02;&#x6B65;hook&#x7684;&#x65B9;&#x5F0F;&#x5904;&#x7406;&#x4E8B;&#x4EF6;&#x6D41;.<br>
+&#x5176;&#x4E2D;device_hook&#x548C;script_hook&#x4F1A;&#x7EF4;&#x62A4;Reflector&#x7ED3;&#x6784;&#x4F53;, trigger_hook&#x4F1A;&#x8F93;&#x51FA;&#x6240;&#x6709;&#x4EA7;&#x751F;&#x53D8;&#x52A8;&#x7684;Device&#x8D44;&#x6E90;, trigger&#x4F1A;&#x6839;&#x636E;Reflector&#x7ED3;&#x6784;&#x4F53;&#x4E2D;&#x7684;Device&#x5230;Script&#x7684;&#x6620;&#x5C04;&#x4EA7;&#x751F;&#x89E6;&#x53D1;&#x4E8B;&#x4EF6;, &#x5176;&#x4E2D;&#x5305;&#x62EC;&#x4E86;&#x8981;&#x8FD0;&#x884C;&#x7684;Script&#x7684;name&#x548C;namespace.</p>
+<p>Scheduler&#x4F1A;&#x63A5;&#x6536;&#x89E6;&#x53D1;&#x4E8B;&#x4EF6;, &#x5E76;&#x6839;&#x636E;Script&#x7684;name&#x548C;namespace&#x8BFB;&#x53D6;Script&#x8D44;&#x6E90;, &#x5E76;&#x8BFB;&#x53D6;&#x5176;&#x4ED6;RunScript&#x6D88;&#x606F;&#x6240;&#x9700;&#x8981;&#x7684;&#x5185;&#x5BB9;.&#x968F;&#x540E;Scheduler&#x5C06;RunScript&#x901A;&#x8FC7;&#x516C;&#x5E73;&#x8C03;&#x5EA6;&#x5668;&#x53D1;&#x9001;&#x7ED9;&#x4E00;&#x4E2A;SessionManager&#x7BA1;&#x7406;&#x7684;&#x6267;&#x884C;&#x5668;gRPC&#x8FDE;&#x63A5;&#x4E0A;.</p>
+<h4 class="mume-header" id="sessionmanager">SessionManager</h4>
+
+<p>SessionManager&#x5373;gRPC&#x670D;&#x52A1;&#x5668;&#x7684;&#x5B9E;&#x73B0;, &#x8D1F;&#x8D23;&#x4E0E;&#x6267;&#x884C;&#x5668;&#x5EFA;&#x7ACB;&#x8FDE;&#x63A5;&#x5E76;&#x5904;&#x7406;gRPC&#x534F;&#x8BAE;. SessionManager&#x4F1A;&#x5C06;&#x4ECE;Scheduler&#x63A5;&#x6536;&#x5230;&#x7684;RunScript&#x6D88;&#x606F;&#x53D1;&#x7ED9;&#x6267;&#x884C;&#x5668;.</p>
+<h4 class="mume-header" id="webserver">WebServer</h4>
+
+<p>WebServer&#x63D0;&#x4F9B;&#x4E86;&#x4E24;&#x4E2A;api, debug&#x548C;webhook. debug&#x53EF;&#x4EE5;&#x5F97;&#x5230;Reflector&#x7684;&#x503C;, &#x53EF;&#x4EE5;&#x5224;&#x65AD;&#x63A7;&#x5236;&#x5668;&#x7684;&#x72B6;&#x6001;&#x662F;&#x5426;&#x6B63;&#x786E;. webhook&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x89E6;&#x53D1;&#x4E00;&#x4E2A;&#x811A;&#x672C;&#x7684;&#x6267;&#x884C;.</p>
+<h3 class="mume-header" id="%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B">&#x6267;&#x884C;&#x8FC7;&#x7A0B;</h3>
+
+<p><!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="1062.5px" preserveAspectRatio="none" style="width:909px;height:1062px;background:#00000000;" version="1.1" viewBox="0 0 909 1062" width="909.375px" zoomAndPan="magnify"><defs><linearGradient id="gfhar75vq0fwi0" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#4DABF5"/><stop offset="100%" stop-color="#2196F3"/></linearGradient><filter height="300%" id="ffhar75vq0fwi" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0833333333333335"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.166666666666667" dy="4.166666666666667" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter><linearGradient id="gfhar75vq0fwi1" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#FFFFFF"/></linearGradient></defs><g><line style="stroke:#CCCCCC;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="42.7083" x2="42.7083" y1="111.025" y2="956.1747"/><line style="stroke:#CCCCCC;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="129.1667" x2="129.1667" y1="111.025" y2="956.1747"/><line style="stroke:#CCCCCC;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="217.7083" x2="217.7083" y1="111.025" y2="956.1747"/><line style="stroke:#CCCCCC;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="312.5" x2="312.5" y1="111.025" y2="956.1747"/><line style="stroke:#CCCCCC;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="436.9792" x2="436.9792" y1="111.025" y2="956.1747"/><line style="stroke:#CCCCCC;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="563.0208" x2="563.0208" y1="111.025" y2="956.1747"/><line style="stroke:#CCCCCC;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="677.6042" x2="677.6042" y1="111.025" y2="956.1747"/><line style="stroke:#CCCCCC;stroke-width:2.0833333333333335;stroke-dasharray:5.0,5.0;" x1="813.0208" x2="813.0208" y1="111.025" y2="956.1747"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="48.9583" x="15.625" y="97.9838">Device1</text><ellipse cx="43.2292" cy="15.625" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="8.3333" ry="8.3333" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><path d="M43.2292,23.9583 L43.2292,52.0833 M29.6875,32.2917 L56.7708,32.2917 M43.2292,52.0833 L29.6875,67.7083 M43.2292,52.0833 L56.7708,67.7083 " fill="none" filter="url(#ffhar75vq0fwi)" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="48.9583" x="15.625" y="978.1169">Device1</text><ellipse cx="43.2292" cy="1001.5747" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="8.3333" ry="8.3333" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><path d="M43.2292,1009.908 L43.2292,1038.033 M29.6875,1018.2414 L56.7708,1018.2414 M43.2292,1038.033 L29.6875,1053.658 M43.2292,1038.033 L56.7708,1053.658 " fill="none" filter="url(#ffhar75vq0fwi)" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="48.9583" x="102.0833" y="97.9838">Device2</text><ellipse cx="129.6875" cy="15.625" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="8.3333" ry="8.3333" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><path d="M129.6875,23.9583 L129.6875,52.0833 M116.1458,32.2917 L143.2292,32.2917 M129.6875,52.0833 L116.1458,67.7083 M129.6875,52.0833 L143.2292,67.7083 " fill="none" filter="url(#ffhar75vq0fwi)" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="48.9583" x="102.0833" y="978.1169">Device2</text><ellipse cx="129.6875" cy="1001.5747" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="8.3333" ry="8.3333" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><path d="M129.6875,1009.908 L129.6875,1038.033 M116.1458,1018.2414 L143.2292,1018.2414 M129.6875,1038.033 L116.1458,1053.658 M129.6875,1038.033 L143.2292,1053.658 " fill="none" filter="url(#ffhar75vq0fwi)" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="52.0833" x="188.5417" y="97.9838">KubeAPI</text><ellipse cx="217.7083" cy="58.3333" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="12.5" ry="12.5" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><line style="stroke:#2196F3;stroke-width:2.0833333333333335;" x1="205.2083" x2="230.2083" y1="72.9167" y2="72.9167"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="52.0833" x="188.5417" y="978.1169">KubeAPI</text><ellipse cx="217.7083" cy="1007.8247" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="12.5" ry="12.5" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><line style="stroke:#2196F3;stroke-width:2.0833333333333335;" x1="205.2083" x2="230.2083" y1="1022.408" y2="1022.408"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="54.1667" x="282.2917" y="97.9838">Reflector</text><path d="M293.75,37.5 C293.75,27.0833 312.5,27.0833 312.5,27.0833 C312.5,27.0833 331.25,27.0833 331.25,37.5 L331.25,64.5833 C331.25,75 312.5,75 312.5,75 C312.5,75 293.75,75 293.75,64.5833 L293.75,37.5 " fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" style="stroke:#2196F3;stroke-width:1.5625;"/><path d="M293.75,37.5 C293.75,47.9167 312.5,47.9167 312.5,47.9167 C312.5,47.9167 331.25,47.9167 331.25,37.5 " fill="none" style="stroke:#2196F3;stroke-width:1.5625;"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="54.1667" x="282.2917" y="978.1169">Reflector</text><path d="M293.75,1001.5747 C293.75,991.158 312.5,991.158 312.5,991.158 C312.5,991.158 331.25,991.158 331.25,1001.5747 L331.25,1028.658 C331.25,1039.0747 312.5,1039.0747 312.5,1039.0747 C312.5,1039.0747 293.75,1039.0747 293.75,1028.658 L293.75,1001.5747 " fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" style="stroke:#2196F3;stroke-width:1.5625;"/><path d="M293.75,1001.5747 C293.75,1011.9914 312.5,1011.9914 312.5,1011.9914 C312.5,1011.9914 331.25,1011.9914 331.25,1001.5747 " fill="none" style="stroke:#2196F3;stroke-width:1.5625;"/><path d="M391.1458,64.5833 L483.8542,64.5833 C489.0625,64.5833 489.0625,87.8042 489.0625,87.8042 C489.0625,87.8042 489.0625,111.025 483.8542,111.025 L391.1458,111.025 C385.9375,111.025 385.9375,87.8042 385.9375,87.8042 C385.9375,87.8042 385.9375,64.5833 391.1458,64.5833 " fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><path d="M483.8542,64.5833 C478.6458,64.5833 478.6458,87.8042 478.6458,87.8042 C478.6458,111.025 483.8542,111.025 483.8542,111.025 " fill="none" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="61.4583" x="401.5625" y="92.7755">Scheduler</text><path d="M391.1458,955.1331 L483.8542,955.1331 C489.0625,955.1331 489.0625,978.3539 489.0625,978.3539 C489.0625,978.3539 489.0625,1001.5747 483.8542,1001.5747 L391.1458,1001.5747 C385.9375,1001.5747 385.9375,978.3539 385.9375,978.3539 C385.9375,978.3539 385.9375,955.1331 391.1458,955.1331 " fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><path d="M483.8542,955.1331 C478.6458,955.1331 478.6458,978.3539 478.6458,978.3539 C478.6458,1001.5747 483.8542,1001.5747 483.8542,1001.5747 " fill="none" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="61.4583" x="401.5625" y="983.3252">Scheduler</text><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="100" x="509.8958" y="97.9838">SessionManager</text><ellipse cx="563.0208" cy="58.3333" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="12.5" ry="12.5" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><line style="stroke:#2196F3;stroke-width:2.0833333333333335;" x1="550.5208" x2="575.5208" y1="72.9167" y2="72.9167"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="100" x="509.8958" y="978.1169">SessionManager</text><ellipse cx="563.0208" cy="1007.8247" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="12.5" ry="12.5" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><line style="stroke:#2196F3;stroke-width:2.0833333333333335;" x1="550.5208" x2="575.5208" y1="1022.408" y2="1022.408"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="55.2083" x="647.3958" y="97.9838">Executor</text><ellipse cx="678.125" cy="58.3333" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="12.5" ry="12.5" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><line style="stroke:#2196F3;stroke-width:2.0833333333333335;" x1="665.625" x2="690.625" y1="72.9167" y2="72.9167"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="55.2083" x="647.3958" y="978.1169">Executor</text><ellipse cx="678.125" cy="1007.8247" fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" rx="12.5" ry="12.5" style="stroke:#2196F3;stroke-width:2.0833333333333335;"/><line style="stroke:#2196F3;stroke-width:2.0833333333333335;" x1="665.625" x2="690.625" y1="1022.408" y2="1022.408"/><rect fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" height="50.6083" rx="4.1667" ry="4.1667" style="stroke:#2196F3;stroke-width:1.5625;" width="80.2083" x="771.3542" y="55.2083"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="44.7917" x="789.0625" y="85.4838">Worker</text><rect fill="url(#gfhar75vq0fwi0)" filter="url(#ffhar75vq0fwi)" height="50.6083" rx="4.1667" ry="4.1667" style="stroke:#2196F3;stroke-width:1.5625;" width="80.2083" x="771.3542" y="955.1331"/><text fill="#FFFFFF" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="44.7917" x="789.0625" y="985.4085">Worker</text><polygon fill="#2196F3" points="574.4792,159.55,564.0625,163.7166,574.4792,167.8833,570.3125,163.7166" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;" x1="568.2292" x2="677.0833" y1="163.7166" y2="163.7166"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="56.25" x="591.1458" y="148.5921">Continue</text><polygon fill="#2196F3" points="205.2083,210.1583,215.625,214.325,205.2083,218.4916,209.375,214.325" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="43.2292" x2="211.4583" y1="214.325" y2="214.325"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="28.125" x="60.9375" y="199.2004">sync</text><polygon fill="#2196F3" points="300,260.7666,310.4167,264.9333,300,269.0999,304.1667,264.9333" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="217.7083" x2="306.25" y1="264.9333" y2="264.9333"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="48.9583" x="235.4167" y="249.8088">Device1</text><polygon fill="#2196F3" points="425,311.3749,435.4167,315.5416,425,319.7083,429.1667,315.5416" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="312.5" x2="431.25" y1="315.5416" y2="315.5416"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="79.1667" x="330.2083" y="300.4171">trigger_hook</text><polygon fill="#2196F3" points="550.5208,361.9832,560.9375,366.1499,550.5208,370.3166,554.6875,366.1499" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="437.5" x2="556.7708" y1="366.1499" y2="366.1499"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="60.4167" x="455.2083" y="351.0254">RunScript</text><polygon fill="#2196F3" points="665.625,412.5916,676.0417,416.7582,665.625,420.9249,669.7917,416.7582" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;" x1="563.0208" x2="671.875" y1="416.7582" y2="416.7582"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="60.4167" x="580.7292" y="401.6337">RunScript</text><polygon fill="#2196F3" points="801.0417,463.1999,811.4583,467.3665,801.0417,471.5332,805.2083,467.3665" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="678.125" x2="807.2917" y1="467.3665" y2="467.3665"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="70.8333" x="695.8333" y="452.242">new thread</text><polygon fill="#2196F3" points="574.4792,513.8082,564.0625,517.9749,574.4792,522.1415,570.3125,517.9749" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="568.2292" x2="812.5" y1="517.9749" y2="517.9749"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="141.6667" x="591.1458" y="502.8503">update_device_desired</text><polygon fill="#2196F3" points="229.1667,564.4165,218.75,568.5832,229.1667,572.7498,225,568.5832" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="222.9167" x2="561.9792" y1="568.5832" y2="568.5832"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="123.9583" x="245.8333" y="553.4587">Patch Device Status</text><polygon fill="#2196F3" points="141.1458,615.0248,130.7292,619.1915,141.1458,623.3582,136.9792,619.1915" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="134.8958" x2="216.6667" y1="619.1915" y2="619.1915"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="28.125" x="157.8125" y="604.067">sync</text><polygon fill="#2196F3" points="574.4792,665.6331,564.0625,669.7998,574.4792,673.9665,570.3125,669.7998" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="568.2292" x2="812.5" y1="669.7998" y2="669.7998"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="131.25" x="591.1458" y="654.6753">update_script_status</text><polygon fill="#2196F3" points="229.1667,716.2415,218.75,720.4081,229.1667,724.5748,225,720.4081" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;stroke-dasharray:2.0,2.0;" x1="222.9167" x2="561.9792" y1="720.4081" y2="720.4081"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="118.75" x="245.8333" y="705.2836">Patch Script Status</text><polygon fill="#2196F3" points="574.4792,766.8498,564.0625,771.0164,574.4792,775.1831,570.3125,771.0164" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;" x1="568.2292" x2="677.0833" y1="771.0164" y2="771.0164"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="56.25" x="591.1458" y="755.8919">Continue</text><rect fill="url(#gfhar75vq0fwi1)" filter="url(#ffhar75vq0fwi)" height="3.125" style="stroke:url(#gfhar75vq0fwi1);stroke-width:1.0416666666666667;" width="902.6042" x="0" y="810.9039"/><line style="stroke:#666666;stroke-width:1.0416666666666667;" x1="0" x2="902.6042" y1="810.9039" y2="810.9039"/><line style="stroke:#666666;stroke-width:1.0416666666666667;" x1="0" x2="902.6042" y1="814.0289" y2="814.0289"/><rect fill="url(#gfhar75vq0fwi1)" filter="url(#ffhar75vq0fwi)" height="44.3583" style="stroke:#666666;stroke-width:2.0833333333333335;" width="81.25" x="410.6771" y="789.7664"/><text fill="#222222" font-family="Verdana" font-size="12.5" font-weight="bold" lengthAdjust="spacing" textLength="41.6667" x="427.3438" y="816.9169">loop...</text><polygon fill="#2196F3" points="574.4792,882.6497,564.0625,886.8164,574.4792,890.9831,570.3125,886.8164" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;" x1="568.2292" x2="677.0833" y1="886.8164" y2="886.8164"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="67.7083" x="591.1458" y="871.6919">Disconnect</text><polygon fill="#2196F3" points="665.625,933.2581,676.0417,937.4247,665.625,941.5914,669.7917,937.4247" style="stroke:#2196F3;stroke-width:1.0416666666666667;"/><line style="stroke:#2196F3;stroke-width:3.125;" x1="563.0208" x2="671.875" y1="937.4247" y2="937.4247"/><text fill="#222222" font-family="Verdana" font-size="12.5" lengthAdjust="spacing" textLength="67.7083" x="580.7292" y="922.3002">Disconnect</text><!--MD5=[c93d95fad24aa87b5ed17b99247ea468]
+@startuml
+!theme materia
+actor Device1
+actor Device2
+entity KubeAPI
+database Reflector
+queue Scheduler
+entity SessionManager
+entity Executor
+Executor -> SessionManager: Continue
+Device1 - -> KubeAPI: sync
+KubeAPI - -> Reflector: Device1
+Reflector - -> Scheduler: trigger_hook
+Scheduler - -> SessionManager: RunScript
+SessionManager -> Executor: RunScript
+Executor - -> Worker: new thread
+Worker - -> SessionManager: update_device_desired
+SessionManager - -> KubeAPI: Patch Device Status
+KubeAPI - -> Device2: sync
+Worker - -> SessionManager: update_script_status
+SessionManager - -> KubeAPI: Patch Script Status
+Executor -> SessionManager: Continue
+== loop... ==
+Executor -> SessionManager: Disconnect
+SessionManager -> Executor: Disconnect
+@enduml
+
+@startuml
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+
+skinparam defaultFontName       "Verdana"
+skinparam defaultFontSize       12
+skinparam dpi                   100
+skinparam shadowing             true
+skinparam roundcorner           8
+skinparam ParticipantPadding    40
+skinparam BoxPadding            40
+skinparam Padding               10
+skinparam ArrowColor            #666
+skinparam stereotype {
+    CBackgroundColor #fff
+    CBorderColor #cccccc
+    ABackgroundColor #70bf73
+    ABorderColor #3D8C40
+    IBackgroundColor #B7161C
+    IBorderColor #b7161c
+    EBackgroundColor #ffad33
+    EBorderColor #CC7A00
+    NBackgroundColor #b052c0
+    NBorderColor #7D1F8D
+}
+skinparam title {
+	FontColor	                 #2196F3
+	BorderColor	                 #cccccc
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #fff-#fff
+}
+
+skinparam legend {
+	BackgroundColor #fff
+	BorderColor #cccccc
+	FontColor #222
+}
+
+skinparam swimlane {
+	BorderColor #9C27B0
+	BorderThickness 2
+	TitleBackgroundColor  #fff-#fff
+	TitleFontColor #2196F3
+}
+
+
+skinparam activity {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	BarColor #4CAF50
+	StartColor #9C27B0
+	EndColor #9C27B0
+	DiamondBackgroundColor #FFF-#fff
+  	DiamondBorderColor #cccccc
+	DiamondFontColor #222
+}
+
+
+skinparam participant {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	ParticipantBorderThickness 2
+}
+
+
+skinparam actor {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	FontColor #222
+}
+
+
+skinparam arrow {
+	Thickness 3
+	Color #2196F3
+	FontColor #222
+}
+
+
+skinparam sequence {
+	BorderColor #2196F3
+	TitleFontColor #2196F3
+	BackgroundColor transparent
+	StartColor #2196F3
+	EndColor #2196F3
+	BoxBackgroundColor #fff
+	BoxBorderColor #666
+	BoxFontColor #222
+	DelayFontColor #222
+	LifeLineBorderColor #cccccc
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor #fff
+	GroupBorderColor #666
+	GroupFontColor #222
+	GroupHeaderFontColor #9C27B0
+	DividerBackgroundColor #FFF-#fff
+    DividerBorderColor #666
+    DividerBorderThickness 2
+    DividerFontColor #222
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #666
+	ReferenceFontColor #222
+	ReferenceHeaderFontColor #9C27B0
+	StereotypeFontColor #FFF
+}
+
+
+skinparam partition {
+	BorderColor #2196F3
+	FontColor #2196F3
+	BackgroundColor transparent
+}
+
+
+skinparam collections {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+}
+
+
+skinparam control {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	FontColor #222
+}
+
+
+skinparam entity {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	FontColor #222
+}
+
+
+skinparam boundary {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	FontColor #222
+}
+
+
+skinparam agent {
+	BackgroundColor #orange
+	BorderColor #999999
+	FontColor #333333
+}
+
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor #b052c0-#9C27B0
+	BorderColor #9C27B0
+	FontColor #FFF
+}
+
+
+skinparam artifact {
+	BackgroundColor #FFF-#fff
+	BorderColor #666
+	FontColor #666
+}
+
+
+skinparam component {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+}
+
+
+skinparam interface {
+	BackgroundColor  #B7161C
+	BorderColor  #e51c23
+	FontColor #222
+}
+
+
+skinparam storage {
+	BackgroundColor #ffad33-#ff9800
+  	BorderColor #ff9800
+	FontColor #FFF
+}
+
+
+skinparam node {
+	BackgroundColor #fff-#fff
+	BorderColor #222
+	FontColor #222
+}
+
+
+skinparam cloud {
+	BackgroundColor #F2FCFE-#eeeeee
+	BorderColor #F2FCFE
+	FontColor #222
+}
+
+
+skinparam database {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	FontColor #222
+}
+
+
+skinparam class {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	HeaderBackgroundColor #2196F3-#1a78c2
+	StereotypeFontColor #222
+	BorderThickness 1
+	AttributeFontColor #fff
+	AttributeFontSize 11
+}
+
+
+skinparam object {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	StereotypeFontColor #222
+	BorderThickness 1
+	AttributeFontColor #222
+	AttributeFontSize 11
+}
+
+
+skinparam usecase {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	BorderThickness 2
+	StereotypeFontColor #2196F3
+}
+
+
+skinparam rectangle {
+	FontColor #2196F3
+	BackgroundColor #fff-#fff
+	BorderThickness 2
+	StereotypeFontColor #2196F3
+}
+
+
+skinparam package {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	BackgroundColor #fff-#fff
+	BorderThickness 2
+}
+
+
+skinparam folder {
+	BackgroundColor #FFF-#fff
+  	BorderColor #ff9800
+	FontColor #ff9800
+	BorderThickness 2
+}
+
+
+skinparam frame {
+	BackgroundColor #FFF-#fff
+  	BorderColor #9C27B0
+	FontColor #9C27B0
+	BorderThickness 2
+}
+
+
+skinparam state {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+	BorderColor #1a78c2
+	StartColor #9C27B0
+	EndColor #9C27B0
+	AttributeFontColor #222
+	AttributeFontSize 11
+}
+
+
+skinparam queue {
+		FontColor #FFF
+	BorderColor #2196F3
+	BackgroundColor #4dabf5-#2196F3
+}
+
+
+skinparam card {
+	BackgroundColor #b052c0-#9C27B0
+	BorderColor #9C27B0
+	FontColor #FFF
+}
+
+
+skinparam file {
+	BackgroundColor #fff-#fff
+	BorderColor #666
+	FontColor #666
+
+}
+
+
+actor Device1
+actor Device2
+entity KubeAPI
+database Reflector
+queue Scheduler
+entity SessionManager
+entity Executor
+Executor -> SessionManager: Continue
+Device1 - -> KubeAPI: sync
+KubeAPI - -> Reflector: Device1
+Reflector - -> Scheduler: trigger_hook
+Scheduler - -> SessionManager: RunScript
+SessionManager -> Executor: RunScript
+Executor - -> Worker: new thread
+Worker - -> SessionManager: update_device_desired
+SessionManager - -> KubeAPI: Patch Device Status
+KubeAPI - -> Device2: sync
+Worker - -> SessionManager: update_script_status
+SessionManager - -> KubeAPI: Patch Script Status
+Executor -> SessionManager: Continue
+== loop... ==
+Executor -> SessionManager: Disconnect
+SessionManager -> Executor: Disconnect
+@enduml
+
+PlantUML version 1.2021.12(Wed Oct 06 00:01:58 CST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: zh
+Country: CN
+--></g></svg></p><h2 class="mume-header" id="%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3">&#x8F6F;&#x4EF6;&#x5B89;&#x88C5;&#x548C;&#x914D;&#x7F6E;&#x6587;&#x6863;</h2>
+
+<h3 class="mume-header" id="%E5%85%88%E5%86%B3%E6%9D%A1%E4%BB%B6">&#x5148;&#x51B3;&#x6761;&#x4EF6;</h3>
+
+<p>&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x57FA;&#x4E8E;Kubernetes&#x548C;KubeEdge&#x63D0;&#x4F9B;&#x7684;&#x73AF;&#x5883;&#x8FD0;&#x884C;, &#x56E0;&#x6B64;&#x9700;&#x8981;&#x5148;&#x5B89;&#x88C5;Kubernetes&#x548C;KubeEdge.</p>
+<h4 class="mume-header" id="kubernetes">Kubernetes</h4>
+
+<p>&#x8BF7;&#x53C2;&#x7167;Kubernetes&#x5B98;&#x65B9;&#x6587;&#x6863;. &#x5EFA;&#x8BAE;&#x5B89;&#x88C5;<code>1.22</code>&#x7248;&#x672C;&#x7684;Kubernetes</p>
+<ul>
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">&#x5B89;&#x88C5;<code>kubeadm</code></a>
+<ul>
+<li>&#x8BE5;&#x8FC7;&#x7A0B;&#x9700;&#x8981;&#x8BBF;&#x95EE;<code>google.com</code>&#x548C;<code>kubernetes.io</code>, &#x8BF7;&#x786E;&#x4FDD;&#x5404;&#x8282;&#x70B9;&#x7684;&#x7F51;&#x7EDC;&#x53EF;&#x4EE5;&#x6B63;&#x5E38;&#x8BBF;&#x95EE;&#x8BE5;&#x57DF;&#x540D;</li>
+</ul>
+</li>
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/">&#x521B;&#x5EFA;&#x96C6;&#x7FA4;</a>
+<ul>
+<li>&#x8BE5;&#x8FC7;&#x7A0B;&#x9700;&#x8981;&#x8BBF;&#x95EE;<code>google.com</code>&#x548C;<code>k8s.gcr.io</code>, &#x8BF7;&#x786E;&#x4FDD;&#x5404;&#x8282;&#x70B9;&#x7684;&#x7F51;&#x7EDC;&#x53EF;&#x4EE5;&#x6B63;&#x5E38;&#x8BBF;&#x95EE;&#x8BE5;&#x57DF;&#x540D;</li>
+</ul>
+</li>
+</ul>
+<p>&#x8BF7;&#x5728;&#x5F00;&#x53D1;&#x673A;&#x4E0A;&#x5B89;&#x88C5;kubectl, &#x5E76;&#x6309;&#x7167;&#x521B;&#x5EFA;&#x96C6;&#x7FA4;&#x7684;&#x8F93;&#x51FA;&#x914D;&#x7F6E;<code>.kube/config</code>&#x914D;&#x7F6E;&#x6587;&#x4EF6;.</p>
+<h4 class="mume-header" id="kubeedge">KubeEdge</h4>
+
+<p>&#x8BF7;&#x53C2;&#x7167;KubeEdge&#x5B98;&#x65B9;&#x6587;&#x6863;.</p>
+<h5 class="mume-header" id="%E4%BA%91%E8%8A%82%E7%82%B9">&#x4E91;&#x8282;&#x70B9;</h5>
+
+<p>&#x8BF7;&#x5728;Kubernetes&#x7684;master&#x8282;&#x70B9;&#x6267;&#x884C;&#x5982;&#x4E0B;&#x64CD;&#x4F5C;</p>
+<ul>
+<li>&#x4ECE;GitHub&#x4E0B;&#x8F7D;&#x6700;&#x65B0;&#x7248;&#x7684;<a href="https://github.com/kubeedge/kubeedge/releases">keadm</a></li>
+<li>&#x89E3;&#x538B;keadm&#x5E76;&#x79FB;&#x52A8;&#x5230;<code>/usr/local/bin</code></li>
+<li><a href="https://kubeedge.io/en/docs/setup/keadm/#setup-cloud-side-kubeedge-master-node">&#x5B89;&#x88C5;&#x4E91;&#x7AEF;&#x7EC4;&#x4EF6;cloudcore</a>
+<ul>
+<li>&#x7B80;&#x8A00;&#x4E4B;, &#x6267;&#x884C;<code>sudo keadm init</code></li>
+<li>&#x8BE5;&#x8F6F;&#x4EF6;&#x9700;&#x8981;&#x8BBF;&#x95EE;<code>github.com</code>&#x548C;<code>raw.githubusercontent.com</code>, &#x8BF7;&#x786E;&#x4FDD;&#x7F51;&#x7EDC;&#x53EF;&#x4EE5;&#x6B63;&#x5E38;&#x8BBF;&#x95EE;&#x8BE5;&#x57DF;&#x540D;</li>
+</ul>
+</li>
+</ul>
+<h5 class="mume-header" id="%E8%BE%B9%E7%BC%98%E8%8A%82%E7%82%B9">&#x8FB9;&#x7F18;&#x8282;&#x70B9;</h5>
+
+<p>&#x8BF7;&#x5728;&#x8FB9;&#x7F18;&#x8282;&#x70B9;&#x4E0A;&#x6267;&#x884C;&#x5982;&#x4E0B;&#x64CD;&#x4F5C;. &#x8FB9;&#x7F18;&#x8282;&#x70B9;&#x5FC5;&#x987B;<strong>&#x6CA1;&#x6709;</strong>&#x52A0;&#x5165;Kubernetes&#x96C6;&#x7FA4;.</p>
+<ul>
+<li>&#x4ECE;GitHub&#x4E0B;&#x8F7D;&#x6700;&#x65B0;&#x7248;&#x7684;<a href="https://github.com/kubeedge/kubeedge/releases">keadm</a></li>
+<li>&#x89E3;&#x538B;keadm&#x5E76;&#x79FB;&#x52A8;&#x5230;<code>/usr/local/bin</code></li>
+<li><a href="https://kubeedge.io/en/docs/setup/keadm/#setup-edge-side-kubeedge-worker-node">&#x5B89;&#x88C5;&#x8FB9;&#x7F18;&#x8282;&#x70B9;&#x7EC4;&#x4EF6;edgecore</a></li>
+</ul>
+<h4 class="mume-header" id="rust">Rust</h4>
+
+<p>&#x672C;&#x8F6F;&#x4EF6;&#x91C7;&#x7528;Rust&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x7F16;&#x5199;, &#x8BF7;&#x5728;&#x5F00;&#x53D1;&#x8BA1;&#x7B97;&#x673A;&#x4E0A;&#x5B89;&#x88C5;Rust&#x7F16;&#x8BD1;&#x5668;&#x548C;C/C++&#x7F16;&#x8BD1;&#x5668;.</p>
+<p>Rust&#x7684;&#x5B89;&#x88C5;&#x65B9;&#x5F0F;&#x8BF7;&#x53C2;&#x8003;<a href="https://www.rust-lang.org/learn/get-started">Rust&#x7A0B;&#x5E8F;&#x8BED;&#x8A00;&#x5B98;&#x7F51;&#x6587;&#x6863;</a>. C/C++&#x7F16;&#x8BD1;&#x5668;&#x53CA;&#x5176;&#x5DE5;&#x5177;&#x7684;&#x5B89;&#x88C5;&#x53C2;&#x8003;&#x5404;&#x7CFB;&#x7EDF;&#x7684;&#x5B98;&#x65B9;&#x6587;&#x6863;.</p>
+<h4 class="mume-header" id="oci%E5%AE%B9%E5%99%A8%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7">OCI&#x5BB9;&#x5668;&#x6784;&#x5EFA;&#x5DE5;&#x5177;</h4>
+
+<p>&#x8BF7;&#x5B89;&#x88C5;&#x4E00;&#x4E2A;&#x53EF;&#x4EE5;&#x6784;&#x5EFA;OCI&#x5BB9;&#x5668;&#x7684;&#x5DE5;&#x5177;, &#x53EF;&#x4EE5;&#x9009;&#x62E9;&#x5982;&#x4E0B;&#x7EC4;&#x5408;</p>
+<ul>
+<li>docker</li>
+<li>containerd/nerdctl/buildkit</li>
+<li>podman/buildah</li>
+</ul>
+<h3 class="mume-header" id="%E6%B5%8B%E8%AF%95">&#x6D4B;&#x8BD5;</h3>
+
+<h4 class="mume-header" id="%E7%94%9F%E6%88%90script-crd">&#x751F;&#x6210;Script CRD</h4>
+
+<p>&#x8FD0;&#x884C;<code>/utils/script-crd</code>&#x4E0B;&#x7684;&#x9879;&#x76EE;, &#x53EF;&#x4EE5;&#x5F97;&#x5230;Script CRD&#x7684;&#x8F93;&#x51FA;.</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token builtin class-name">cd</span> /utils/script-crd
+cargo run --release <span class="token operator">&gt;</span> <span class="token punctuation">..</span>/<span class="token punctuation">..</span>/config/script_crd.yaml
+</pre><p>&#x5982;&#x679C;&#x6CA1;&#x6709;&#x5BF9;proto&#x4E0B;&#x7684;&#x534F;&#x8BAE;&#x505A;&#x51FA;&#x53D8;&#x52A8;,&#x5219;&#x4E0D;&#x9700;&#x8981;&#x6267;&#x884C;&#x6B64;&#x64CD;&#x4F5C;.</p>
+<h4 class="mume-header" id="%E7%BC%96%E8%AF%91%E9%A1%B9%E7%9B%AE">&#x7F16;&#x8BD1;&#x9879;&#x76EE;</h4>
+
+<p>&#x867D;&#x7136;kubernetes&#x53EA;&#x80FD;&#x5728;Linux&#x4E0A;&#x4F7F;&#x7528;, &#x4F46;&#x672C;&#x9879;&#x76EE;&#x4E0D;&#x9650;&#x5236;&#x5F00;&#x53D1;&#x9636;&#x6BB5;&#x80FD;&#x8FD0;&#x884C;&#x7684;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;. &#x5728;&#x5F00;&#x53D1;&#x673A;&#x4E0A;&#x9879;&#x76EE;&#x6839;&#x76EE;&#x5F55;&#x8FD0;&#x884C;&#x8BE5;&#x547D;&#x4EE4;&#x5373;&#x53EF;&#x7F16;&#x8BD1;&#x6240;&#x6709;&#x7EC4;&#x4EF6;.</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell">cargo build --release
+</pre><p>&#x4E8C;&#x8FDB;&#x5236;&#x4F4D;&#x4E8E;<code>target/release</code>&#x4E0B;.</p>
+<h4 class="mume-header" id="%E8%BF%90%E8%A1%8C">&#x8FD0;&#x884C;</h4>
+
+<p>&#x6309;&#x5982;&#x4E0B;&#x987A;&#x5E8F;&#x542F;&#x52A8;&#x5404;&#x4E2A;&#x670D;&#x52A1;</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell">cloud
+deno_executor
+filter-server
+</pre><p>&#x6267;&#x884C;&#x5982;&#x4E0B;&#x547D;&#x4EE4;, &#x5982;&#x679C;&#x6709;&#x8F93;&#x51FA;, &#x4EE3;&#x8868;&#x63A7;&#x5236;&#x5668;&#x6B63;&#x5E38;&#x542F;&#x52A8;</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">curl</span> -v http://127.0.0.1:8000/api/v1alpha/debug
+</pre><h3 class="mume-header" id="%E9%85%8D%E7%BD%AE">&#x914D;&#x7F6E;</h3>
+
+<h4 class="mume-header" id="controller">controller</h4>
+
+<p>&#x4E91;&#x7AEF;&#x63A7;&#x5236;&#x5668;&#x652F;&#x6301;&#x5982;&#x4E0B;&#x9009;&#x9879;.</p>
+<pre data-role="codeBlock" data-info="txt" class="language-txt">cloud 
+
+USAGE:
+    cloud [OPTIONS]
+
+OPTIONS:
+    -g &lt;GRPC&gt;        [default: 0.0.0.0:8001]
+    -h, --help       Print help information
+    -m &lt;MQTT&gt;        [default: 127.0.0.1:1883]
+    -w &lt;WEB&gt;         [default: 0.0.0.0:8000]
+</pre><p>&#x5176;&#x4E2D;</p>
+<ul>
+<li>GRPC&#x4E3A;executor&#x7684;&#x8FDE;&#x63A5;&#x7AEF;&#x53E3;</li>
+<li>MQTT&#x4E3A;MQT Broker&#x7684;ip/&#x7AEF;&#x53E3;&#x53F7;</li>
+<li>WEB&#x4E3A;&#x63A7;&#x5236;&#x5668;&#x7684;webhook&#x548C;&#x8C03;&#x8BD5;api&#x7684;&#x8FDE;&#x63A5;&#x7AEF;&#x53E3;</li>
+</ul>
+<p>&#x5728;&#x96C6;&#x7FA4;&#x5916;&#x90E8;&#x8FD0;&#x884C;&#x65F6;, &#x63A7;&#x5236;&#x5668;&#x4F1A;&#x81EA;&#x52A8;&#x8BFB;&#x53D6;<code>~/.kube/config</code>&#x4E0B;&#x7684;&#x51ED;&#x636E;&#x548C;&#x914D;&#x7F6E;&#x8BBF;&#x95EE;Kubernetes&#x96C6;&#x7FA4;.</p>
+<h4 class="mume-header" id="executor">executor</h4>
+
+<p>&#x6267;&#x884C;&#x5668;&#x53EA;&#x652F;&#x6301;&#x4E00;&#x4E2A;&#x53C2;&#x6570;, &#x5373;controller&#x7684;GRPC&#x8FDE;&#x63A5;&#x57DF;&#x540D;.</p>
+<h3 class="mume-header" id="%E5%8F%91%E5%B8%83">&#x53D1;&#x5E03;</h3>
+
+<h4 class="mume-header" id="%E7%BC%96%E8%AF%91controller">&#x7F16;&#x8BD1;controller</h4>
+
+<p>&#x6784;&#x5EFA;<code>controller/cloud</code>&#x4E0B;&#x7684;Dockerfile, &#x5E76;&#x5C06;&#x8BE5;&#x955C;&#x50CF;&#x53D1;&#x5E03;&#x5230;&#x79C1;&#x6709;register</p>
+<h4 class="mume-header" id="%E7%BC%96%E8%AF%91executor">&#x7F16;&#x8BD1;executor</h4>
+
+<p>&#x6784;&#x5EFA;<code>executor/deno</code>&#x4E0B;&#x7684;Dockerfile, &#x5E76;&#x5C06;&#x8BE5;&#x955C;&#x50CF;&#x53D1;&#x5E03;&#x5230;&#x79C1;&#x6709;register</p>
+<h3 class="mume-header" id="%E9%83%A8%E7%BD%B2">&#x90E8;&#x7F72;</h3>
+
+<p>&#x90E8;&#x7F72;&#x9700;&#x8981;&#x5E94;&#x7528;&#x5982;&#x4E0B;yaml, &#x5728;&#x5E94;&#x7528;&#x524D;&#x68C0;&#x67E5;&#x5185;&#x5BB9;&#x5E76;&#x505A;&#x51FA;&#x5FC5;&#x8981;&#x7684;&#x8C03;&#x6574;, &#x5982;URL, &#x955C;&#x50CF;&#x5730;&#x5740;&#x548C;ip&#x5730;&#x5740;</p>
+<pre data-role="codeBlock" data-info="list" class="language-list"><code>config/controller_account.yaml
+config/script_crd.yaml
+controller/cloud/deployment-cloud.yaml
+controller/cloud/service-cloud.yaml
+executor/deno/deployment-deno.yaml
+</code></pre><p>&#x53EF;&#x4EE5;&#x5728;<code>controller/cloud/deployment-cloud.yaml</code>&#x7684;<code>spec.template.spec.containers[0].args</code>&#x6307;&#x5B9A;&#x63A7;&#x5236;&#x5668;&#x7684;&#x53C2;&#x6570;, &#x4FEE;&#x6539;&#x7AEF;&#x53E3;&#x53F7;&#x540E;, &#x8BF7;&#x4E00;&#x5E76;&#x4FEE;&#x6539;<code>controller/cloud/service-cloud.yaml</code>&#x4E2D;&#x7684;&#x7AEF;&#x53E3;&#x53F7;&#x6620;&#x5C04;.</p>
+<p>&#x53EF;&#x4EE5;&#x5728;<code>executor/deno/deployment-deno.yaml</code>&#x7684;<code>spec.template.spec.containers[0].args</code>&#x6307;&#x5B9A;&#x6267;&#x884C;&#x5668;&#x8981;&#x8FDE;&#x63A5;&#x7684;&#x63A7;&#x5236;&#x6743;&#x57DF;&#x540D;.</p>
+<h3 class="mume-header" id="%E5%8F%AF%E9%80%89%E8%BF%90%E8%A1%8C%E7%A4%BA%E4%BE%8B%E8%84%9A%E6%9C%AC">(&#x53EF;&#x9009;)&#x8FD0;&#x884C;&#x793A;&#x4F8B;&#x811A;&#x672C;</h3>
+
+<p>&#x8BF7;&#x989D;&#x5916;&#x6784;&#x5EFA;<code>utils/filter-server</code>&#x4E0B;&#x7684;Dockerfile, &#x5E76;&#x5C06;&#x8BE5;&#x955C;&#x50CF;&#x53D1;&#x5E03;&#x5230;&#x79C1;&#x6709;register</p>
+<p>&#x8BF7;&#x90E8;&#x7F72;http&#x670D;&#x52A1;&#x5668;, &#x5C06;&#x6839;&#x76EE;&#x5F55;&#x8BBE;&#x7F6E;&#x4E3A;<code>config/register</code>, &#x968F;&#x540E;&#x6839;&#x636E;<code>sercice-filter</code>&#x7684;&#x96C6;&#x7FA4;DNS&#x8BBE;&#x7F6E;&#x4FEE;&#x6539;<code>config/test_script.yaml</code>&#x4E2D;&#x7684;<code>spec.env.filter_service_url</code>&#x7684;&#x57DF;&#x540D;&#x4E3A;&#x96C6;&#x7FA4;dns&#x7ED9;&#x5B9A;&#x7684;&#x5730;&#x5740;, &#x5C06;<code>spec.manifest.register</code>&#x7684;&#x57DF;&#x540D;&#x8BBE;&#x7F6E;&#x4E3A;http&#x670D;&#x52A1;&#x5668;&#x7684;&#x57DF;&#x540D;.</p>
+<p>&#x8BF7;&#x989D;&#x5916;&#x5E94;&#x7528;&#x5982;&#x4E0B;yaml</p>
+<pre data-role="codeBlock" data-info="list" class="language-list"><code>utils/mapper/switch.model.yaml
+utils/mapper/switch.yaml
+utils/mapper/temp.model.yaml
+utils/mapper/temp.yaml
+utils/filter-server/deployment-filter.yaml
+utils/filter-server/sercice-filter.yaml
+config/test_script.yaml
+</code></pre><p>&#x8FD0;&#x884C;&#x5982;&#x4E0B;&#x547D;&#x4EE4;&#x6267;&#x884C;&#x793A;&#x4F8B;&#x811A;&#x672C;</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">curl</span> -v <span class="token string">&quot;http://127.0.0.1:8000/api/v1alpha/webhook?namespace=default&amp;name=test-script&quot;</span>
+</pre><p>&#x67E5;&#x770B;deno_executor&#x7684;&#x8F93;&#x51FA;, &#x53EF;&#x4EE5;&#x770B;&#x5230;&#x811A;&#x672C;&#x7684;&#x8F93;&#x51FA;.</p>
+<p>&#x8FD0;&#x884C;&#x5982;&#x4E0B;&#x547D;&#x4EE4;&#x67E5;&#x770B;&#x811A;&#x672C;&#x7684;&#x8FD0;&#x884C;&#x7ED3;&#x679C;, Status.Message&#x7684;&#x72B6;&#x6001;&#x5E94;&#x8BE5;&#x4E3A;&#x7A7A;, Status.Status&#x7684;&#x72B6;&#x6001;&#x5E94;&#x8BE5;&#x4E3A;0</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell">kubectl describe scripts.hit.edu.cn test-script
+</pre><h3 class="mume-header" id="%E7%BC%96%E5%86%99%E6%96%B0%E7%9A%84%E8%84%9A%E6%9C%AC">&#x7F16;&#x5199;&#x65B0;&#x7684;&#x811A;&#x672C;</h3>
+
+<p>&#x811A;&#x672C;&#x7684;&#x7F16;&#x5199;&#x5206;&#x4E3A;&#x4E24;&#x6B65;: 1. &#x4F7F;&#x7528;&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x7F16;&#x5199;&#x811A;&#x672C; 2. &#x7F16;&#x5199;Script&#x8D44;&#x6E90;&#x7684;&#x5B9A;&#x4E49;&#x6587;&#x4EF6;&#x5E76;&#x5E94;&#x7528;&#x5230;&#x96C6;&#x7FA4;</p>
+<h4 class="mume-header" id="%E8%84%9A%E6%9C%AC%E9%83%A8%E5%88%86">&#x811A;&#x672C;&#x90E8;&#x5206;</h4>
+
+<p>&#x76EE;&#x524D;&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x53EA;&#x652F;&#x6301;ECMAScript&#x8BED;&#x8A00;. WebAssembly&#x7684;&#x652F;&#x6301;&#x6B63;&#x5728;&#x5F00;&#x53D1;&#x4E2D;, &#x6682;&#x65E0;&#x652F;&#x6301;&#x5176;&#x4ED6;&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x7684;&#x8BA1;&#x5212;.</p>
+<p>&#x811A;&#x672C;&#x652F;&#x6301;&#x6807;&#x51C6;&#x7684;ECMAScript&#x8BED;&#x8A00;, &#x5E76;&#x5E26;&#x6709;&#x90E8;&#x5206;Web API&#x7684;&#x652F;&#x6301;, &#x7531;&#x4E8E;Web API&#x7684;&#x652F;&#x6301;&#x5C1A;&#x5728;&#x5F00;&#x53D1;, &#x56E0;&#x6B64;&#x5E76;&#x6CA1;&#x6709;&#x5BF9;&#x8FD9;&#x90E8;&#x5206;API&#x662F;&#x5426;&#x7B26;&#x5408;&#x89C4;&#x8303;&#x8FDB;&#x884C;&#x68C0;&#x67E5;.</p>
+<p>&#x9664;&#x4E86;ECMAScript&#x7684;&#x6807;&#x51C6;&#x5168;&#x5C40;&#x53D8;&#x91CF;&#x4E4B;&#x5916;, &#x89C4;&#x5219;&#x5F15;&#x64CE;&#x8FD8;&#x5177;&#x6709;&#x989D;&#x5916;&#x4E24;&#x4E2A;&#x53EA;&#x8BFB;&#x5168;&#x5C40;&#x53D8;&#x91CF;, <code>Deno</code>&#x548C;<code>Device</code>.</p>
+<p>Device&#x5168;&#x5C40;&#x53D8;&#x91CF;&#x5177;&#x6709;&#x5982;&#x4E0B;API</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token comment">/// &#x8FD4;&#x56DE;&#x53EF;&#x8BFB;&#x8BBE;&#x5907;&#x540D;&#x79F0;&#x7684;Array</span>
+<span class="token keyword keyword-function">function</span> <span class="token function">listReadableDevices</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/// &#x8FD4;&#x56DE;&#x53EF;&#x5199;&#x8BBE;&#x5907;&#x540D;&#x79F0;&#x7684;Array</span>
+<span class="token keyword keyword-function">function</span> <span class="token function">listWritableDevices</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/// &#x83B7;&#x5F97;device&#x8BBE;&#x5907;&#x7684;property&#x5C5E;&#x6027;&#x503C;</span>
+<span class="token keyword keyword-function">function</span> <span class="token function">getDeviceStatus</span><span class="token punctuation">(</span><span class="token parameter">device<span class="token punctuation">,</span> property</span><span class="token punctuation">)</span>
+<span class="token comment">/// &#x8BBE;&#x7F6E;device&#x8BBE;&#x5907;&#x7684;property&#x5C5E;&#x6027;&#x503C;</span>
+<span class="token comment">/// &#x5BF9;&#x5C5E;&#x6027;&#x503C;&#x7684;&#x4FEE;&#x6539;&#x53EA;&#x6709;&#x63D0;&#x4EA4;&#x540E;&#x624D;&#x4F1A;&#x751F;&#x6548;</span>
+<span class="token keyword keyword-function">function</span> <span class="token function">setDeviceStatus</span><span class="token punctuation">(</span><span class="token parameter">device<span class="token punctuation">,</span> property<span class="token punctuation">,</span> value</span><span class="token punctuation">)</span>
+<span class="token comment">/// &#x63D0;&#x4EA4;&#x5BF9;&#x5C5E;&#x6027;&#x503C;&#x7684;&#x4FEE;&#x6539;</span>
+<span class="token keyword keyword-async">async</span> <span class="token keyword keyword-function">function</span> <span class="token function">commitDevice</span><span class="token punctuation">(</span><span class="token parameter">device<span class="token punctuation">,</span> qos</span><span class="token punctuation">)</span>
+</pre><p>Deno&#x5168;&#x5C40;&#x53D8;&#x91CF;&#x4E0B;&#x7684;&#x529F;&#x80FD;&#x5747;&#x4E3A;&#x5185;&#x90E8;&#x5B9E;&#x73B0;&#x6216;&#x4E34;&#x65F6;&#x529F;&#x80FD;, &#x4E0D;&#x5E94;&#x89C6;&#x4E3A;&#x516C;&#x5F00;&#x529F;&#x80FD;.<br>
+&#x4F46;&#x89C4;&#x5219;&#x5F15;&#x64CE;&#x7684;&#x786E;&#x6709;&#x8BA1;&#x5212;&#x90E8;&#x5206;&#x517C;&#x5BB9;Deno&#x7684;&#x6807;&#x51C6;&#x5E93;, &#x53EA;&#x662F;&#x8BE5;&#x529F;&#x80FD;&#x6B63;&#x5728;&#x5F00;&#x53D1;.</p>
+<p>&#x811A;&#x672C;&#x7684;&#x5165;&#x53E3;&#x4E3A;<code>main()</code>&#x51FD;&#x6570;, main&#x51FD;&#x6570;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x4F1A;&#x88AB;&#x4E22;&#x5F03;.</p>
+<h4 class="mume-header" id="script%E8%B5%84%E6%BA%90%E5%AE%9A%E4%B9%89">script&#x8D44;&#x6E90;&#x5B9A;&#x4E49;</h4>
+
+<p>Script&#x8D44;&#x6E90;&#x4E3A;yaml&#x6587;&#x4EF6;, &#x5176;&#x793A;&#x4F8B;&#x5982;&#x4E0B;:</p>
+<pre data-role="codeBlock" data-info="yaml" class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> hit.edu.cn/v1alpha1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Script
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> test<span class="token punctuation">-</span>script
+  <span class="token key atrule">namespace</span><span class="token punctuation">:</span> default
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">readSelector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchNames</span><span class="token punctuation">:</span>
+      <span class="token key atrule">temp-sensor-name</span><span class="token punctuation">:</span> dht11
+  <span class="token key atrule">writeSelector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchNames</span><span class="token punctuation">:</span>
+      <span class="token key atrule">target-device-name</span><span class="token punctuation">:</span> switch
+  <span class="token key atrule">env</span><span class="token punctuation">:</span>
+    <span class="token key atrule">filter_service_url</span><span class="token punctuation">:</span> <span class="token string">&quot;http://127.0.0.1:8003/api/v1alpha1/filter&quot;</span>
+    <span class="token key atrule">threshold-value</span><span class="token punctuation">:</span> <span class="token string">&quot;400&quot;</span>
+  <span class="token key atrule">manifest</span><span class="token punctuation">:</span>
+    <span class="token key atrule">scriptType</span><span class="token punctuation">:</span> Js
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> test
+    <span class="token key atrule">version</span><span class="token punctuation">:</span> 0.1_beta1
+    <span class="token key atrule">register</span><span class="token punctuation">:</span> http<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span><span class="token number">8080</span>
+  <span class="token key atrule">executePolicy</span><span class="token punctuation">:</span>
+    <span class="token key atrule">readChange</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+    <span class="token key atrule">webhook</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+    <span class="token key atrule">cron</span><span class="token punctuation">:</span> <span class="token string">&quot;&quot;</span>
+    <span class="token key atrule">qos</span><span class="token punctuation">:</span> AtMostOnce
+</pre><p>&#x7CBE;&#x786E;&#x7684;&#x683C;&#x5F0F;&#x8981;&#x6C42;&#x89C1;crd&#x5B9A;&#x4E49;&#x7684;OpenAPI v3 Schema</p>
+<h5 class="mume-header" id="readseledtorwriteselector">readSeledtor/writeSelector</h5>
+
+<p>&#x76EE;&#x524D;&#x4EC5;&#x652F;&#x6301;<code>matchNames</code>, &#x5176;&#x5185;&#x5BB9;&#x4E3A;&#x952E;&#x503C;&#x5BF9;, &#x952E;&#x4E3A;&#x811A;&#x672C;&#x4E2D;&#x4F7F;&#x7528;&#x7684;&#x8BBE;&#x5907;&#x540D;&#x79F0;, &#x503C;&#x4E3A;&#x5B9E;&#x9645;&#x8BBE;&#x5907;&#x7684;&#x8D44;&#x6E90;&#x540D;&#x79F0;.</p>
+<p>&#x5728;&#x811A;&#x672C;&#x4E2D;&#x4F7F;&#x7528;&#x7684;Device API&#x6240;&#x7528;&#x5230;&#x7684;&#x8BBE;&#x5907;&#x540D;&#x79F0;&#x5747;&#x4E3A;&#x952E;, &#x64CD;&#x4F5C;&#x5BF9;&#x8C61;&#x5219;&#x4E3A;&#x503C;&#x5BF9;&#x5E94;&#x7684;Device&#x8D44;&#x6E90;.</p>
+<h5 class="mume-header" id="env">env</h5>
+
+<p>env&#x4E3A;&#x952E;&#x503C;&#x5BF9;, &#x53EF;&#x4EE5;&#x5728;&#x811A;&#x672C;&#x4E2D;&#x4F7F;&#x7528;<code>Deno.env[key]</code>&#x6765;&#x8BBF;&#x95EE;&#x5BF9;&#x5E94;&#x7684;value.</p>
+<h4 class="mume-header" id="manifest">manifest</h4>
+
+<p>&#x76EE;&#x524D;scriptType&#x4EC5;&#x652F;&#x6301;Js, &#x5373;ECMAScript. &#x5BF9;Wasm, &#x5373;WebAssembly&#x7684;&#x652F;&#x6301;&#x6B63;&#x5728;&#x5F00;&#x53D1;.</p>
+<p>name, version&#x548C;register&#x6307;&#x5B9A;&#x4E86;&#x8D44;&#x6E90;&#x7684;&#x5730;&#x5740;, &#x6700;&#x7EC8;&#x8BBF;&#x95EE;&#x7684;URL&#x4E3A;<code>${register}/${name}/${version}.${ext}</code>. &#x5176;&#x4E2D;ext&#x76EE;&#x524D;&#x4EC5;&#x652F;&#x6301;js, &#x672A;&#x6765;&#x4F1A;&#x652F;&#x6301;wasm, zip&#x548C;gz</p>
+<h4 class="mume-header" id="executepolicy">executePolicy</h4>
+
+<p>executePolicy&#x7684;&#x5404;&#x9879;&#x529F;&#x80FD;&#x5747;&#x672A;&#x5B9E;&#x73B0;, &#x8BF7;&#x4FDD;&#x6301;&#x539F;&#x6837;.</p>
+<p>&#x539F;&#x5B9A;&#x7684;&#x5B57;&#x6BB5;&#x529F;&#x80FD;&#x4E3A;: readChange&#x8868;&#x793A;&#x662F;&#x5426;&#x542F;&#x7528;&#x57FA;&#x4E8E;&#x8BBE;&#x5907;&#x72B6;&#x6001;&#x53D8;&#x52A8;&#x7684;&#x89E6;&#x53D1;, webhook&#x8868;&#x793A;&#x662F;&#x5426;&#x542F;&#x7528;&#x57FA;&#x4E8E;webhook&#x7684;&#x89E6;&#x53D1;, cron&#x8868;&#x793A;&#x542F;&#x7528;&#x57FA;&#x4E8E;cron&#x7684;&#x5B9A;&#x65F6;&#x89E6;&#x53D1;, qos&#x53EF;&#x9009;&#x503C;&#x4E3A;AtMostOnce, AtLeastOnce, OnlyOnce, &#x5206;&#x522B;&#x5BF9;&#x5E94;&#x540C;&#x540D;&#x7684;MQTT Qos&#x7B49;&#x7EA7;.</p>
+<p>&#x57FA;&#x4E8E;webhook&#x7684;&#x89E6;&#x53D1;&#x76EE;&#x524D;&#x603B;&#x662F;&#x542F;&#x7528;, &#x5176;URL&#x4E3A;<code>http://&lt;host&gt;/api/v1alpha1/webhook?namespace=default&amp;name=script</code>, namespace&#x548C;name&#x8BF7;&#x6C42;&#x53C2;&#x6570;&#x6307;&#x5B9A;&#x8981;&#x89E6;&#x53D1;&#x7684;Script&#x7684;namespace&#x548C;name, &#x9700;&#x8981;&#x4F7F;&#x7528;HTTP Get&#x8BF7;&#x6C42;.</p>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

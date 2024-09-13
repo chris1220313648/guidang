@@ -1,0 +1,154 @@
+---
+#创建自定义资源
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: scripts.hit.edu.cn
+spec:
+  group: hit.edu.cn
+  names:
+    categories: []
+    kind: Script
+    plural: scripts
+    shortNames: []
+    singular: script
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns: []
+      name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: "Auto-generated derived type for ScriptSpec via `CustomResource`"
+          properties:
+            spec:
+              description: Script spec defination
+              properties:
+                env:
+                  additionalProperties:
+                    type: string
+                  description: Envirenment variables
+                  type: object
+                executePolicy:
+                  description: controller side policy of executing script.
+                  properties:
+                    cron:
+                      description: Same format of crontab
+                      type: string
+                    qos:
+                      description: default Qos of submission
+                      enum:
+                        - OnlyOnce
+                        - AtMostOnce
+                        - AtLeastOnce
+                      type: string
+                    readChange:
+                      description: When to execute the script Execute when state of devices in read_selector changed
+                      type: boolean
+                    webhook:
+                      description: Execute when webhook is triggerd
+                      type: boolean
+                  required:
+                    - cron
+                    - qos
+                    - readChange
+                    - webhook
+                  type: object
+                manifest:
+                  description: script manifest.
+                  properties:
+                    name:
+                      description: package name
+                      type: string
+                    register:
+                      description: override the default script package register
+                      nullable: true
+                      type: string
+                    scriptType:
+                      description: script type
+                      enum:
+                        - Wasm
+                        - Js
+                        - Native
+                        - Standalone
+                      type: string
+                    version:
+                      description: version number
+                      type: string
+                  required:
+                    - name
+                    - scriptType
+                    - version
+                  type: object
+                readSelector:
+                  description: devices that the rule script can read.
+                  properties:
+                    matchAbilities:
+                      additionalProperties:
+                        type: string
+                      description: This is a map from name of a set of devices used in rule scirpt to a Ability resource in kubernetes. The Ability resource resolve to a set of devices.
+                      nullable: true
+                      type: object
+                    matchNames:
+                      additionalProperties:
+                        type: string
+                      description: "This is a map from name of device used in rule script to a single device resource in kubnernetes. key: name of device used in rule script value: name of device resource"
+                      nullable: true
+                      type: object
+                  type: object
+                writeSelector:
+                  description: devices that the rule script can operate.
+                  properties:
+                    matchAbilities:
+                      additionalProperties:
+                        type: string
+                      description: This is a map from name of a set of devices used in rule scirpt to a Ability resource in kubernetes. The Ability resource resolve to a set of devices.
+                      nullable: true
+                      type: object
+                    matchNames:
+                      additionalProperties:
+                        type: string
+                      description: "This is a map from name of device used in rule script to a single device resource in kubnernetes. key: name of device used in rule script value: name of device resource"
+                      nullable: true
+                      type: object
+                  type: object
+              required:
+                - env
+                - executePolicy
+                - manifest
+                - readSelector
+                - writeSelector
+              type: object
+            status:
+              nullable: true
+              properties:
+                elapsedTime:
+                  description: time of last executing time in us
+                  format: uint32
+                  minimum: 0.0
+                  type: integer
+                lastRun:
+                  description: unix ms timestamp
+                  format: int64
+                  type: integer
+                message:
+                  description: executing message
+                  type: string
+                status:
+                  description: "executing status: map to controller.proto"
+                  format: int32
+                  type: integer
+              required:
+                - elapsedTime
+                - lastRun
+                - message
+                - status
+              type: object
+          required:
+            - spec
+          title: Script
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+

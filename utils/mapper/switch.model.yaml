@@ -1,0 +1,15 @@
+apiVersion: devices.kubeedge.io/v1alpha2
+kind: DeviceModel
+metadata:
+  name: wifi-switch
+  namespace: default
+spec:
+  properties:
+    - name: status
+      description: 0 is off, 1 is on
+      type:
+        int:
+          accessMode: ReadWrite
+          defaultValue: 0
+          minimum: 0
+          maximum: 1

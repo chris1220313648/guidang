@@ -1,0 +1,26 @@
+apiVersion: hit.edu.cn/v1alpha1
+kind: Script
+metadata:
+  name: test-script_ability
+  namespace: default
+spec:
+  readSelector:
+    matchAbility:
+      ability-sensor-name: sensor
+  writeSelector:
+    matchAbility:
+      ability-target-name: executor
+  # env:
+  #   filter_service_url: "http://10.100.255.4:8003/api/v1alpha1/filter"
+  #   threshold-value: "40"
+  manifest:
+    scriptType: Js
+    name: test_ability
+    version: 0.1_beta2
+
+    register: http://192.168.56.150:3000
+  executePolicy:
+    readChange: true
+    webhook: true
+    cron: ""
+    qos: AtMostOnce

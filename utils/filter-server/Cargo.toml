@@ -1,0 +1,24 @@
+[package]
+name = "filter-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+color-eyre = '0.6'
+tracing = '0.1'
+
+[dependencies.axum]
+version = '0.5'
+features = ['http2']
+
+[dependencies.tokio]
+version = '1'
+features = ['full']
+
+[dependencies.serde]
+version = '1.0'
+features = ['derive']
+
+[dependencies.tracing-subscriber]
+version = '0.3'
+features = ['env-filter']

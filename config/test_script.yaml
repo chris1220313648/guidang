@@ -1,0 +1,26 @@
+apiVersion: hit.edu.cn/v1alpha1
+kind: Script
+metadata:
+  name: test-script
+  namespace: default
+spec:
+  readSelector:
+    matchNames:
+      temp-sensor-name: dht11
+  writeSelector:
+    matchNames:
+      target-device-name: switch
+  env:
+    filter_service_url: "http://10.100.255.4:8003/api/v1alpha1/filter"
+    threshold-value: "40"
+  manifest:
+    scriptType: Js
+    name: test
+    version: 0.1_beta1
+    #register: http://10.108.251.228:8000
+    register: http://192.168.56.150:3000
+  executePolicy:
+    readChange: true
+    webhook: true
+    cron: ""
+    qos: AtMostOnce

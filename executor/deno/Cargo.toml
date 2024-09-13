@@ -1,0 +1,51 @@
+[package]
+name = 'deno_executor'
+version = '0.1.0'
+edition = '2021'
+
+[dependencies]
+futures = '0.3'
+anyhow = '1.0'
+async-trait = '0.1'
+tracing = '0.1'
+deno_core = '0.140'
+tonic = "0.7"
+prost-types = "0.10"
+time = '0.3'
+serde_json = '1.0'
+console-subscriber = "0.1"
+
+[dependencies.clap]
+version = '3.0.0-rc.7'
+features = ['derive']
+
+[dependencies.reqwest]
+version = '0.11'
+features = ['gzip', 'brotli']
+
+[dependencies.tracing-subscriber]
+version = '0.3'
+features = ['env-filter']
+
+[dependencies.tokio]
+version = '1'
+features = ['full', 'tracing']
+
+[dependencies.serde]
+version = '1.0'
+features = ['derive']
+
+[dependencies.executor]
+path = '../common'
+
+[dependencies.executor_ops]
+path = './ops'
+
+[dependencies.proto]
+path = '../../proto'
+
+[build-dependencies]
+deno_core = "0.140"
+tonic-build = "0.7.2"
+[build-dependencies.executor_ops]
+path = './ops'
