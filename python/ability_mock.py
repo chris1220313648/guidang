@@ -47,140 +47,21 @@ class Ability:
         }
         res = requests.put(f"http://127.0.0.1:5000/update", headers=self.headers, json=data)
 
-class Camera(Ability):
-    def __init__(self):
-        super().__init__("sensor", "camera", "isonline")
+def create_abilities(n):
+    abilities = {}
+    alerts = {}
+    for i in range(1, n+1):
+        ability_name = f"ability{i}_sensor"
+        alert_name = f"ability{i}_executor"
+        ability = Ability(ability_name, f"ability{i}", "isonline")
+        alert = Ability(alert_name, f"alert_ability{i}", "activate")
+        abilities[ability_name] = ability
+        alerts[alert_name] = alert
+        # 将创建的能力注册到全局变量中
+        globals()[f"local_{ability_name}"] = ability
+        globals()[f"local_alertforability{i}"] = alert
+    return abilities, alerts
 
-class AlertCamera(Ability):
-    def __init__(self):
-        super().__init__("executor", "alert", "activate")
-
-class Plc(Ability):
-    def __init__(self):
-        super().__init__("plc_sensor", "plc_1", "isonline")
-
-class AlertPlc(Ability):
-    def __init__(self):
-        super().__init__("plc_executor", "alert_plc", "activate")
-
-class Ability1(Ability):
-    def __init__(self):
-        super().__init__("ability1_sensor", "ability1", "isonline")
-
-class Ability2(Ability):
-    def __init__(self):
-        super().__init__("ability2_sensor", "ability2", "isonline")
-
-class Ability3(Ability):
-    def __init__(self):
-        super().__init__("ability3_sensor", "ability3", "isonline")
-
-class Ability4(Ability):
-    def __init__(self):
-        super().__init__("ability4_sensor", "ability4", "isonline")
-
-class Ability5(Ability):
-    def __init__(self):
-        super().__init__("ability5_sensor", "ability5", "isonline")
-
-class Ability6(Ability):
-    def __init__(self):
-        super().__init__("ability6_sensor", "ability6", "isonline")
-
-class Ability7(Ability):
-    def __init__(self):
-        super().__init__("ability7_sensor", "ability7", "isonline")
-
-class Ability8(Ability):
-    def __init__(self):
-        super().__init__("ability8_sensor", "ability8", "isonline")
-
-class Ability9(Ability):
-    def __init__(self):
-        super().__init__("ability9_sensor", "ability9", "isonline")
-
-class Ability10(Ability):
-    def __init__(self):
-        super().__init__("ability10_sensor", "ability10", "isonline")
-
-class AbilityAlert1(Ability):
-    def __init__(self):
-        super().__init__("ability1_executor", "alert_ability1", "activate")
-
-class AbilityAlert2(Ability):
-    def __init__(self):
-        super().__init__("ability2_executor", "alert_ability2", "activate")
-
-class AbilityAlert3(Ability):
-    def __init__(self):
-        super().__init__("ability3_executor", "alert_ability3", "activate")
-
-class AbilityAlert4(Ability):
-    def __init__(self):
-        super().__init__("ability4_executor", "alert_ability4", "activate")
-
-class AbilityAlert5(Ability):
-    def __init__(self):
-        super().__init__("ability5_executor", "alert_ability5", "activate")
-
-class AbilityAlert6(Ability):
-    def __init__(self):
-        super().__init__("ability6_executor", "alert_ability6", "activate")
-
-class AbilityAlert7(Ability):
-    def __init__(self):
-        super().__init__("ability7_executor", "alert_ability7", "activate")
-
-class AbilityAlert8(Ability):
-    def __init__(self):
-        super().__init__("ability8_executor", "alert_ability8", "activate")
-
-class AbilityAlert9(Ability):
-    def __init__(self):
-        super().__init__("ability9_executor", "alert_ability9", "activate")
-
-class AbilityAlert10(Ability):
-    def __init__(self):
-        super().__init__("ability10_executor", "alert_ability10", "activate")
-class AbilityAlert1(Ability):
-    def __init__(self):
-        super().__init__("ability1_executor", "alert_ability1", "activate")
-
-class AbilityAlert2(Ability):
-    def __init__(self):
-        super().__init__("ability2_executor", "alert_ability2", "activate")
-
-class AbilityAlert3(Ability):
-    def __init__(self):
-        super().__init__("ability3_executor", "alert_ability3", "activate")
-
-class AbilityAlert4(Ability):
-    def __init__(self):
-        super().__init__("ability4_executor", "alert_ability4", "activate")
-
-class AbilityAlert5(Ability):
-    def __init__(self):
-        super().__init__("ability5_executor", "alert_ability5", "activate")
-
-class AbilityAlert6(Ability):
-    def __init__(self):
-        super().__init__("ability6_executor", "alert_ability6", "activate")
-
-class AbilityAlert7(Ability):
-    def __init__(self):
-        super().__init__("ability7_executor", "alert_ability7", "activate")
-
-class AbilityAlert8(Ability):
-    def __init__(self):
-        super().__init__("ability8_executor", "alert_ability8", "activate")
-
-class AbilityAlert9(Ability):
-    def __init__(self):
-        super().__init__("ability9_executor", "alert_ability9", "activate")
-
-class AbilityAlert10(Ability):
-    def __init__(self):
-        super().__init__("ability10_executor", "alert_ability10", "activate")
 @app.route('/ability/get_status/<ability>', methods=['GET'])
 def get_ability_status(ability):
     local_ability = globals().get(f"local_{ability}")
@@ -209,51 +90,23 @@ def toggle_ability_status(ability_name):
                 print(f"Response: {response.status_code} - {response.text}")
             except requests.exceptions.RequestException as e:
                 print(f"Request failed: {e}")
-        time.sleep(10)
+        time.sleep(3)
 
 if __name__ == "__main__":
-    local_camera = Camera()
-    local_alertforcamera = AlertCamera()
-    local_plc = Plc()
-    local_alertforplc = AlertPlc()
+    local_camera = Ability("sensor", "camera", "isonline")
+    local_alertforcamera = Ability("executor", "alert", "activate")
+    local_plc = Ability("plc_sensor", "plc_1", "isonline")
+    local_alertforplc = Ability("plc_executor", "alert_plc", "activate")
 
-    # 实例化新添加的10个能力
-    local_ability1 = Ability1()
-    local_ability2 = Ability2()
-    local_ability3 = Ability3()
-    local_ability4 = Ability4()
-    local_ability5 = Ability5()
-    local_ability6 = Ability6()
-    local_ability7 = Ability7()
-    local_ability8 = Ability8()
-    local_ability9 = Ability9()
-    local_ability10 = Ability10()
+    # 批量创建 10 个能力和报警器能力
+    abilities, alerts = create_abilities(20)
 
- # 实例化新添加的10个报警器能力
-    local_alertforability1 = AbilityAlert1()
-    local_alertforability2 = AbilityAlert2()
-    local_alertforability3 = AbilityAlert3()
-    local_alertforability4 = AbilityAlert4()
-    local_alertforability5 = AbilityAlert5()
-    local_alertforability6 = AbilityAlert6()
-    local_alertforability7 = AbilityAlert7()
-    local_alertforability8 = AbilityAlert8()
-    local_alertforability9 = AbilityAlert9()
-    local_alertforability10 = AbilityAlert10()
     # 启动线程来周期性地改变能力状态
     threading.Thread(target=toggle_ability_status, args=("camera",), daemon=True).start()
     threading.Thread(target=toggle_ability_status, args=("plc",), daemon=True).start()
 
-    # 启动新能力的线程
-    threading.Thread(target=toggle_ability_status, args=("ability1",), daemon=True).start()
-    threading.Thread(target=toggle_ability_status, args=("ability2",), daemon=True).start()
-    threading.Thread(target=toggle_ability_status, args=("ability3",), daemon=True).start()
-    threading.Thread(target=toggle_ability_status, args=("ability4",), daemon=True).start()
-    threading.Thread(target=toggle_ability_status, args=("ability5",), daemon=True).start()
-    threading.Thread(target=toggle_ability_status, args=("ability6",), daemon=True).start()
-    threading.Thread(target=toggle_ability_status, args=("ability7",), daemon=True).start()
-    threading.Thread(target=toggle_ability_status, args=("ability8",), daemon=True).start()
-    threading.Thread(target=toggle_ability_status, args=("ability9",), daemon=True).start()
-    threading.Thread(target=toggle_ability_status, args=("ability10",), daemon=True).start()
+    # 启动新创建的能力的线程
+    for ability_name in abilities.keys():
+        threading.Thread(target=toggle_ability_status, args=(ability_name,), daemon=True).start()
 
     app.run(host='0.0.0.0', port=8079)

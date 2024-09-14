@@ -1,11 +1,11 @@
 import os
 
-def create_ability_scripts(base_path):
+def create_ability_scripts(base_path,n):
     # 确保 base_path 存在
     if not os.path.exists(base_path):
         os.makedirs(base_path)
     
-    for i in range(1, 11):
+    for i in range(1, n):
         file_name = f"test_ability_{i}/0.1_beta{i+3}.js"
         file_path = os.path.join(base_path, file_name)
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -42,4 +42,4 @@ async function main() {{
 
 if __name__ == "__main__":
     base_directory = '../config/register'  # 根据您的路径调整
-    create_ability_scripts(base_directory)
+    create_ability_scripts(base_directory,30)
