@@ -14,8 +14,15 @@ pub struct Ability {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
 pub struct Item {
-    pub properties: HashMap<String, i32>,
-    
+    pub properties: HashMap<String, serde_json::Value>,
 }
 
+// 为 Item 实现 Default trait
+impl Default for Item {
+    fn default() -> Self {
+        Self {
+            properties: HashMap::new(),
+        }
+    }
+}
 

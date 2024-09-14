@@ -131,6 +131,11 @@ def delete_ability():
 def get_events():
     """获取所有事件记录"""
     return jsonify(event), 200
+@app.route('/log', methods=['POST'])
+def log_alert():
+    print("plc too slow")
+    return "sucessfully trigger log_alert", 200
+
 
 if __name__ == '__main__':
     print("Start register")

@@ -45,92 +45,97 @@ pub async fn reflector_sqlite3(conn: Arc<Mutex<Connection>>,reflector: Arc<Refle
     
 }
 pub async fn reflector_ability(
-    register_url: &str,
+    ability_flamework_url: &str,
     reflector: Arc<Reflector>,
     scheduler: Sender<ResourceIndex<Ability>>,
 ) -> Result<(), Report> {
     let poll_interval = Duration::from_secs(2); // 轮询间隔
     let mut interval = interval(poll_interval); // 定时器
-    let event_url = format!("{}/event", register_url); // 查询事件的URL
-    let mut count=0;
+    let running_url = format!("{}:8080/api/AbilityRunning", ability_flamework_url); // 获取正在运行的能力
+    let mut count = 0;
     let abi_to_idx = |abi: &Ability| ResourceIndex {
-        //定义了一个闭包dev_to_idx，它接受一个&Device引用作为参数，并返回一个ResourceIndex<Device>结构
         name: abi.name.clone(),
         namespace: "default".to_string(),
-        api: PhantomData,//
+        api: PhantomData,
     };
 
     loop {
-        info!("Polling alility count:{}",count);
-        count=count+1;
+        info!("Polling ability count: {}", count);
+        count += 1;
         interval.tick().await;
 
-        // 发送 GET 请求到 register 服务器以获取事件列表
-        match reqwest::get(&event_url).await {
+        // 发送 GET 请求到 AbilityRunning 服务器以获取正在运行的能力列表
+        match reqwest::get(&running_url).await {
             Ok(response) => {
-                // 如果请求成功，尝试解析 JSON 响应
-                match response.json::<Value>().await {
-                    Ok(events) => {
-                        // 处理事件数据
-                        if let Some(events_map) = events.as_object() {
-                            for (timestamp, event_data) in events_map.iter() {
-                                info!("Received event at {}: {:?}", timestamp, event_data);
-                                // 你可以在这里处理不同类型的事件
-                                let event_type = event_data["event"].as_str().unwrap_or_default();
-                                let event_name = event_data["name"].as_str().unwrap_or_default();
-                                let http_url=event_data["http_url"].as_str().unwrap_or_default();
-                                let attributes = event_data["attributes"].clone();
+                match response.json::<Vec<Value>>().await {
+                    Ok(running_abilities) => {
+                        for ability_info in running_abilities {
+                            // 提取能力的端口
+                            if let Some(ability_port) = ability_info["abilityPort"].as_u64() {
+                                let ability_name = ability_info["abilityName"].as_str().unwrap_or_default();
+                                let ability_ip = ability_flamework_url; // 使用基础 URL
+                                let full_url = format!("{}:{}/api/getAllAtomicInfo", ability_ip, ability_port);
 
-                                // 根据事件类型处理
-                                match event_type {
-                                    "create" | "update"  => {
-                                        // 构造 Ability 对象
-                                        let ability = Ability {
-                                            name: event_name.to_string(),
-                                            http_url:http_url.to_string(),
-                                            attributes: serde_json::from_value(attributes)
-                                                .unwrap_or_default(),
-                                        };
-
-                                        // 打印并更新 Reflector 中的能力信息
-                                        info!("add ability: {:?}", ability);
-                                        reflector.add_ability(&ability);
-                                        let idx: ResourceIndex<Ability> = abi_to_idx(&ability);
-                                        scheduler.send_async(idx).await?;
-                                        info!("sucessfully send ability");
+                                // 查询该能力的详细信息
+                                match reqwest::get(&full_url).await {
+                                    Ok(detail_response) => {
+                                        match detail_response.json::<Value>().await {
+                                            Ok(ability_details) => {
+                                                // 创建 Ability 对象并更新到 Reflector 中
+                                                let mut attributes_map = HashMap::new();
+                                        
+                                                // 将 JSON 对象转换为 HashMap<String, serde_json::Value>
+                                                if let Some(object) = ability_details.as_object() {
+                                                    let mut properties = HashMap::new();
+                                        
+                                                    // 遍历 JSON 对象的每个键值对，并将其插入到 properties 中
+                                                    for (key, value) in object {
+                                                        properties.insert(key.clone(), value.clone());
+                                                    }
+                                        
+                                                    // 创建一个 Item 并插入到 attributes_map 中
+                                                    let item = Item { properties };
+                                                    attributes_map.insert("Ability_attribute".to_string(), item);
+                                                }
+                                        
+                                                // 创建 Ability 对象并更新到 Reflector 中
+                                                let ability = Ability {
+                                                    name: ability_name.to_string(),
+                                                    http_url: format!("{}:{}", ability_ip, ability_port),
+                                                    attributes: attributes_map,
+                                                };
+                                        
+                                                info!("add ability: {:?}", ability);
+                                                reflector.add_ability(&ability);
+                                                let idx: ResourceIndex<Ability> = abi_to_idx(&ability);
+                                                scheduler.send_async(idx).await?;
+                                                info!("successfully sent ability");
+                                            }
+                                            Err(detail_json_err) => {
+                                                eprintln!("Failed to parse ability details JSON: {}", detail_json_err);
+                                            }
+                                        }
                                     }
-                                    
-                                    "delete" => {
-                                        // 从 Reflector 中移除指定的能力
-                                        let ability = Ability {
-                                            name: event_name.to_string(),
-                                            http_url:http_url.to_string(),
-                                            attributes: serde_json::from_value(attributes)
-                                                .unwrap_or_default(),
-                                        };
-                                        // reflector.abilities.remove(event_name);
-                                        info!("Deleted ability: {}", event_name);
-                                        reflector.remove_ability(&ability)
-                                    }
-                                    _ => {
-                                        eprintln!("Unknown event type: {}", event_type);
+                                    Err(detail_request_err) => {
+                                        eprintln!("Failed to get ability details: {}", detail_request_err);
                                     }
                                 }
+                            } else {
+                                eprintln!("Ability port not found in running abilities.");
                             }
-                        } else {
-                            eprintln!("Invalid event structure received.");
                         }
                     }
                     Err(json_err) => {
-                        eprintln!("Failed to parse JSON response: {}", json_err);
+                        eprintln!("Failed to parse running abilities JSON: {}", json_err);
                     }
                 }
             }
             Err(request_err) => {
-                eprintln!("Failed to send request: {}", request_err);
+                eprintln!("Failed to send request to AbilityRunning: {}", request_err);
             }
         }
     }
+
     Ok(())
 }
 
@@ -146,17 +151,17 @@ async fn import_existing_scripts(conn: Arc<Mutex<Connection>>, reflector: Arc<Re
    
     while let Some(row) = rows.next()? {
         let script_id: i32 = row.get(0)?;
-        info!("Importing script: {:?}", script_id);
+        // info!("Importing script: {:?}", script_id);
         let script = fetch_script_details(&conn, script_id)?;
-        info!("get script: {:?}", script_id);
+        // info!("get script: {:?}", script_id);
         let env_vars = fetch_environment_variables(&conn, script_id)?;
-        info!("get env script: {:?}", script_id);
+        // info!("get env script: {:?}", script_id);
         let execute_policy = fetch_execute_policy(&conn, script_id)?;
-        info!("get policy script: {:?}", script_id);
+        // info!("get policy script: {:?}", script_id);
         let selectors = fetch_selectors(&conn, script_id)?;
-        info!("get selector script: {:?}", script_id);
+        // info!("get selector script: {:?}", script_id);
         let script_struct = create_script_struct(script, env_vars, execute_policy, selectors)?;
-        info!("create script: {:?}", script_id);
+        // info!("create script: {:?}", script_id);
         info!("{:?}", script_struct);
         reflector.add_script(&script_struct);
     }
