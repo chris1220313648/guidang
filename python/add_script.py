@@ -45,5 +45,5 @@ if __name__ == "__main__":
     insert_script_ability('test_ability_plc', 'plc_sensor', 'plc_executor', '0.1_beta3')
 
     # 插入10个新能力的脚本
-    for i in range(1, 11):
+    for i in range(11, 21):
         insert_script_ability(f'test_ability_{i}', f'ability{i}_sensor', f'ability{i}_executor', f'0.1_beta{i+3}')

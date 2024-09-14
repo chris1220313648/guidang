@@ -167,7 +167,7 @@ impl Controller {
         self.spawn(async move { trigger(reflector_clone, schdevin_rx, schin_tx_clone).await });
         self.spawn(async move { trigger_ability(reflector_clone_abi, schdevin_rx_abi, schin_tx_clone_abi).await });
         let reflector_abi = reflector_store.clone();// 克隆Reflector实例。
-        let register_url = "http://localhost:5000";
+        let register_url = "http://localhost:5200";
         self.spawn(async move { reflector_ability(register_url,reflector_abi,schdevin_tx_abi.clone()).await });
         let reflector_script = reflector_store.clone();// 克隆Reflector实例。
         let _conn = match Connection::open("./test.db") {

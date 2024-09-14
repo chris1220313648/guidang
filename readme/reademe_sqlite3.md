@@ -8,11 +8,11 @@ apt-get update && apt-get install -y \
     sqlite3 \
     libsqlite3-dev \
 ```
-3.添加设备资源到k8s
+<!-- 3.添加设备资源到k8s
 utils/mapper/switch.model.yaml
 utils/mapper/switch.yaml
 utils/mapper/temp.model.yaml
-utils/mapper/temp.yaml
+utils/mapper/temp.yaml -->
 4.启动规则引擎
 
 ```
