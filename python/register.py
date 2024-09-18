@@ -133,7 +133,7 @@ def get_events():
     return jsonify(event), 200
 @app.route('/log', methods=['POST'])
 def log_alert():
-    print("plc too slow")
+    print("alarm:plc dianji sudu too fast!")
     return "sucessfully trigger log_alert", 200
 
 

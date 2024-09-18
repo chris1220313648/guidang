@@ -49,7 +49,7 @@ pub async fn reflector_ability(
     reflector: Arc<Reflector>,
     scheduler: Sender<ResourceIndex<Ability>>,
 ) -> Result<(), Report> {
-    let poll_interval = Duration::from_secs(2); // 轮询间隔
+    let poll_interval = Duration::from_secs(5); // 轮询间隔
     let mut interval = interval(poll_interval); // 定时器
     let running_url = format!("{}:8080/api/AbilityRunning", ability_flamework_url); // 获取正在运行的能力
     let mut count = 0;
