@@ -14,7 +14,7 @@ serve ./config/register &
 
 # 启动 Python 脚本（可选）
 
-python3 /home/ai801/code/rule_engine/guidang/python/register.py &
+# python3 /home/ai801/code/rule_engine/guidang/python/register.py &
 
 # 启动 cloud
 

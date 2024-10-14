@@ -34,12 +34,12 @@ async function main() {
     // 目标设备的完整 HTTP URL
     
 
-    if (axis_actualVelocity > thresholdValue) {
+    if (axis_actualVelocity >=thresholdValue) {
         // 当速度超过阈值时，发送报警信息
         const message = {
             timestamp: formattedTime,
-            message: "PLC velocity is too fast",
-            velocity: axis_actualVelocity
+            message: `Alarm:PLC motors velocity is too fast,current velocity is ${axis_actualVelocity}`,
+            // velocity: axis_actualVelocity
         };
 
         // 调用 Deno.httpPost，将 Content-Type 设置为 application/json
@@ -48,19 +48,20 @@ async function main() {
             JSON.stringify(message), // 直接将 message 对象转换为 JSON 字符串
             JSON.stringify({ 'Content-Type': 'application/json' })
         );
-    } else {
-        // 当速度未超过阈值时，发送正常信息
-        const message = {
-            timestamp: formattedTime,
-            message: "test：PLC velocity is normal",
-            velocity: axis_actualVelocity
-        };
+    } 
+    // else {
+    //     // 当速度未超过阈值时，发送正常信息
+    //     const message = {
+    //         timestamp: formattedTime,
+    //         message: "test：PLC velocity is normal",
+    //         velocity: axis_actualVelocity
+    //     };
 
-        // 调用 Deno.httpPost，将 Content-Type 设置为 application/json
-        await Deno.httpPost(
-            full_url, 
-            JSON.stringify(message), // 直接将 message 对象转换为 JSON 字符串
-            JSON.stringify({ 'Content-Type': 'application/json' })
-        );
-    }
+    //     // 调用 Deno.httpPost，将 Content-Type 设置为 application/json
+    //     await Deno.httpPost(
+    //         full_url, 
+    //         JSON.stringify(message), // 直接将 message 对象转换为 JSON 字符串
+    //         JSON.stringify({ 'Content-Type': 'application/json' })
+    //     );
+    // }
 }
