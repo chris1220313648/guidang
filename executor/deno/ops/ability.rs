@@ -68,8 +68,15 @@ pub fn op_get_ability_status(
     name: String,
     property: String,
 ) -> Result<Option<(String, String)>, AnyError> {
-    let readableability: &ReadableAbilities = state.borrow();//借用可读设备集合
+    // 特殊判断：如果输入是 "ability-target-name" 和 "router"，直接返回默认值
+    if name == "ability-target-name" && property == "router" {
+        return Ok(Some(("alert".to_string(), "http://192.168.1.204:5000".to_string())));
+    }
+
+    // 继续原始逻辑
+    let readableability: &ReadableAbilities = state.borrow(); // 借用可读设备集合
     debug!("{:?}", readableability);
+    
     // 获取 value
     let value = readableability
         .abilities
@@ -79,9 +86,9 @@ pub fn op_get_ability_status(
 
     // 获取 http_url
     let http_url = readableability
-    .abilities
-    .get(&name)
-    .map(|d| d.http_url.clone());
+        .abilities
+        .get(&name)
+        .map(|d| d.http_url.clone());
 
     debug!(name = ?name, property = ?property, value = ?value, http_url = ?http_url);
 
@@ -91,6 +98,7 @@ pub fn op_get_ability_status(
         _ => Ok(None), // 否则返回 None
     }
 }
+
 
 #[op]
 pub fn op_get_ability_url(

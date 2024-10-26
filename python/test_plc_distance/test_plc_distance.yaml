@@ -1,0 +1,26 @@
+ability_name: test_plc_distance
+cron: ''
+elapsed_time: 0
+env:
+  threshold-value: '1300'
+execute_policy:
+  cron: ''
+  qos: AtMostOnce
+  read_change: true
+  webhook: true
+last_run: 0
+message: ''
+qos: AtMostOnce
+read_change: true
+register: ''
+script_type: Js
+script_version: 0.1_beta1
+selectors:
+- match_ability: ability-sensor-name:plc
+  match_name: ''
+  type: readSelector
+- match_ability: ability-target-name:alert_log
+  match_name: ''
+  type: writeSelector
+status: 0
+webhook: true

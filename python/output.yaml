@@ -1,0 +1,22 @@
+ability_name: test_actual_plc
+script_type: Js
+script_version: 0.1_beta1
+env:
+  threshold-value: "1500"
+selectors:
+  - type: readSelector
+    match_ability: "ability-sensor-name:plc"
+    match_name: ""
+  - type: writeSelector
+    match_ability: "ability-target-name:alert_log"
+    match_name: ""
+elapsed_time: 0
+last_run: 0
+message: ""
+status: 0
+register: ""
+execute_policy:
+cron: ""
+qos: AtMostOnce
+read_change: true
+webhook: true
